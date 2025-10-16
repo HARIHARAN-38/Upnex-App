@@ -1,12 +1,13 @@
 # UpNext App
 
-A Java desktop application for personal task and schedule management with secure user authentication.
+A Java desktop application for personal task and schedule management with secure user authentication and professional skills tracking.
 
 ## Overview
 
 UpNext is a desktop application built with Java Swing that allows users to:
 
-- Create and manage personal accounts
+- Create and manage personal accounts with professional skills
+- Record and visualize skill proficiency levels
 - Access a customized dashboard
 - View and manage tasks (coming soon)
 - Track schedules and events (coming soon)
@@ -36,6 +37,7 @@ CREATE DATABASE upnext;
 
 4. Run the database schema script:
 ```sql
+-- Users Table
 CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -45,6 +47,18 @@ CREATE TABLE IF NOT EXISTS users (
     active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Skills Table
+CREATE TABLE IF NOT EXISTS skills (
+    skill_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    skill_name VARCHAR(100) NOT NULL,
+    description VARCHAR(255),
+    proficiency_level INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 ```
 
@@ -87,9 +101,28 @@ The theme includes:
   - `config/` - Configuration classes
   - `core/` - Core utilities
   - `data/` - Data access layer
+    - `JdbcConnectionProvider.java` - Database connection manager
+    - `UserRepository.java` - User data management
+    - `SkillRepository.java` - Skill data management
+    - `SchemaInitializer.java` - Database schema setup
   - `domain/` - Domain models
+    - `User.java` - User entity
+    - `Skill.java` - Skill entity
   - `service/` - Business logic
+    - `AuthService.java` - Authentication logic
+    - `SkillService.java` - Skill management logic
   - `ui/` - User interface components
+    - `components/` - Reusable UI components
+      - `forms/` - Form-related components
+      - `SkillCard.java` - Skill display component
+      - `SkillCardPanel.java` - Container for skill cards
+      - `ProficiencyBar.java` - Visual proficiency indicator
+    - `screens/` - Application screens
+      - `SignInScreen.java` - User sign-in
+      - `CreateAccountScreen.java` - Initial account setup
+      - `SkillsetScreen.java` - Skill management screen
+      - `SkillAddScreen.java` - Add new skill screen
+      - `HomeScreen.java` - Main application dashboard
 
 ### Logging
 
@@ -98,6 +131,13 @@ Logs are stored in the `logs/` directory in the application's root folder.
 ## Testing
 
 See `docs/TestPlan.md` for manual testing procedures.
+
+## Documentation
+
+- `docs/TestPlan.md` - Comprehensive testing procedures for the application
+- `docs/AppThemePalette.md` - Color palette and theme documentation
+- `docs/SkillsUserGuide.md` - Guide for using the skills management feature
+- `docs/UI_Refinements_Summary.md` - UI improvement details and screenshots
 
 ## License
 

@@ -2,6 +2,7 @@ package com.upnext.app.service;
 
 import com.upnext.app.core.Logger;
 import com.upnext.app.data.UserRepository;
+import com.upnext.app.domain.Skill;
 import com.upnext.app.domain.User;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -9,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,6 +23,7 @@ public class AuthService {
     
     // Dependencies
     private final UserRepository userRepository;
+    private final SkillService skillService;
     private final Logger logger = Logger.getInstance();
     
     // Current user session
@@ -35,6 +38,7 @@ public class AuthService {
      */
     private AuthService() {
         this.userRepository = UserRepository.getInstance();
+        this.skillService = SkillService.getInstance();
     }
     
     /**
@@ -59,6 +63,20 @@ public class AuthService {
      * @throws AuthException If there's an error during sign-up
      */
     public User signUp(String name, String email, String password) throws AuthException {
+        return signUp(name, email, password, null);
+    }
+    
+    /**
+     * Signs up a new user with the provided credentials and initial skills.
+     * 
+     * @param name The user's full name
+     * @param email The user's email address
+     * @param password The user's password
+     * @param initialSkills List of initial skills to add for the user
+     * @return The newly created user
+     * @throws AuthException If there's an error during sign-up
+     */
+    public User signUp(String name, String email, String password, List<Skill> initialSkills) throws AuthException {
         try {
             logger.info("Sign-up attempt for email: " + email);
             
@@ -83,6 +101,19 @@ public class AuthService {
             
             User savedUser = userRepository.save(user);
             logger.info("User created successfully: " + email);
+            
+            // Add initial skills if provided
+            if (initialSkills != null && !initialSkills.isEmpty()) {
+                try {
+                    skillService.addSkills(savedUser.getId(), initialSkills);
+                    // Update the user object with the added skills
+                    loadUserSkills(savedUser);
+                } catch (SkillService.SkillException e) {
+                    logger.logException("Error adding initial skills during sign-up", e);
+                    // Continue with sign-up even if adding skills fails
+                }
+            }
+            
             return savedUser;
         } catch (SQLException e) {
             logger.logException("Database error during sign-up", e);
@@ -127,8 +158,9 @@ public class AuthService {
                 throw new AuthException("Invalid email or password");
             }
             
-            // Set current user
+            // Set current user and load skills
             currentUser = user;
+            loadUserSkills(currentUser);
             logger.info("User signed in successfully: " + email);
             return user;
         } catch (SQLException e) {
@@ -153,12 +185,116 @@ public class AuthService {
     }
     
     /**
-     * Gets the currently signed-in user.
+     * Gets the currently signed-in user with their skills loaded.
      * 
-     * @return The current user, or null if no user is signed in
+     * @return The current user with skills loaded, or null if no user is signed in
      */
     public User getCurrentUser() {
+        if (currentUser != null) {
+            loadUserSkills(currentUser);
+        }
         return currentUser;
+    }
+    
+    /**
+     * Loads skills for a user.
+     * 
+     * @param user The user to load skills for
+     */
+    private void loadUserSkills(User user) {
+        try {
+            List<Skill> skills = skillService.getUserSkills(user.getId());
+            user.setSkills(skills);
+        } catch (SkillService.SkillException e) {
+            logger.logException("Error loading user skills", e);
+            // Don't throw the exception, just log it
+        }
+    }
+    
+    /**
+     * Adds a skill for the currently signed-in user.
+     * 
+     * @param skillName The name of the skill
+     * @param description The description of the skill
+     * @param proficiencyLevel The proficiency level (1-10)
+     * @return The added skill
+     * @throws AuthException If no user is signed in or there's an error adding the skill
+     */
+    public Skill addSkillForCurrentUser(String skillName, String description, int proficiencyLevel) throws AuthException {
+        if (currentUser == null) {
+            throw new AuthException("No user is currently signed in");
+        }
+        
+        try {
+            Skill skill = skillService.addSkill(currentUser.getId(), skillName, description, proficiencyLevel);
+            currentUser.addSkill(skill);
+            return skill;
+        } catch (SkillService.SkillException e) {
+            logger.logException("Error adding skill for current user", e);
+            throw new AuthException("Error adding skill: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Deletes a skill for the currently signed-in user.
+     * 
+     * @param skillId The ID of the skill to delete
+     * @throws AuthException If no user is signed in or there's an error deleting the skill
+     */
+    public void deleteSkillForCurrentUser(Long skillId) throws AuthException {
+        if (currentUser == null) {
+            throw new AuthException("No user is currently signed in");
+        }
+        
+        try {
+            skillService.deleteSkill(skillId);
+            currentUser.removeSkill(skillId);
+        } catch (SkillService.SkillException e) {
+            logger.logException("Error deleting skill for current user", e);
+            throw new AuthException("Error deleting skill: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Updates a skill for the currently signed-in user.
+     * 
+     * @param skillId The ID of the skill to update
+     * @param skillName The updated name
+     * @param description The updated description
+     * @param proficiencyLevel The updated proficiency level
+     * @return The updated skill
+     * @throws AuthException If no user is signed in or there's an error updating the skill
+     */
+    public Skill updateSkillForCurrentUser(Long skillId, String skillName, String description, int proficiencyLevel) throws AuthException {
+        if (currentUser == null) {
+            throw new AuthException("No user is currently signed in");
+        }
+        
+        try {
+            Skill skill = skillService.updateSkill(skillId, skillName, description, proficiencyLevel);
+            // Refresh user skills after update
+            loadUserSkills(currentUser);
+            return skill;
+        } catch (SkillService.SkillException e) {
+            logger.logException("Error updating skill for current user", e);
+            throw new AuthException("Error updating skill: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Gets all skills for the currently signed-in user.
+     * 
+     * @return The list of skills for the current user
+     * @throws AuthException If no user is signed in
+     */
+    public List<Skill> getCurrentUserSkills() throws AuthException {
+        if (currentUser == null) {
+            throw new AuthException("No user is currently signed in");
+        }
+        
+        // Make sure the skills are loaded
+        loadUserSkills(currentUser);
+        return currentUser.getSkills();
     }
     
     /**

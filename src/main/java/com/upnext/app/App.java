@@ -1,6 +1,7 @@
 package com.upnext.app;
 
 import com.upnext.app.core.Logger;
+import com.upnext.app.domain.Skill;
 import com.upnext.app.domain.User;
 import com.upnext.app.service.AuthService;
 import com.upnext.app.ui.components.FeedbackManager;
@@ -8,8 +9,11 @@ import com.upnext.app.ui.navigation.ViewNavigator;
 import com.upnext.app.ui.screens.CreateAccountScreen;
 import com.upnext.app.ui.screens.HomeScreen;
 import com.upnext.app.ui.screens.SignInScreen;
+import com.upnext.app.ui.screens.SkillAddScreen;
+import com.upnext.app.ui.screens.SkillsetScreen;
 import com.upnext.app.ui.theme.AppTheme;
 import java.awt.Dimension;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -23,6 +27,8 @@ public final class App {
     public static final String SIGN_IN_SCREEN = "signIn";
     public static final String CREATE_ACCOUNT_SCREEN = "createAccount";
     public static final String HOME_SCREEN = "home";
+    public static final String SKILLSET_SCREEN = "skillset";
+    public static final String SKILL_ADD_SCREEN = "add-skill";
     
     private static final Logger logger = Logger.getInstance();
     
@@ -72,13 +78,17 @@ public final class App {
             SignInScreen signInScreen = new SignInScreen();
             CreateAccountScreen createAccountScreen = new CreateAccountScreen();
             HomeScreen homeScreen = new HomeScreen();
+            SkillsetScreen skillsetScreen = new SkillsetScreen();
+            SkillAddScreen skillAddScreen = new SkillAddScreen();
             
             navigator.registerScreen(SIGN_IN_SCREEN, signInScreen);
             navigator.registerScreen(CREATE_ACCOUNT_SCREEN, createAccountScreen);
             navigator.registerScreen(HOME_SCREEN, homeScreen);
+            navigator.registerScreen(SKILLSET_SCREEN, skillsetScreen);
+            navigator.registerScreen(SKILL_ADD_SCREEN, skillAddScreen);
             
             // Setup navigation
-            setupNavigation(signInScreen, createAccountScreen, homeScreen);
+            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen);
             
             // Start with sign-in screen
             navigator.navigateTo(SIGN_IN_SCREEN);
@@ -98,11 +108,15 @@ public final class App {
      * @param signInScreen The sign-in screen
      * @param createAccountScreen The create account screen
      * @param homeScreen The home screen
+     * @param skillsetScreen The skillset screen
+     * @param skillAddScreen The skill add screen
      */
     private static void setupNavigation(
             SignInScreen signInScreen,
             CreateAccountScreen createAccountScreen,
-            HomeScreen homeScreen) {
+            HomeScreen homeScreen,
+            SkillsetScreen skillsetScreen,
+            SkillAddScreen skillAddScreen) {
         
         final ViewNavigator navigator = ViewNavigator.getInstance();
         final AuthService authService = AuthService.getInstance();
@@ -153,7 +167,7 @@ public final class App {
         // Create Account Screen -> Sign In Screen
         createAccountScreen.getSignInLink().addActionListener(_ -> navigator.navigateTo(SIGN_IN_SCREEN));
         
-        // Create Account Screen -> Sign In Screen (after successful account creation)
+        // Create Account Screen -> Skillset Screen (after validating initial data)
         createAccountScreen.getCreateAccountButton().addActionListener(_ -> {
             String name = createAccountScreen.getNameField().getText();
             String email = createAccountScreen.getEmailField().getText();
@@ -170,39 +184,32 @@ public final class App {
                 );
                 return;
             }
-            
-            try {
-                logger.info("Attempting to create account for: " + email);
-                
-                // Attempt to create account
-                authService.signUp(name, email, password);
-                
-                // Clear sensitive fields
-                createAccountScreen.getNameField().setText("");
-                createAccountScreen.getEmailField().setText("");
-                createAccountScreen.getPasswordField().clear();
-                createAccountScreen.getConfirmPasswordField().clear();
-                
-                // Log success and show success message
-                logger.info("Account created successfully for: " + email);
-                FeedbackManager.showSuccess(
+
+            // Basic validation for other fields
+            if (name.trim().isEmpty()) {
+                FeedbackManager.showWarning(
                     createAccountScreen,
-                    "Account created successfully! Please sign in.",
-                    "Account Created"
+                    "Please enter your name.",
+                    "Validation Error"
                 );
-                
-                // Navigate to sign in screen
-                navigator.navigateTo(SIGN_IN_SCREEN);
-                
-            } catch (AuthService.AuthException ex) {
-                // Log failure and show error message
-                logger.warning("Account creation failed: " + ex.getMessage());
-                FeedbackManager.showError(
-                    createAccountScreen,
-                    ex.getMessage(),
-                    "Account Creation Error"
-                );
+                return;
             }
+            
+            if (email.trim().isEmpty()) {
+                FeedbackManager.showWarning(
+                    createAccountScreen,
+                    "Please enter your email address.",
+                    "Validation Error"
+                );
+                return;
+            }
+            
+            // Store user data in skillset screen for later use
+            skillsetScreen.setUserData(name, email, password);
+            
+            // Navigate to skillset screen to collect skills
+            logger.info("Proceeding to skills collection for: " + email);
+            navigator.navigateTo(SKILLSET_SCREEN);
         });
         
         // Home Screen -> Sign In Screen (sign out)
@@ -224,6 +231,92 @@ public final class App {
                 "You have been signed out successfully.",
                 "Sign Out"
             );
+        });
+        
+        // SkillsetScreen -> CreateAccountScreen (back button)
+        skillsetScreen.getBackButton().addActionListener(_ -> {
+            navigator.navigateTo(CREATE_ACCOUNT_SCREEN);
+        });
+        
+        // SkillsetScreen -> SkillAddScreen (add new skill)
+        skillsetScreen.getAddSkillButton().addActionListener(_ -> {
+            navigator.navigateTo(SKILL_ADD_SCREEN);
+        });
+        
+        // SkillAddScreen navigation is handled within the SkillAddScreen class itself
+        // We're keeping the skillAddScreen parameter for completeness and future extensions
+        
+        // SkillsetScreen -> HomeScreen (after final account creation)
+        skillsetScreen.getCreateAccountButton().addActionListener(_ -> {
+            try {
+                // Get user registration data stored in the skillset screen
+                final String userName = skillsetScreen.getUserName();
+                final String userEmail = skillsetScreen.getUserEmail(); 
+                final String userPassword = skillsetScreen.getUserPassword();
+                
+                // Check if we have all required user data
+                if (userName == null || userEmail == null || userPassword == null || 
+                    userName.isEmpty() || userEmail.isEmpty() || userPassword.isEmpty()) {
+                    throw new IllegalStateException("Missing user registration data");
+                }
+                
+                // Ensure at least one skill was added
+                if (skillsetScreen.getPendingSkills().isEmpty()) {
+                    FeedbackManager.showWarning(
+                        skillsetScreen,
+                        "Please add at least one skill to continue.",
+                        "Validation Error"
+                    );
+                    return;
+                }
+                
+                logger.info("Attempting to create account for: " + userEmail);
+                
+                // Get the list of skills to be associated with the account
+                List<Skill> userSkills = skillsetScreen.getPendingSkills();
+                logger.info("Creating account with " + userSkills.size() + " skills for: " + userEmail);
+                
+                // Create account with skills
+                authService.signUp(userName, userEmail, userPassword, userSkills);
+                
+                // Clear skill list after successful account creation
+                skillsetScreen.clearSkills();
+                
+                // Navigate to home screen
+                navigator.navigateTo(HOME_SCREEN);
+                
+                // Update home screen welcome message
+                homeScreen.updateWelcomeMessage();
+                
+                // Log success and show welcome message
+                logger.info("Account created successfully for: " + userEmail);
+                FeedbackManager.showSuccess(
+                    skillsetScreen,
+                    "Welcome to UpNext, " + userName + "!",
+                    "Account Created"
+                );
+                
+            } catch (IllegalStateException ex) {
+                // This should not happen in normal flow
+                logger.error("Account creation failed: " + ex.getMessage());
+                FeedbackManager.showError(
+                    skillsetScreen,
+                    "An error occurred during account creation. Please try again.",
+                    "Account Creation Error"
+                );
+                
+                // Return to create account screen
+                navigator.navigateTo(CREATE_ACCOUNT_SCREEN);
+                
+            } catch (AuthService.AuthException ex) {
+                // Handle authentication service errors
+                logger.warning("Account creation failed: " + ex.getMessage());
+                FeedbackManager.showError(
+                    skillsetScreen,
+                    ex.getMessage(),
+                    "Account Creation Error"
+                );
+            }
         });
     }
 }

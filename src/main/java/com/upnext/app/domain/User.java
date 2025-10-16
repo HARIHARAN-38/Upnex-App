@@ -1,5 +1,8 @@
 package com.upnext.app.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a user in the UpNext application.
  * Contains user identity and authentication information.
@@ -12,12 +15,14 @@ public class User {
     private String salt;
     private boolean active;
     private String createdAt;
+    private List<Skill> skills;
     
     /**
      * Creates a new user with default values.
      */
     public User() {
         this.active = true;
+        this.skills = new ArrayList<>();
     }
     
     /**
@@ -30,6 +35,7 @@ public class User {
         this.name = name;
         this.email = email;
         this.active = true;
+        this.skills = new ArrayList<>();
     }
     
     /**
@@ -51,6 +57,30 @@ public class User {
         this.salt = salt;
         this.active = active;
         this.createdAt = createdAt;
+        this.skills = new ArrayList<>();
+    }
+    
+    /**
+     * Creates a new user with the specified details including skills.
+     * 
+     * @param id The user's unique ID
+     * @param name The user's full name
+     * @param email The user's email address
+     * @param passwordHash The user's hashed password
+     * @param salt The salt used for password hashing
+     * @param active Whether the user is active
+     * @param createdAt The timestamp when the user was created
+     * @param skills The user's skills
+     */
+    public User(Long id, String name, String email, String passwordHash, String salt, boolean active, String createdAt, List<Skill> skills) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.salt = salt;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.skills = skills != null ? skills : new ArrayList<>();
     }
 
     /**
@@ -179,6 +209,52 @@ public class User {
         this.createdAt = createdAt;
     }
     
+    /**
+     * Gets the user's skills.
+     * 
+     * @return The list of skills
+     */
+    public List<Skill> getSkills() {
+        if (skills == null) {
+            skills = new ArrayList<>();
+        }
+        return skills;
+    }
+    
+    /**
+     * Sets the user's skills.
+     * 
+     * @param skills The list of skills
+     */
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+    
+    /**
+     * Adds a skill to the user's skills list.
+     * 
+     * @param skill The skill to add
+     */
+    public void addSkill(Skill skill) {
+        if (skills == null) {
+            skills = new ArrayList<>();
+        }
+        skills.add(skill);
+    }
+    
+    /**
+     * Removes a skill from the user's skills list.
+     * 
+     * @param skillId The ID of the skill to remove
+     * @return true if the skill was removed, false if it wasn't found
+     */
+    public boolean removeSkill(Long skillId) {
+        if (skills == null) {
+            return false;
+        }
+        return skills.removeIf(skill -> skill.getSkillId().equals(skillId));
+    }
+    
     @Override
     public String toString() {
         return "User{" +
@@ -187,6 +263,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", active=" + active +
                 ", createdAt='" + createdAt + '\'' +
+                ", skillsCount=" + (skills != null ? skills.size() : 0) +
                 '}';
     }
 }

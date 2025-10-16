@@ -106,9 +106,105 @@ Before executing tests, ensure the following:
 | **Status** | ◯ Pass<br>◯ Fail |
 | **Notes** |  |
 
-### 4. Error Handling
+### 4. Skills Functionality
+
+#### 4.1 Registration with Skills
 
 | ID | TC-401 |
+| --- | --- |
+| **Test Case** | Navigate to skills screen during registration |
+| **Precondition** | Application started, on create account screen |
+| **Steps** | 1. Fill in name, email and matching passwords<br>2. Click "Create Account" button |
+| **Expected Result** | - Redirected to skillset screen<br>- User data preserved<br>- Create account button initially disabled<br>- Back button available |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-402 |
+| --- | --- |
+| **Test Case** | Add skill during registration |
+| **Precondition** | On skillset screen during registration |
+| **Steps** | 1. Click "Add New Skill" button<br>2. Enter skill name "Java Programming"<br>3. Enter description "Core Java and frameworks"<br>4. Set proficiency to 8<br>5. Click "Add Skill" button |
+| **Expected Result** | - Redirected back to skillset screen<br>- Skill card appears with correct data<br>- Create account button becomes enabled<br>- Delete option available on skill card |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-403 |
+| --- | --- |
+| **Test Case** | Cancel adding a skill |
+| **Precondition** | On add skill screen during registration |
+| **Steps** | 1. Enter some skill data<br>2. Click "Cancel" button |
+| **Expected Result** | - Redirected back to skillset screen<br>- No new skill added<br>- Previous skills still displayed |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-404 |
+| --- | --- |
+| **Test Case** | Delete skill during registration |
+| **Precondition** | On skillset screen with at least one skill added |
+| **Steps** | 1. Click delete button (X) on a skill card |
+| **Expected Result** | - Skill removed from display<br>- If last skill removed, create account button becomes disabled |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-405 |
+| --- | --- |
+| **Test Case** | Navigate back from skillset to create account screen |
+| **Precondition** | On skillset screen with skills added |
+| **Steps** | 1. Click "Back" button<br>2. Confirm navigation in dialog |
+| **Expected Result** | - Confirmation dialog appears warning about losing skills<br>- After confirmation, redirected to create account screen<br>- Form fields still populated |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-406 |
+| --- | --- |
+| **Test Case** | Complete registration with skills |
+| **Precondition** | On skillset screen with at least one skill added |
+| **Steps** | 1. Click "Create Account" button |
+| **Expected Result** | - Account created successfully<br>- Redirected to home screen<br>- Success message displayed<br>- User logged in with correct name |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+#### 4.2 Validation of Skills
+
+| ID | TC-407 |
+| --- | --- |
+| **Test Case** | Add skill with empty name |
+| **Precondition** | On add skill screen during registration |
+| **Steps** | 1. Leave skill name empty<br>2. Enter description<br>3. Set proficiency<br>4. Click "Add Skill" button |
+| **Expected Result** | - Error message "Skill name is required"<br>- Remains on add skill screen<br>- Form fields preserved |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-408 |
+| --- | --- |
+| **Test Case** | Add skill with too long name |
+| **Precondition** | On add skill screen during registration |
+| **Steps** | 1. Enter skill name over 100 characters<br>2. Enter description<br>3. Set proficiency<br>4. Click "Add Skill" button |
+| **Expected Result** | - Error message about name length<br>- Remains on add skill screen<br>- Form fields preserved |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-409 |
+| --- | --- |
+| **Test Case** | Add skill with too long description |
+| **Precondition** | On add skill screen during registration |
+| **Steps** | 1. Enter valid skill name<br>2. Enter description over 255 characters<br>3. Set proficiency<br>4. Click "Add Skill" button |
+| **Expected Result** | - Error message about description length<br>- Remains on add skill screen<br>- Form fields preserved |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-410 |
+| --- | --- |
+| **Test Case** | Create account without adding skills |
+| **Precondition** | On skillset screen with no skills added |
+| **Steps** | 1. Click "Create Account" button |
+| **Expected Result** | - Error message "Please add at least one skill to continue"<br>- Remains on skillset screen |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+### 5. Error Handling
+
+| ID | TC-501 |
 | --- | --- |
 | **Test Case** | Database connection failure |
 | **Precondition** | MySQL service stopped or credentials changed |
@@ -117,7 +213,7 @@ Before executing tests, ensure the following:
 | **Status** | ◯ Pass<br>◯ Fail |
 | **Notes** |  |
 
-| ID | TC-402 |
+| ID | TC-502 |
 | --- | --- |
 | **Test Case** | Error logging |
 | **Precondition** | Application started |
@@ -134,8 +230,9 @@ Before executing tests, ensure the following:
 | Account Creation | | | 3 |
 | Sign In | | | 3 |
 | Dashboard Functionality | | | 2 |
+| Skills Functionality | | | 10 |
 | Error Handling | | | 2 |
-| **Total** | | | 11 |
+| **Total** | | | 21 |
 
 ## Follow-up Items
 
