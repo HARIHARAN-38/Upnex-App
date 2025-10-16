@@ -1,0 +1,3 @@
+based on the apptheme create a: create account page and signin page. there is jdbc connector jar file in lib directory create a jdbc connection file the connects database: name = upnex, pass = hari, its in 127. local host ip. after signin sucess redirect to homepage in progress. so we know signin worked.
+
+based on the above info create a detailed road map with proper file names and structure in CurrentRoadmap.md make it like [ ] step 1 so its easy to mark as done after implementation

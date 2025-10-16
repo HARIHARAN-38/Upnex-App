@@ -1,0 +1,20 @@
+# Database connection properties for UpNext App
+# Customize these settings to match your MySQL database configuration
+
+# Database host address
+db.host=127.0.0.1
+
+# Database port
+db.port=3306
+
+# Database name
+db.name=upnext
+
+# Database user credentials
+db.user=root
+db.password=
+
+# Connection pool settings
+db.pool.min=5
+db.pool.max=10
+db.pool.timeout=30000
