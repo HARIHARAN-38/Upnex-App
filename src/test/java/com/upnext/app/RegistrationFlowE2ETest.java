@@ -1,10 +1,9 @@
 package com.upnext.app;
 
-import com.upnext.app.ui.components.FeedbackManager;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.SwingUtilities;
 
 /**
  * End-to-end test for the UpNext registration flow.
@@ -21,9 +20,7 @@ public class RegistrationFlowE2ETest {
      * @throws Exception If an error occurs during testing
      */
     public static void main(String[] args) throws Exception {
-        // Override JOptionPane and FeedbackManager to avoid blocking dialogs
-        JOptionPane.setDefaultLookAndFeelDecorated(true);
-        FeedbackManager.setTestMode(true);
+        // Launch the UI on the event dispatch thread to mirror real usage
         
         // Start the application
         final CountDownLatch appStartLatch = new CountDownLatch(1);

@@ -29,7 +29,11 @@ public class UserRepository {
             "password_hash VARCHAR(255) NOT NULL, " +
             "salt VARCHAR(255) NOT NULL, " +
             "active BOOLEAN DEFAULT TRUE, " +
-            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+            "questions_asked INT NOT NULL DEFAULT 0, " +
+            "answers_given INT NOT NULL DEFAULT 0, " +
+            "total_upvotes INT NOT NULL DEFAULT 0, " +
+            "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+            "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)";
     
     private static final String INSERT_USER_SQL = 
             "INSERT INTO users (name, email, password_hash, salt) " +
@@ -44,6 +48,10 @@ public class UserRepository {
     private static final String UPDATE_USER_SQL = 
             "UPDATE users SET name = ?, email = ?, password_hash = ?, " +
             "salt = ?, active = ? WHERE id = ?";
+    
+    private static final String UPDATE_USER_METRICS_SQL = 
+            "UPDATE users SET questions_asked = ?, answers_given = ?, " +
+            "total_upvotes = ? WHERE id = ?";
     
     private static final String DELETE_USER_SQL = 
             "DELETE FROM users WHERE id = ?";
@@ -251,6 +259,40 @@ public class UserRepository {
     }
     
     /**
+     * Updates user metrics in the database.
+     * 
+     * @param userId The ID of the user to update
+     * @param questionsAsked The count of questions asked
+     * @param answersGiven The count of answers given
+     * @param totalUpvotes The total upvotes received
+     * @return true if the update was successful, false otherwise
+     * @throws SQLException If there's an error updating the metrics
+     */
+    public boolean updateMetrics(Long userId, int questionsAsked, int answersGiven, int totalUpvotes) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            statement = connection.prepareStatement(UPDATE_USER_METRICS_SQL);
+            statement.setInt(1, questionsAsked);
+            statement.setInt(2, answersGiven);
+            statement.setInt(3, totalUpvotes);
+            statement.setLong(4, userId);
+            
+            int affectedRows = statement.executeUpdate();
+            return affectedRows > 0;
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
+            }
+        }
+    }
+    
+    /**
      * Deletes a user from the database.
      * 
      * @param id The ID of the user to delete
@@ -326,6 +368,9 @@ public class UserRepository {
         String passwordHash = resultSet.getString("password_hash");
         String salt = resultSet.getString("salt");
         boolean active = resultSet.getBoolean("active");
+        int questionsAsked = resultSet.getInt("questions_asked");
+        int answersGiven = resultSet.getInt("answers_given");
+        int totalUpvotes = resultSet.getInt("total_upvotes");
         Timestamp createdAt = resultSet.getTimestamp("created_at");
         
         User user = new User();
@@ -335,6 +380,9 @@ public class UserRepository {
         user.setPasswordHash(passwordHash);
         user.setSalt(salt);
         user.setActive(active);
+        user.setQuestionsAsked(questionsAsked);
+        user.setAnswersGiven(answersGiven);
+        user.setTotalUpvotes(totalUpvotes);
         user.setCreatedAt(createdAt != null ? createdAt.toString() : null);
         
         return user;

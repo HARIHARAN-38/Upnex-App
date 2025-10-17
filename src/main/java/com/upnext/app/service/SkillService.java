@@ -1,12 +1,14 @@
 package com.upnext.app.service;
 
-import com.upnext.app.core.Logger;
-import com.upnext.app.data.SkillRepository;
-import com.upnext.app.domain.Skill;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import com.upnext.app.core.Logger;
+import com.upnext.app.data.SkillRepository;
+import com.upnext.app.domain.Skill;
 
 /**
  * Service for user skill operations.
@@ -17,14 +19,18 @@ public class SkillService {
     private static SkillService instance;
     
     // Dependencies
-    private final SkillRepository skillRepository;
+    private final SkillDataAccess skillDataAccess;
     private final Logger logger = Logger.getInstance();
     
     /**
      * Private constructor to enforce singleton pattern.
      */
     private SkillService() {
-        this.skillRepository = SkillRepository.getInstance();
+        this(new RepositorySkillDataAccess(SkillRepository.getInstance()));
+    }
+
+    SkillService(SkillDataAccess skillDataAccess) {
+        this.skillDataAccess = Objects.requireNonNull(skillDataAccess, "skillDataAccess");
     }
     
     /**
@@ -72,7 +78,7 @@ public class SkillService {
             skill.setDescription(description != null ? description.trim() : "");
             skill.setProficiencyLevel(proficiencyLevel);
             
-            Skill savedSkill = skillRepository.save(skill);
+            Skill savedSkill = skillDataAccess.save(skill);
             logger.info("Skill added successfully: " + savedSkill.getSkillId());
             return savedSkill;
         } catch (SQLException e) {
@@ -110,7 +116,7 @@ public class SkillService {
         
         try {
             logger.info("Retrieving skills for user ID: " + userId);
-            return skillRepository.findByUserId(userId);
+            return skillDataAccess.findByUserId(userId);
         } catch (SQLException e) {
             logger.logException("Database error while retrieving skills", e);
             throw new SkillException("Failed to retrieve skills: " + e.getMessage(), e);
@@ -131,7 +137,7 @@ public class SkillService {
         
         try {
             logger.info("Retrieving skill with ID: " + skillId);
-            Optional<Skill> skill = skillRepository.findById(skillId);
+            Optional<Skill> skill = skillDataAccess.findById(skillId);
             
             if (skill.isPresent()) {
                 return skill.get();
@@ -173,7 +179,7 @@ public class SkillService {
             logger.info("Updating skill with ID: " + skillId);
             
             // Check if skill exists
-            Optional<Skill> optionalSkill = skillRepository.findById(skillId);
+            Optional<Skill> optionalSkill = skillDataAccess.findById(skillId);
             if (!optionalSkill.isPresent()) {
                 logger.warning("Cannot update - skill not found with ID: " + skillId);
                 throw new SkillException("Skill not found");
@@ -184,7 +190,7 @@ public class SkillService {
             skill.setDescription(description != null ? description.trim() : "");
             skill.setProficiencyLevel(proficiencyLevel);
             
-            boolean updated = skillRepository.update(skill);
+            boolean updated = skillDataAccess.update(skill);
             if (updated) {
                 logger.info("Skill updated successfully: " + skillId);
                 return skill;
@@ -215,7 +221,7 @@ public class SkillService {
             logger.info("Updating proficiency for skill ID: " + skillId);
             
             // Check if skill exists
-            Optional<Skill> optionalSkill = skillRepository.findById(skillId);
+            Optional<Skill> optionalSkill = skillDataAccess.findById(skillId);
             if (!optionalSkill.isPresent()) {
                 logger.warning("Cannot update proficiency - skill not found with ID: " + skillId);
                 throw new SkillException("Skill not found");
@@ -224,7 +230,7 @@ public class SkillService {
             Skill skill = optionalSkill.get();
             skill.setProficiencyLevel(proficiencyLevel); // This will constrain to 1-10
             
-            boolean updated = skillRepository.update(skill);
+            boolean updated = skillDataAccess.update(skill);
             if (updated) {
                 logger.info("Skill proficiency updated successfully: " + skillId);
                 return skill;
@@ -252,7 +258,7 @@ public class SkillService {
         try {
             logger.info("Deleting skill with ID: " + skillId);
             
-            boolean deleted = skillRepository.deleteById(skillId);
+            boolean deleted = skillDataAccess.deleteById(skillId);
             if (!deleted) {
                 logger.warning("Failed to delete skill - skill may not exist: " + skillId);
                 throw new SkillException("Failed to delete skill - skill may not exist");
@@ -280,7 +286,7 @@ public class SkillService {
         try {
             logger.info("Deleting all skills for user ID: " + userId);
             
-            int deletedCount = skillRepository.deleteByUserId(userId);
+            int deletedCount = skillDataAccess.deleteByUserId(userId);
             logger.info("Deleted " + deletedCount + " skills for user ID: " + userId);
             
             return deletedCount;
@@ -327,6 +333,58 @@ public class SkillService {
         
         public SkillException(String message, Throwable cause) {
             super(message, cause);
+        }
+    }
+
+    interface SkillDataAccess {
+        Skill save(Skill skill) throws SQLException;
+
+        List<Skill> findByUserId(Long userId) throws SQLException;
+
+        Optional<Skill> findById(Long skillId) throws SQLException;
+
+        boolean update(Skill skill) throws SQLException;
+
+        boolean deleteById(Long skillId) throws SQLException;
+
+        int deleteByUserId(Long userId) throws SQLException;
+    }
+
+    private static final class RepositorySkillDataAccess implements SkillDataAccess {
+        private final SkillRepository repository;
+
+        RepositorySkillDataAccess(SkillRepository repository) {
+            this.repository = Objects.requireNonNull(repository, "repository");
+        }
+
+        @Override
+        public Skill save(Skill skill) throws SQLException {
+            return repository.save(skill);
+        }
+
+        @Override
+        public List<Skill> findByUserId(Long userId) throws SQLException {
+            return repository.findByUserId(userId);
+        }
+
+        @Override
+        public Optional<Skill> findById(Long skillId) throws SQLException {
+            return repository.findById(skillId);
+        }
+
+        @Override
+        public boolean update(Skill skill) throws SQLException {
+            return repository.update(skill);
+        }
+
+        @Override
+        public boolean deleteById(Long skillId) throws SQLException {
+            return repository.deleteById(skillId);
+        }
+
+        @Override
+        public int deleteByUserId(Long userId) throws SQLException {
+            return repository.deleteByUserId(userId);
         }
     }
 }

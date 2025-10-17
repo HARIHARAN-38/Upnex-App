@@ -1,5 +1,13 @@
 package com.upnext.app;
 
+import java.awt.Dimension;
+ import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+
 import com.upnext.app.core.Logger;
 import com.upnext.app.domain.Skill;
 import com.upnext.app.domain.User;
@@ -8,16 +16,11 @@ import com.upnext.app.ui.components.FeedbackManager;
 import com.upnext.app.ui.navigation.ViewNavigator;
 import com.upnext.app.ui.screens.CreateAccountScreen;
 import com.upnext.app.ui.screens.HomeScreen;
+import com.upnext.app.ui.screens.QuestionDetailScreen;
 import com.upnext.app.ui.screens.SignInScreen;
 import com.upnext.app.ui.screens.SkillAddScreen;
 import com.upnext.app.ui.screens.SkillsetScreen;
 import com.upnext.app.ui.theme.AppTheme;
-import java.awt.Dimension;
-import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 /**
  * Entry point for the UpNext desktop application.
@@ -29,6 +32,7 @@ public final class App {
     public static final String HOME_SCREEN = "home";
     public static final String SKILLSET_SCREEN = "skillset";
     public static final String SKILL_ADD_SCREEN = "add-skill";
+    public static final String QUESTION_DETAIL_SCREEN = "question-detail";
     
     private static final Logger logger = Logger.getInstance();
     
@@ -80,15 +84,17 @@ public final class App {
             HomeScreen homeScreen = new HomeScreen();
             SkillsetScreen skillsetScreen = new SkillsetScreen();
             SkillAddScreen skillAddScreen = new SkillAddScreen();
+            QuestionDetailScreen questionDetailScreen = new QuestionDetailScreen();
             
             navigator.registerScreen(SIGN_IN_SCREEN, signInScreen);
             navigator.registerScreen(CREATE_ACCOUNT_SCREEN, createAccountScreen);
             navigator.registerScreen(HOME_SCREEN, homeScreen);
             navigator.registerScreen(SKILLSET_SCREEN, skillsetScreen);
             navigator.registerScreen(SKILL_ADD_SCREEN, skillAddScreen);
+            navigator.registerScreen(QUESTION_DETAIL_SCREEN, questionDetailScreen);
             
             // Setup navigation
-            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen);
+            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen, questionDetailScreen);
             
             // Start with sign-in screen
             navigator.navigateTo(SIGN_IN_SCREEN);
@@ -110,22 +116,24 @@ public final class App {
      * @param homeScreen The home screen
      * @param skillsetScreen The skillset screen
      * @param skillAddScreen The skill add screen
+     * @param questionDetailScreen The question detail screen
      */
     private static void setupNavigation(
             SignInScreen signInScreen,
             CreateAccountScreen createAccountScreen,
             HomeScreen homeScreen,
             SkillsetScreen skillsetScreen,
-            SkillAddScreen skillAddScreen) {
+            SkillAddScreen skillAddScreen,
+            QuestionDetailScreen questionDetailScreen) {
         
         final ViewNavigator navigator = ViewNavigator.getInstance();
         final AuthService authService = AuthService.getInstance();
         
         // Sign In Screen -> Create Account Screen
-        signInScreen.getCreateAccountLink().addActionListener(_ -> navigator.navigateTo(CREATE_ACCOUNT_SCREEN));
+    signInScreen.getCreateAccountLink().addActionListener(event -> navigator.navigateTo(CREATE_ACCOUNT_SCREEN));
         
         // Sign In Screen -> Home Screen (real authentication)
-        signInScreen.getSignInButton().addActionListener(_ -> {
+    signInScreen.getSignInButton().addActionListener(event -> {
             String email = signInScreen.getEmailField().getText();
             String password = new String(signInScreen.getPasswordField().getPassword());
             
@@ -165,10 +173,10 @@ public final class App {
         });
         
         // Create Account Screen -> Sign In Screen
-        createAccountScreen.getSignInLink().addActionListener(_ -> navigator.navigateTo(SIGN_IN_SCREEN));
+    createAccountScreen.getSignInLink().addActionListener(event -> navigator.navigateTo(SIGN_IN_SCREEN));
         
         // Create Account Screen -> Skillset Screen (after validating initial data)
-        createAccountScreen.getCreateAccountButton().addActionListener(_ -> {
+    createAccountScreen.getCreateAccountButton().addActionListener(event -> {
             String name = createAccountScreen.getNameField().getText();
             String email = createAccountScreen.getEmailField().getText();
             String password = new String(createAccountScreen.getPasswordField().getPassword());
@@ -213,7 +221,7 @@ public final class App {
         });
         
         // Home Screen -> Sign In Screen (sign out)
-        homeScreen.getSignOutButton().addActionListener(_ -> {
+    homeScreen.getSignOutButton().addActionListener(event -> {
             // Sign out the current user
             User user = authService.getCurrentUser();
             String email = user != null ? user.getEmail() : "unknown";
@@ -234,12 +242,12 @@ public final class App {
         });
         
         // SkillsetScreen -> CreateAccountScreen (back button)
-        skillsetScreen.getBackButton().addActionListener(_ -> {
+    skillsetScreen.getBackButton().addActionListener(event -> {
             navigator.navigateTo(CREATE_ACCOUNT_SCREEN);
         });
         
         // SkillsetScreen -> SkillAddScreen (add new skill)
-        skillsetScreen.getAddSkillButton().addActionListener(_ -> {
+    skillsetScreen.getAddSkillButton().addActionListener(event -> {
             navigator.navigateTo(SKILL_ADD_SCREEN);
         });
         
@@ -247,7 +255,7 @@ public final class App {
         // We're keeping the skillAddScreen parameter for completeness and future extensions
         
         // SkillsetScreen -> HomeScreen (after final account creation)
-        skillsetScreen.getCreateAccountButton().addActionListener(_ -> {
+    skillsetScreen.getCreateAccountButton().addActionListener(event -> {
             try {
                 // Get user registration data stored in the skillset screen
                 final String userName = skillsetScreen.getUserName();

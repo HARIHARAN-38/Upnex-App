@@ -14,7 +14,7 @@ public final class DatabaseConfig {
     // Default database connection properties
     private static final String DEFAULT_HOST = "127.0.0.1";
     private static final String DEFAULT_PORT = "3306";
-    private static final String DEFAULT_DATABASE = "upnext";
+    private static final String DEFAULT_DATABASE = "upnex";
     private static final String DEFAULT_USER = "root";
     private static final String DEFAULT_PASSWORD = "hari";
     

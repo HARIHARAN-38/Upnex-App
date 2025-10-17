@@ -231,14 +231,62 @@ Before executing tests, ensure the following:
 | Sign In | | | 3 |
 | Dashboard Functionality | | | 2 |
 | Skills Functionality | | | 10 |
+| Home Screen & Search | | | 5 |
 | Error Handling | | | 2 |
-| **Total** | | | 21 |
+| **Total** | | | 26 |
+
+### 6. Home Screen & Search
+
+| ID | TC-601 |
+| --- | --- |
+| **Test Case** | Filter preservation during navigation |
+| **Precondition** | User signed in, on home screen |
+| **Steps** | 1. Apply filters (select a subject, add tags, enter search text)<br>2. Click on a question to navigate to detail screen<br>3. Click back button to return to home screen |
+| **Expected Result** | - All previously applied filters are still active<br>- Question feed shows the same filtered results<br>- Filter UI elements show the same selections |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-602 |
+| --- | --- |
+| **Test Case** | Filter reset button functionality |
+| **Precondition** | User signed in, on home screen with filters applied |
+| **Steps** | 1. Click "Clear Filters" button |
+| **Expected Result** | - All filters are cleared<br>- Subject selection reverts to "All Subjects"<br>- No tags are selected<br>- Search text is cleared<br>- Question feed updates to show unfiltered results |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-603 |
+| --- | --- |
+| **Test Case** | Search functionality |
+| **Precondition** | User signed in, on home screen |
+| **Steps** | 1. Enter search term in search box<br>2. Wait for results to load |
+| **Expected Result** | - Question feed updates to show matching results<br>- Results include questions with search term in title or content<br>- No results message shown if no matches found |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-604 |
+| --- | --- |
+| **Test Case** | Subject and tag filtering |
+| **Precondition** | User signed in, on home screen |
+| **Steps** | 1. Select a subject from the left panel<br>2. Select one or more tags<br>3. Observe question feed |
+| **Expected Result** | - Question feed updates with each selection<br>- Only questions matching both subject and tags are shown<br>- Filter pills/chips show active filters |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
+
+| ID | TC-605 |
+| --- | --- |
+| **Test Case** | Filter persistence between sessions |
+| **Precondition** | User signed in, on home screen with filters applied |
+| **Steps** | 1. Close the application<br>2. Re-open the application and sign in<br>3. Navigate to home screen |
+| **Expected Result** | - Previously applied filters are still active<br>- Question feed shows same filtered results<br>- Filter UI elements show same selections |
+| **Status** | ◯ Pass<br>◯ Fail |
+| **Notes** |  |
 
 ## Follow-up Items
 
-1. 
-2. 
-3. 
+1. Create automated tests for filter persistence
+2. Add navigation tests for upcoming "Ask a Question" functionality  
+3. Document filter state persistence behavior
 
 ## Test Environment
 
@@ -250,4 +298,4 @@ Before executing tests, ensure the following:
 
 ---
 
-*Last Updated: October 16, 2025*
+*Last Updated: October 17, 2025*

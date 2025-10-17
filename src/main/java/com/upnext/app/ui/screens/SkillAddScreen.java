@@ -1,5 +1,28 @@
 package com.upnext.app.ui.screens;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+
 import com.upnext.app.core.Logger;
 import com.upnext.app.domain.Skill;
 import com.upnext.app.ui.components.FeedbackManager;
@@ -9,11 +32,6 @@ import com.upnext.app.ui.components.forms.FormPanel;
 import com.upnext.app.ui.components.forms.SubmitButton;
 import com.upnext.app.ui.navigation.ViewNavigator;
 import com.upnext.app.ui.theme.AppTheme;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 
 /**
  * Screen for adding a new skill during account creation or profile management.
@@ -186,7 +204,7 @@ public class SkillAddScreen extends JPanel {
         loadingLabel.setFont(AppTheme.PRIMARY_FONT);
         loadingLabel.setForeground(AppTheme.PRIMARY);
         
-        loadingPanel.add(new JLabel(new ImageIcon(getClass().getResource("/ui/icons/spinner.gif"))));
+    loadingPanel.add(createLoadingIndicator());
         loadingPanel.add(loadingLabel);
         
         // Add button
@@ -244,18 +262,17 @@ public class SkillAddScreen extends JPanel {
      * - Enter in last field submits the form
      */
     private void setupEventListeners() {
-        // Button click handlers using lambda expressions
-        // Using underscore (_) as per Java convention for ignored parameters
-        cancelButton.addActionListener((_) -> cancelAddSkill());
-        addSkillButton.addActionListener((_) -> addSkill());
+    // Button click handlers using lambda expressions
+    cancelButton.addActionListener(event -> cancelAddSkill());
+    addSkillButton.addActionListener(event -> addSkill());
         
         // Enhanced keyboard navigation support
         // When user presses Enter in skill name field, focus moves to description field
-        skillNameField.getTextField().addActionListener((_) -> descriptionField.getTextField().requestFocus());
+    skillNameField.getTextField().addActionListener(event -> descriptionField.getTextField().requestFocus());
         
         // When user presses Enter in description field, it triggers the add skill action
         // This allows for keyboard-only form submission
-        descriptionField.getTextField().addActionListener((_) -> addSkill());
+    descriptionField.getTextField().addActionListener(event -> addSkill());
     }
     
     /**
@@ -511,5 +528,18 @@ public class SkillAddScreen extends JPanel {
      */
     private void showValidationError(String message) {
         FeedbackManager.showError(this, message, "Validation Error");
+    }
+
+    private JComponent createLoadingIndicator() {
+        java.net.URL resource = getClass().getResource("/ui/icons/spinner.gif");
+        if (resource != null) {
+            return new JLabel(new ImageIcon(resource));
+        }
+
+        JProgressBar fallback = new JProgressBar();
+        fallback.setIndeterminate(true);
+        fallback.setBorder(new EmptyBorder(0, 0, 0, 0));
+        fallback.setPreferredSize(new Dimension(64, 12));
+        return fallback;
     }
 }

@@ -179,9 +179,9 @@ public class SkillsetScreen extends JPanel {
     private void setupEventListeners() {
         // Note: The '__' parameter is intentionally unused - it's a common convention 
         // for lambda parameters that aren't referenced in the method body
-        backButton.addActionListener(__ -> navigateBack());
-        addSkillButton.addActionListener(__ -> navigateToAddSkill());
-        createAccountButton.addActionListener(__ -> finalizeRegistration());
+    backButton.addActionListener(event -> navigateBack());
+    addSkillButton.addActionListener(event -> navigateToAddSkill());
+    createAccountButton.addActionListener(event -> finalizeRegistration());
     }
     
     /**

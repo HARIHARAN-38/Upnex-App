@@ -15,6 +15,10 @@ public class User {
     private String salt;
     private boolean active;
     private String createdAt;
+    private String updatedAt;
+    private int questionsAsked;
+    private int answersGiven;
+    private int totalUpvotes;
     private List<Skill> skills;
     
     /**
@@ -23,6 +27,9 @@ public class User {
     public User() {
         this.active = true;
         this.skills = new ArrayList<>();
+        this.questionsAsked = 0;
+        this.answersGiven = 0;
+        this.totalUpvotes = 0;
     }
     
     /**
@@ -36,6 +43,9 @@ public class User {
         this.email = email;
         this.active = true;
         this.skills = new ArrayList<>();
+        this.questionsAsked = 0;
+        this.answersGiven = 0;
+        this.totalUpvotes = 0;
     }
     
     /**
@@ -58,6 +68,9 @@ public class User {
         this.active = active;
         this.createdAt = createdAt;
         this.skills = new ArrayList<>();
+        this.questionsAsked = 0;
+        this.answersGiven = 0;
+        this.totalUpvotes = 0;
     }
     
     /**
@@ -80,6 +93,42 @@ public class User {
         this.salt = salt;
         this.active = active;
         this.createdAt = createdAt;
+        this.skills = skills != null ? skills : new ArrayList<>();
+        this.questionsAsked = 0;
+        this.answersGiven = 0;
+        this.totalUpvotes = 0;
+    }
+    
+    /**
+     * Creates a new user with all details including metrics.
+     * 
+     * @param id The user's unique ID
+     * @param name The user's full name
+     * @param email The user's email address
+     * @param passwordHash The user's hashed password
+     * @param salt The salt used for password hashing
+     * @param active Whether the user is active
+     * @param createdAt The timestamp when the user was created
+     * @param updatedAt The timestamp when the user was last updated
+     * @param questionsAsked The count of questions asked by this user
+     * @param answersGiven The count of answers given by this user
+     * @param totalUpvotes The total upvotes received by this user
+     * @param skills The user's skills
+     */
+    public User(Long id, String name, String email, String passwordHash, String salt, boolean active, 
+                String createdAt, String updatedAt, int questionsAsked, int answersGiven, 
+                int totalUpvotes, List<Skill> skills) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.salt = salt;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.questionsAsked = questionsAsked;
+        this.answersGiven = answersGiven;
+        this.totalUpvotes = totalUpvotes;
         this.skills = skills != null ? skills : new ArrayList<>();
     }
 
@@ -255,6 +304,78 @@ public class User {
         return skills.removeIf(skill -> skill.getSkillId().equals(skillId));
     }
     
+    /**
+     * Gets the timestamp when the user was last updated.
+     * 
+     * @return The update timestamp
+     */
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    /**
+     * Sets the timestamp when the user was last updated.
+     * 
+     * @param updatedAt The update timestamp
+     */
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    /**
+     * Gets the count of questions asked by this user.
+     * 
+     * @return The count of questions asked
+     */
+    public int getQuestionsAsked() {
+        return questionsAsked;
+    }
+    
+    /**
+     * Sets the count of questions asked by this user.
+     * 
+     * @param questionsAsked The count of questions asked
+     */
+    public void setQuestionsAsked(int questionsAsked) {
+        this.questionsAsked = questionsAsked;
+    }
+    
+    /**
+     * Gets the count of answers given by this user.
+     * 
+     * @return The count of answers given
+     */
+    public int getAnswersGiven() {
+        return answersGiven;
+    }
+    
+    /**
+     * Sets the count of answers given by this user.
+     * 
+     * @param answersGiven The count of answers given
+     */
+    public void setAnswersGiven(int answersGiven) {
+        this.answersGiven = answersGiven;
+    }
+    
+    /**
+     * Gets the total upvotes received by this user.
+     * 
+     * @return The total upvotes
+     */
+    public int getTotalUpvotes() {
+        return totalUpvotes;
+    }
+    
+    /**
+     * Sets the total upvotes received by this user.
+     * 
+     * @param totalUpvotes The total upvotes
+     */
+    public void setTotalUpvotes(int totalUpvotes) {
+        this.totalUpvotes = totalUpvotes;
+    }
+    
     @Override
     public String toString() {
         return "User{" +
@@ -263,6 +384,9 @@ public class User {
                 ", email='" + email + '\'' +
                 ", active=" + active +
                 ", createdAt='" + createdAt + '\'' +
+                ", questionsAsked=" + questionsAsked +
+                ", answersGiven=" + answersGiven +
+                ", totalUpvotes=" + totalUpvotes +
                 ", skillsCount=" + (skills != null ? skills.size() : 0) +
                 '}';
     }

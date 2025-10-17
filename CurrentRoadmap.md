@@ -126,3 +126,70 @@
   - Enhance method documentation with step-by-step process descriptions
   - Create user guide for the skills registration process
   - Document UI/UX patterns and design decisions
+
+# Home Experience & Search Roadmap
+
+- [x] Step 23: Schema & Metrics Update (Completed Oct 17, 2025)
+  - Extend `src/main/resources/db/schema.sql` with question tables and user metric columns (questions_asked, answers_given, total_upvotes)
+  - Add migration notes to `docs/DatabaseAccess.md`
+  - Refresh `SchemaInitializer.java` fixtures if needed
+
+- [x] Step 24: Repository Foundations (Completed Oct 16, 2025)
+  - Scaffold domain model `src/main/java/com/upnext/app/domain/question/Question.java`
+  - Implement CRUD/filter stubs in `src/main/java/com/upnext/app/data/question/QuestionRepository.java`
+  - Add integration smoke test `src/test/java/com/upnext/app/data/question/QuestionRepositoryTest.java`
+
+- [x] Step 25: JDBC Alignment & Docs
+  - Reconfirm `JdbcConnectionProvider` credentials (`db=upnex`, `user=root`, `password=hari`, host `127.0.0.1`)
+  - Document connection usage patterns in `docs/DatabaseAccess.md`
+  - Ensure MySQL driver JAR in `lib/` is referenced by `pom.xml`
+
+- [x] Step 26: Search Token Utilities (Completed Oct 17, 2025)
+  - Implement tokenizer helper `src/main/java/com/upnext/app/service/search/TokenUtils.java`
+  - Support lowercasing, dedupe, trigram preparation
+  - Cover edge cases in `src/test/java/com/upnext/app/service/search/TokenUtilsTest.java`
+
+- [x] Step 27: Search Service Core (Completed Oct 18, 2025)
+  - Build `src/main/java/com/upnext/app/service/SearchService.java` using token utilities + repository queries
+  - Implement fuzzy matching (LIKE / trigram fallback) and result ranking
+  - Add tests in `src/test/java/com/upnext/app/service/SearchServiceTest.java`
+
+- [x] Step 28: Home Layout Scaffold (Completed Oct 17, 2025)
+  - Restructure `HomeScreen` with three-column layout skeleton respecting `AppTheme`
+  - Introduce layout constants for spacing and breakpoints
+
+- [x] Step 29: Subject Navigation Panel (Completed Oct 17, 2025)
+  - Implement `SubjectNavigationPanel` with single-select subjects and multi-select trending tags
+  - Expose filter change events via listener interface
+  - Add panel behaviour tests/mocks
+
+- [x] Step 30: Question Feed & Cards (Completed Oct 18, 2025)
+  - Create `QuestionCard` component (vote controls, metadata badges, navigation)
+  - Implement `QuestionFeedPanel` rendering list, toolbar chips (Hot/New/Unanswered/Solved), empty states
+  - Wire vote actions to repository/service stubs
+
+- [x] Step 31: Profile Summary & Metrics (Completed Oct 17, 2025)
+  - Build `ProfileSummaryCard` showing avatar, username, metrics, member-since
+  - Bind data via `AuthService`/`UserRepository` metrics
+  - Handle loading/placeholder states
+
+- [x] Step 32: Hero Bar & Search Wiring (2023-07-05)
+  - Create `HeroBar` (logo, search input, avatar button)
+  - Connect search input to `SearchService` with debounced updates
+  - Route avatar/menu button to profile screen via `ViewNavigator`
+
+- [x] Step 33: Filter Integration Pass (2025-10-17)
+  - Combine subject/tag selections, toolbar chips, and search into unified query model
+  - Ensure feed refresh handles simultaneous filters and empty results gracefully
+  - Persist active filter state in session/storage
+
+- [x] Step 34: Navigation Persistence & QA (Completed Oct 17, 2025)
+  - Ensure question card navigation to detail page and back retains filters
+  - Confirm "Ask a Question" CTA routes to post page; avatar to profile
+  - Add navigation tests `src/test/java/com/upnext/app/ui/navigation/HomeNavigationTest.java`
+
+- [x] Step 35: Documentation & End-to-End QA (Completed Oct 17, 2025)
+  - Update `docs/TestPlan.md` with new home/search cases
+  - Create `docs/HomeScreenSpec.md` detailing UX flow and component interactions
+  - Created `docs/End-to-End_Validation.md` with comprehensive validation plan
+  - Perform manual + automated end-to-end validation for search, filters, navigation, metrics
