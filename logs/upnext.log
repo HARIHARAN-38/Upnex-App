@@ -5207,3 +5207,24 @@ java.sql.SQLException: Database error
 [2025-10-17 12:36:01] [INFO] Retrieving skills for user ID: 3
 [2025-10-17 12:36:01] [INFO] User signed in successfully: priyan123xyz@gmail.com
 [2025-10-17 12:36:01] [INFO] Sign In Successful: Welcome back, Priyan!
+[2025-10-17 12:39:04] [INFO] Retrieving skills for user ID: 3
+[2025-10-17 12:39:04] [INFO] User signing out: priyan123xyz@gmail.com
+[2025-10-17 12:39:04] [INFO] User signed out: priyan123xyz@gmail.com
+[2025-10-17 12:39:04] [INFO] User signed out successfully: priyan123xyz@gmail.com
+[2025-10-17 12:39:04] [INFO] Sign Out: You have been signed out successfully.
+[2025-10-17 12:39:06] [WARNING] Sign out attempted with no active user session
+[2025-10-17 12:39:55] [INFO] Proceeding to skills collection for: xyz@gmail.com
+[2025-10-17 12:40:01] [INFO] Navigating to add skill screen
+[2025-10-17 12:40:28] [INFO] Added new skill: java with proficiency: 8
+[2025-10-17 12:40:32] [INFO] Navigating to add skill screen
+[2025-10-17 12:40:39] [INFO] Attempting to create account for: xyz@gmail.com
+[2025-10-17 12:40:39] [INFO] Creating account with 1 skills for: xyz@gmail.com
+[2025-10-17 12:40:39] [INFO] Sign-up attempt for email: xyz@gmail.com
+[2025-10-17 12:40:39] [INFO] User created successfully: xyz@gmail.com
+[2025-10-17 12:40:39] [INFO] Adding skill for user ID: 4, skill: java
+[2025-10-17 12:40:39] [INFO] Skill added successfully: 3
+[2025-10-17 12:40:39] [INFO] Added 1 skills for user ID: 4
+[2025-10-17 12:40:39] [INFO] Retrieving skills for user ID: 4
+[2025-10-17 12:40:39] [INFO] Account created successfully for: xyz@gmail.com
+[2025-10-17 12:40:39] [INFO] Account Created: Welcome to UpNext, hari!
+[2025-10-17 12:40:42] [INFO] Finalizing registration with 0 skills
