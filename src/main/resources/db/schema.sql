@@ -1,17 +1,5 @@
 -- UpNext Database Schema
-
--- Disable foreign key checks while dropping/creating tables to avoid
--- errors when re-creating schema during tests or local runs.
-SET FOREIGN_KEY_CHECKS = 0;
-
--- Drop all tables (in dependency order) to ensure a clean recreate.
-DROP TABLE IF EXISTS question_tags;
-DROP TABLE IF EXISTS answers;
-DROP TABLE IF EXISTS questions;
-DROP TABLE IF EXISTS tags;
-DROP TABLE IF EXISTS subjects;
-DROP TABLE IF EXISTS skills;
-DROP TABLE IF EXISTS users;
+-- This schema creates tables only if they don't exist to preserve data
 
 
 -- Users Table
@@ -64,6 +52,7 @@ CREATE TABLE IF NOT EXISTS questions (
     subject_id BIGINT,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
+    context TEXT,
     upvotes INT NOT NULL DEFAULT 0,
     downvotes INT NOT NULL DEFAULT 0,
     answer_count INT NOT NULL DEFAULT 0,
@@ -104,5 +93,4 @@ CREATE TABLE IF NOT EXISTS answers (
     INDEX idx_answers_user (user_id)
 );
 
--- Re-enable foreign key checks after schema creation
-SET FOREIGN_KEY_CHECKS = 1;
+-- Schema creation complete

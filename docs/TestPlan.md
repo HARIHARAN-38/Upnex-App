@@ -282,11 +282,58 @@ Before executing tests, ensure the following:
 | **Status** | ◯ Pass<br>◯ Fail |
 | **Notes** |  |
 
+## Add Question Feature Testing
+
+### 7.1 Question Creation Flow (Unit & Integration Tests)
+
+| **Test Case ID** | **Test Description** | **Steps** | **Expected Result** | **Status** | **Notes** |
+|---|---|---|---|---|---|
+| AQ-UNIT-001 | Validate question creation with valid data | 1. Call QuestionService.createQuestion() with valid Question object<br>2. Verify database transaction commits<br>3. Check telemetry logging | - Question saved to database<br>- User metrics updated<br>- Operation logged with marker | ◯ Pass<br>◯ Fail |  |
+| AQ-UNIT-002 | Validate question with tags association | 1. Create question with existing tags<br>2. Verify tag linking in question_tags table<br>3. Check tag analytics update | - Question-tag relationships created<br>- Tag usage counts incremented<br>- Analytics logged | ◯ Pass<br>◯ Fail |  |
+| AQ-UNIT-003 | Test question validation rules | 1. Attempt creation with invalid data (empty text, null subject)<br>2. Verify validation errors<br>3. Check no database changes | - Validation errors returned<br>- No database modifications<br>- Error logged appropriately | ◯ Pass<br>◯ Fail |  |
+| AQ-INT-001 | End-to-end question creation | 1. Authenticate user<br>2. Create question through service layer<br>3. Verify in database and search index | - Question appears in user's questions<br>- Question searchable immediately<br>- Full audit trail created | ◯ Pass<br>◯ Fail |  |
+
+### 7.2 User Interface Testing
+
+| **Test Case ID** | **Test Description** | **Steps** | **Expected Result** | **Status** | **Notes** |
+|---|---|---|---|---|---|
+| AQ-UI-001 | Add Question dialog opening | 1. Navigate to Home Screen<br>2. Click "Ask a Question" button<br>3. Verify dialog opens | - Add Question dialog displays<br>- All form fields visible and enabled<br>- Focus set to question text field | ◯ Pass<br>◯ Fail |  |
+| AQ-UI-002 | Question text input validation | 1. Open Add Question dialog<br>2. Enter various question text lengths<br>3. Test with empty, short, and maximum length text | - Validation feedback shown in real-time<br>- Submit button enabled/disabled appropriately<br>- Character count displayed | ◯ Pass<br>◯ Fail |  |
+| AQ-UI-003 | Subject selection functionality | 1. Click subject dropdown<br>2. Select different subjects<br>3. Verify selection persistence | - Dropdown shows all available subjects<br>- Selection updates form state<br>- Selected subject displayed correctly | ◯ Pass<br>◯ Fail |  |
+| AQ-UI-004 | Tag management interface | 1. Add new tags via input field<br>2. Remove existing tags<br>3. Test tag suggestions | - Tags added/removed correctly<br>- Tag suggestions appear based on input<br>- Visual feedback for tag operations | ◯ Pass<br>◯ Fail |  |
+| AQ-UI-005 | Form submission success flow | 1. Fill valid question data<br>2. Click Submit button<br>3. Verify success feedback | - Success message displayed<br>- Dialog closes automatically<br>- Question appears in home screen feed | ◯ Pass<br>◯ Fail |  |
+
+### 7.3 Error Handling & Validation
+
+| **Test Case ID** | **Test Description** | **Steps** | **Expected Result** | **Status** | **Notes** |
+|---|---|---|---|---|---|
+| AQ-ERR-001 | Database connection failure | 1. Simulate database unavailability<br>2. Attempt question creation<br>3. Verify error handling | - User-friendly error message shown<br>- Operation logged as failure<br>- Form data preserved for retry | ◯ Pass<br>◯ Fail |  |
+| AQ-ERR-002 | Validation error display | 1. Submit form with invalid data<br>2. Verify error messages<br>3. Test error message clearing | - Specific validation errors shown<br>- Errors clear when data corrected<br>- Focus returned to problem fields | ◯ Pass<br>◯ Fail |  |
+| AQ-ERR-003 | Concurrent modification handling | 1. Open Add Question dialog in multiple instances<br>2. Submit from both simultaneously<br>3. Verify proper handling | - Both submissions processed or proper conflict resolution<br>- No data corruption<br>- Appropriate feedback to users | ◯ Pass<br>◯ Fail |  |
+| AQ-ERR-004 | Network timeout scenarios | 1. Simulate slow network during submission<br>2. Test timeout handling<br>3. Verify retry mechanisms | - Timeout handled gracefully<br>- User informed of delay/failure<br>- Retry option available | ◯ Pass<br>◯ Fail |  |
+
+### 7.4 Transaction & Rollback Testing
+
+| **Test Case ID** | **Test Description** | **Steps** | **Expected Result** | **Status** | **Notes** |
+|---|---|---|---|---|---|
+| AQ-TXN-001 | Successful transaction commit | 1. Create question with tags<br>2. Verify all database changes committed atomically<br>3. Check transaction logging | - Question and tags saved together<br>- User metrics updated<br>- Transaction marked complete | ◯ Pass<br>◯ Fail |  |
+| AQ-TXN-002 | Transaction rollback on failure | 1. Simulate failure during question creation<br>2. Verify rollback behavior<br>3. Check database consistency | - No partial data saved<br>- Database state unchanged<br>- Error logged with rollback marker | ◯ Pass<br>◯ Fail |  |
+| AQ-TXN-003 | Tag creation rollback | 1. Create question with new tags<br>2. Simulate failure after tag creation<br>3. Verify complete rollback | - New tags not persisted<br>- Question not saved<br>- Clean rollback logged | ◯ Pass<br>◯ Fail |  |
+
+### 7.5 Performance & Telemetry Validation
+
+| **Test Case ID** | **Test Description** | **Steps** | **Expected Result** | **Status** | **Notes** |
+|---|---|---|---|---|---|
+| AQ-PERF-001 | Question creation performance | 1. Create questions under normal load<br>2. Measure response times<br>3. Verify performance telemetry | - Creation completes within 2 seconds<br>- Performance metrics logged<br>- No memory leaks detected | ◯ Pass<br>◯ Fail |  |
+| AQ-TEL-001 | Telemetry marker verification | 1. Perform various Add Question operations<br>2. Verify telemetry markers in logs<br>3. Check metric accuracy | - All operations logged with proper markers<br>- User metrics updated correctly<br>- Analytics data accurate | ◯ Pass<br>◯ Fail |  |
+| AQ-TEL-002 | UI action logging validation | 1. Interact with Add Question dialog<br>2. Verify UI action telemetry<br>3. Check action correlation | - UI interactions logged appropriately<br>- Action flows traceable<br>- Performance timing captured | ◯ Pass<br>◯ Fail |  |
+
 ## Follow-up Items
 
 1. Create automated tests for filter persistence
-2. Add navigation tests for upcoming "Ask a Question" functionality  
+2. Implement continuous integration tests for Add Question feature
 3. Document filter state persistence behavior
+4. Add performance benchmarking for question creation operations
 
 ## Test Environment
 
@@ -296,6 +343,32 @@ Before executing tests, ensure the following:
 - Date Tested:
 - Tester:
 
+## Summary
+
+This test plan provides comprehensive coverage for the UpNext-App application, including all core functionality and the recently implemented Add Question feature. The test cases cover:
+
+- **Unit Tests**: Service layer validation, business logic testing, data integrity checks
+- **Integration Tests**: End-to-end workflows, database transactions, service interactions  
+- **UI Tests**: User interface functionality, form validation, navigation flows
+- **Error Handling**: Exception scenarios, rollback verification, user feedback
+- **Performance**: Response time validation, telemetry verification, resource usage
+
+### Test Execution Priority
+
+1. **Critical Path**: Authentication, Question Creation, Core Navigation
+2. **Feature Validation**: Skills Management, Search Functionality, Add Question Flow
+3. **Error Scenarios**: Database failures, Network issues, Validation errors
+4. **Performance**: Load testing, Telemetry validation, Memory usage
+
+### Test Environment Requirements
+
+- Java 11 or higher
+- MySQL 8.0+
+- Test database with sample data
+- Network simulation tools for timeout testing
+- Log monitoring tools for telemetry validation
+
 ---
 
-*Last Updated: October 17, 2025*
+*Last Updated: January 27, 2025*
+*Add Question Feature Testing Added: Step 44 Implementation*

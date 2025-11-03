@@ -193,3 +193,45 @@
   - Create `docs/HomeScreenSpec.md` detailing UX flow and component interactions
   - Created `docs/End-to-End_Validation.md` with comprehensive validation plan
   - Perform manual + automated end-to-end validation for search, filters, navigation, metrics
+
+# Add Question Feature Roadmap
+
+- [x] Step 36: Schema Alignment & Migration Prep (Completed Oct 26, 2025)
+  - Update `src/main/resources/db/schema.sql` to include nullable `context` column on `questions`, ensure `tags` and `question_tags` definitions match AppTheme requirements
+  - Create idempotent migration `sql/008_add_question_context_and_constraints.sql` (guarded `ALTER`/`CREATE` statements) to sync existing databases
+  - Adjust `src/main/java/com/upnext/app/data/SchemaInitializer.java` to execute the new migration and verify `users.id`/`questions.user_id` types align (BIGINT consistency)
+- [x] Step 37: Domain & DTO Enhancements (Completed Oct 26, 2025)
+  - Extended `src/main/java/com/upnext/app/domain/question/Question.java` with `context` field, proper getters/setters, and updated constructors
+  - Created lightweight `src/main/java/com/upnext/app/domain/tag/Tag.java` domain class with id, name, usageCount fields and proper lifecycle methods
+  - Updated QuestionRepository mappers to handle context field in INSERT, UPDATE, and SELECT operations with backward compatibility
+- [x] Step 38: Repository Transaction Support
+  - Implemented transactional `saveWithTags` in `src/main/java/com/upnext/app/data/question/QuestionRepository.java` (insert question → upsert tags → populate `question_tags`), handling generated keys and duplicate tag detection
+  - Enhanced existing `src/main/java/com/upnext/app/data/question/TagRepository.java` with better transaction support and tag management
+  - Created comprehensive integration test `src/test/java/com/upnext/app/data/question/QuestionRepositoryAddTest.java` covering happy path, duplicate tag handling, validation edge cases, and transactional rollback scenarios
+- [x] Step 39: Service Layer & Validation
+  - Created comprehensive `src/main/java/com/upnext/app/service/QuestionService.java` with validation (title required, max lengths, ≤10 tags) and delegation to repository + `AuthService` for current user lookup
+  - Implemented robust error handling contracts with `QuestionException` checked exception for UI inline messaging, and proper SQL exception propagation for transaction rollback scenarios
+  - Added unit tests in `src/test/java/com/upnext/app/service/QuestionServiceTest.java` covering validation rules, error handling, and authentication requirements
+- [x] Step 40: Add Question UI Screen
+  - Built comprehensive `src/main/java/com/upnext/app/ui/screens/AddQuestionScreen.java` matching layout/spacing from `Myidea.md` (Hero bar alignment, gradient background, SURFACE card with proper centered layout)
+  - Created supporting components in `src/main/java/com/upnext/app/ui/components/questions/` including `TagInputField` with autocomplete functionality and `TagChipList` for removable tag chips
+  - Applied AppTheme colours, Segoe typography, focus rings, and hover behaviours with proper form validation and QuestionService integration
+- [x] Step 41: Tag Entry UX & State Management (Completed Oct 26, 2025)
+  - Implemented comprehensive tag entry controller in `AddQuestionViewModel.java` handling lowercase normalization, duplicate prevention (case-insensitive), +/- interactions, and 10-tag limit enforcement with validation feedback
+  - Created robust ViewModel state management pattern with event listeners for UI updates, validation errors, and form lifecycle management for testability and future extensibility
+  - Developed comprehensive unit test suite with `TagInputFieldTest.java` (12 test methods for UI automation) and `AddQuestionViewModelTest.java` (15 test methods for business logic) covering all edge cases and interaction flows
+- [x] Step 42: Navigation & Home Refresh Wiring (Completed Oct 26, 2025)
+  - Hooked Home "Ask a Question" CTA to navigate to AddQuestionScreen via `ViewNavigator` with proper constants and action listener
+  - Implemented question feed refresh system with callback pattern: AddQuestionScreen notifies HomeScreen on successful creation, triggering feed refresh through FilterManager
+  - Created comprehensive regression tests in `AddQuestionFlowTest.java` covering navigation flow, callback handling, feed refresh, and navigation stack integrity (5 test methods, all passing)
+- [x] Step 43: Logging, Metrics & Telemetry
+  - ✅ Instrumented `QuestionService` with comprehensive structured logging using markers for create success/failure, tag usage analytics, and performance timing
+  - ✅ Updated metrics calculations so user profile (`total_upvotes`, `questions_asked`) refresh after question submission through UserRepository integration
+  - ✅ Enhanced `AddQuestionViewModel` with UI action logging for tag management, form validation, and question creation flows
+  - ✅ Created `TestLogCapture` utility for comprehensive telemetry validation with pattern matching and flow verification
+  - ✅ Extended telemetry system with user metrics integration, operation timing, and structured error logging
+- [x] Step 44: Documentation & QA Pass
+  - ✅ Updated `docs/HomeScreenSpec.md` with Add Question button integration, dialog interactions, and navigation flow documentation
+  - ✅ Enhanced `docs/DatabaseAccess.md` with comprehensive schema documentation for questions table, tag relationships, and transactional patterns
+  - ✅ Created new `docs/AddQuestionGuide.md` with comprehensive user-facing instructions, step-by-step guide, and troubleshooting tips
+  - ✅ Expanded `docs/TestPlan.md` with comprehensive Add Question test scenarios covering unit tests, integration tests, UI tests, error handling, transaction rollback, and telemetry validation (25+ new test cases)

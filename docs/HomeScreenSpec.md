@@ -64,8 +64,46 @@ When a user clicks the back button:
 ### Ask a Question
 
 When a user clicks the "Ask a Question" button:
-1. Navigation will occur to a future `QuestionPostScreen` (to be implemented)
-2. After submitting a new question, user will return to `HomeScreen`
+1. `HomeScreen.navigateToAddQuestion()` is called via CTA action listener
+2. Navigation occurs to `AddQuestionScreen` using ViewNavigator
+3. User fills out question form (title, content, context, tags)
+4. On successful question creation, callback triggers home screen refresh
+5. User returns to `HomeScreen` with updated question feed including their new question
+
+#### Add Question Flow Details
+
+The Add Question integration uses a callback pattern for seamless user experience:
+
+**Navigation Setup:**
+```java
+// HomeScreen sets up navigation to AddQuestionScreen
+askQuestionButton.addActionListener(e -> {
+    AddQuestionScreen addScreen = new AddQuestionScreen();
+    addScreen.setOnQuestionCreated(this::addNewQuestionToFeed);
+    navigator.navigateTo("AddQuestionScreen", addScreen);
+});
+```
+
+**Callback Implementation:**
+```java
+// AddQuestionScreen notifies HomeScreen on successful creation
+private void addNewQuestionToFeed(Question newQuestion) {
+    // Add question to top of feed for immediate visibility
+    questionFeedPanel.addQuestionToTop(newQuestion);
+    
+    // Refresh feed to show updated data with proper filtering
+    refreshQuestionFeed();
+    
+    // Log successful integration
+    Logger.getInstance().info("Adding new question to feed: " + newQuestion.getTitle());
+}
+```
+
+**Feed Refresh Integration:**
+- New questions appear at the top of the feed immediately
+- Feed respects current filter state (subject, tags, search terms)
+- User metrics are updated in the profile summary card
+- Proper telemetry logging for analytics and debugging
 
 ### Avatar → Profile
 
@@ -111,6 +149,59 @@ Navigation tests focus on screen transitions and state preservation:
 4. **Saved Searches**: Allow users to save and quickly access favorite searches
 5. **Custom Filter Layouts**: Allow users to customize the layout and visibility of filters
 
+## Add Question Integration Features
+
+### UI Components
+
+**AddQuestionScreen Integration:**
+- Full-screen form with Hero bar alignment and gradient background
+- Comprehensive form fields: title, content, context (optional), tags
+- Real-time tag input with autocomplete from existing tags
+- Tag chip display with removal capabilities (max 10 tags)
+- Form validation with inline error messaging
+- Cancel and Submit buttons with proper navigation flow
+
+**Tag Management System:**
+- `TagInputField` with autocomplete dropdown from existing tags
+- `TagChipList` for visual tag management with removal buttons
+- Duplicate prevention (case-insensitive)
+- Length validation (max 50 characters per tag)
+- Tag limit enforcement (max 10 tags per question)
+
+**State Management:**
+- `AddQuestionViewModel` handles form state and validation
+- Event-driven architecture with listeners for UI updates
+- Comprehensive validation with user-friendly error messages
+- Integration with `QuestionService` for business logic
+
+### Navigation Architecture
+
+**HomeScreen → AddQuestionScreen:**
+- Triggered by "Ask a Question" CTA button click
+- Uses ViewNavigator for screen transition management
+- Callback setup for feed refresh on successful creation
+
+**AddQuestionScreen → HomeScreen:**
+- Auto-navigation after successful question creation
+- Cancel button returns to home without creating question
+- Error handling maintains user on form with validation messages
+
+### Data Flow Integration
+
+**Question Creation Pipeline:**
+1. User input → AddQuestionViewModel validation
+2. ViewModel → QuestionService business logic validation  
+3. QuestionService → QuestionRepository transactional persistence
+4. Success callback → HomeScreen feed refresh
+5. User metrics update → Profile card refresh
+
+**Telemetry Integration:**
+- Structured logging for all user interactions and system operations
+- Performance timing for question creation operations
+- User metrics tracking (questions_asked counter)
+- Tag analytics for popular tags and usage patterns
+- Error tracking with detailed failure categorization
+
 ## Implementation Status
 
 - ✅ Three-column layout
@@ -119,9 +210,13 @@ Navigation tests focus on screen transitions and state preservation:
 - ✅ Filter persistence
 - ✅ Navigation between Home and Question Detail
 - ✅ Filter state preservation during navigation
-- ⬜ "Ask a Question" screen implementation
+- ✅ "Ask a Question" screen implementation (Steps 36-43)
+- ✅ Add Question navigation and callback integration
+- ✅ Question creation with tag management and validation
+- ✅ Feed refresh system with new question integration
+- ✅ User metrics and telemetry integration
 - ⬜ User Profile screen implementation
 
 ---
 
-*Last Updated: October 17, 2025*
+*Last Updated: October 26, 2025 - Added Add Question Integration (Step 44)*

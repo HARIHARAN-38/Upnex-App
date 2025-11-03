@@ -14,6 +14,7 @@ import com.upnext.app.domain.User;
 import com.upnext.app.service.AuthService;
 import com.upnext.app.ui.components.FeedbackManager;
 import com.upnext.app.ui.navigation.ViewNavigator;
+import com.upnext.app.ui.screens.AddQuestionScreen;
 import com.upnext.app.ui.screens.CreateAccountScreen;
 import com.upnext.app.ui.screens.HomeScreen;
 import com.upnext.app.ui.screens.QuestionDetailScreen;
@@ -33,6 +34,7 @@ public final class App {
     public static final String SKILLSET_SCREEN = "skillset";
     public static final String SKILL_ADD_SCREEN = "add-skill";
     public static final String QUESTION_DETAIL_SCREEN = "question-detail";
+    public static final String ADD_QUESTION_SCREEN = "add-question";
     
     private static final Logger logger = Logger.getInstance();
     
@@ -85,6 +87,7 @@ public final class App {
             SkillsetScreen skillsetScreen = new SkillsetScreen();
             SkillAddScreen skillAddScreen = new SkillAddScreen();
             QuestionDetailScreen questionDetailScreen = new QuestionDetailScreen();
+            AddQuestionScreen addQuestionScreen = new AddQuestionScreen();
             
             navigator.registerScreen(SIGN_IN_SCREEN, signInScreen);
             navigator.registerScreen(CREATE_ACCOUNT_SCREEN, createAccountScreen);
@@ -92,9 +95,10 @@ public final class App {
             navigator.registerScreen(SKILLSET_SCREEN, skillsetScreen);
             navigator.registerScreen(SKILL_ADD_SCREEN, skillAddScreen);
             navigator.registerScreen(QUESTION_DETAIL_SCREEN, questionDetailScreen);
+            navigator.registerScreen(ADD_QUESTION_SCREEN, addQuestionScreen);
             
             // Setup navigation
-            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen, questionDetailScreen);
+            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen, questionDetailScreen, addQuestionScreen);
             
             // Start with sign-in screen
             navigator.navigateTo(SIGN_IN_SCREEN);
@@ -117,6 +121,7 @@ public final class App {
      * @param skillsetScreen The skillset screen
      * @param skillAddScreen The skill add screen
      * @param questionDetailScreen The question detail screen
+     * @param addQuestionScreen The add question screen
      */
     private static void setupNavigation(
             SignInScreen signInScreen,
@@ -124,7 +129,8 @@ public final class App {
             HomeScreen homeScreen,
             SkillsetScreen skillsetScreen,
             SkillAddScreen skillAddScreen,
-            QuestionDetailScreen questionDetailScreen) {
+            QuestionDetailScreen questionDetailScreen,
+            AddQuestionScreen addQuestionScreen) {
         
         final ViewNavigator navigator = ViewNavigator.getInstance();
         final AuthService authService = AuthService.getInstance();
@@ -325,6 +331,19 @@ public final class App {
                     "Account Creation Error"
                 );
             }
+        });
+        
+        // AddQuestionScreen -> Home Screen (navigation back and after successful question creation)
+        addQuestionScreen.setOnNavigateBack(() -> {
+            logger.info("Navigating back from Add Question screen to Home");
+            navigator.navigateTo(HOME_SCREEN);
+        });
+        
+        addQuestionScreen.setOnQuestionCreated(question -> {
+            logger.info("Question created successfully, returning to Home and refreshing feed");
+            // Refresh the home screen's question feed with the new question
+            homeScreen.addNewQuestionToFeed(question);
+            navigator.navigateTo(HOME_SCREEN);
         });
     }
 }

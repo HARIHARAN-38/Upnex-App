@@ -65,10 +65,10 @@ public final class QuestionRepository {
                     "FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE)";
 
     private static final String INSERT_QUESTION_SQL =
-            "INSERT INTO questions (user_id, subject_id, title, content) VALUES (?, ?, ?, ?)";
+            "INSERT INTO questions (user_id, subject_id, title, content, context) VALUES (?, ?, ?, ?, ?)";
 
     private static final String UPDATE_QUESTION_SQL =
-            "UPDATE questions SET title = ?, content = ?, subject_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+            "UPDATE questions SET title = ?, content = ?, context = ?, subject_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
 
     private static final String DELETE_QUESTION_SQL = "DELETE FROM questions WHERE id = ?";
 
@@ -169,6 +169,7 @@ public final class QuestionRepository {
             }
             insertStatement.setString(3, question.getTitle());
             insertStatement.setString(4, question.getContent());
+            insertStatement.setString(5, question.getContext());
             if (insertStatement.executeUpdate() == 0) {
                 throw new SQLException("Inserting question returned zero affected rows");
             }
@@ -186,6 +187,97 @@ public final class QuestionRepository {
             return question;
         } catch (SQLException ex) {
             safeRollback(connection);
+            throw ex;
+        } finally {
+            closeQuietly(keys);
+            closeQuietly(insertStatement);
+            resetAndRelease(provider, connection);
+        }
+    }
+
+    /**
+     * Saves a question with tags in a single transaction.
+     * This method explicitly handles the full transaction: question insertion,
+     * tag upserts, and question-tag relationship creation.
+     * 
+     * @param question The question to save (must have non-null userId, title, content)
+     * @param tags The list of tag names to associate with the question (max 10 tags)
+     * @return The saved question with generated ID and timestamps set
+     * @throws SQLException If there's a database error
+     * @throws IllegalArgumentException If the question is invalid or has too many tags
+     */
+    public Question saveWithTags(Question question, List<String> tags) throws SQLException {
+        validateQuestionForSave(question);
+        
+        // Validate tag count (max 10 tags as per requirements)
+        List<String> safeTags = tags == null ? Collections.emptyList() : tags;
+        if (safeTags.size() > 10) {
+            throw new IllegalArgumentException("Maximum 10 tags allowed, found: " + safeTags.size());
+        }
+        
+        // Normalize and deduplicate tags
+        List<String> normalizedTags = new ArrayList<>();
+        for (String tag : safeTags) {
+            if (tag != null && !tag.trim().isEmpty()) {
+                String normalized = tag.trim().toLowerCase();
+                if (!normalizedTags.contains(normalized)) {
+                    normalizedTags.add(normalized);
+                }
+            }
+        }
+        
+        JdbcConnectionProvider provider = JdbcConnectionProvider.getInstance();
+        Connection connection = provider.getConnection();
+        PreparedStatement insertStatement = null;
+        ResultSet keys = null;
+        
+        try {
+            connection.setAutoCommit(false);
+            
+            // Step 1: Insert the question
+            insertStatement = connection.prepareStatement(INSERT_QUESTION_SQL, Statement.RETURN_GENERATED_KEYS);
+            insertStatement.setLong(1, question.getUserId());
+            if (question.getSubjectId() != null) {
+                insertStatement.setLong(2, question.getSubjectId());
+            } else {
+                insertStatement.setNull(2, Types.BIGINT);
+            }
+            insertStatement.setString(3, question.getTitle());
+            insertStatement.setString(4, question.getContent());
+            insertStatement.setString(5, question.getContext());
+            
+            if (insertStatement.executeUpdate() == 0) {
+                throw new SQLException("Inserting question returned zero affected rows");
+            }
+            
+            // Step 2: Get generated question ID
+            keys = insertStatement.getGeneratedKeys();
+            if (keys.next()) {
+                question.setId(keys.getLong(1));
+            } else {
+                throw new SQLException("Inserting question failed to return generated id");
+            }
+            
+            // Step 3: Set timestamps
+            LocalDateTime now = LocalDateTime.now();
+            question.setCreatedAt(now);
+            question.setUpdatedAt(now);
+            
+            // Step 4: Handle tags with improved duplicate detection
+            insertQuestionTagsWithUsageCount(connection, question.getId(), normalizedTags);
+            
+            // Step 5: Set tags on question object
+            question.setTags(normalizedTags);
+            
+            // Step 6: Commit transaction
+            connection.commit();
+            
+            LOGGER.info("Question saved successfully with ID: " + question.getId() + " and " + normalizedTags.size() + " tags");
+            return question;
+            
+        } catch (SQLException ex) {
+            safeRollback(connection);
+            LOGGER.logException("Failed to save question with tags", ex);
             throw ex;
         } finally {
             closeQuietly(keys);
@@ -268,12 +360,13 @@ public final class QuestionRepository {
             updateStatement = connection.prepareStatement(UPDATE_QUESTION_SQL);
             updateStatement.setString(1, question.getTitle());
             updateStatement.setString(2, question.getContent());
+            updateStatement.setString(3, question.getContext());
             if (question.getSubjectId() != null) {
-                updateStatement.setLong(3, question.getSubjectId());
+                updateStatement.setLong(4, question.getSubjectId());
             } else {
-                updateStatement.setNull(3, Types.BIGINT);
+                updateStatement.setNull(4, Types.BIGINT);
             }
-            updateStatement.setLong(4, question.getId());
+            updateStatement.setLong(5, question.getId());
             int affected = updateStatement.executeUpdate();
             if (affected > 0) {
                 question.setUpdatedAt(LocalDateTime.now());
@@ -556,6 +649,50 @@ public final class QuestionRepository {
         }
     }
 
+    /**
+     * Inserts question tags with proper usage count management.
+     * This is an improved version of replaceTags that doesn't clear existing tags first
+     * and provides better duplicate handling.
+     * 
+     * @param connection The database connection (must be in transaction)
+     * @param questionId The question ID
+     * @param tags The list of normalized tag names
+     * @throws SQLException If there's a database error
+     */
+    private void insertQuestionTagsWithUsageCount(Connection connection, Long questionId, List<String> tags) throws SQLException {
+        if (tags == null || tags.isEmpty()) {
+            return;
+        }
+        
+        try (PreparedStatement upsert = connection.prepareStatement(UPSERT_TAG_SQL);
+             PreparedStatement findId = connection.prepareStatement(FIND_TAG_ID_SQL);
+             PreparedStatement link = connection.prepareStatement(LINK_TAG_SQL)) {
+            
+            for (String tag : tags) {
+                if (tag == null || tag.trim().isEmpty()) {
+                    continue;
+                }
+                
+                // Step 1: Upsert the tag (insert or increment usage count)
+                upsert.setString(1, tag);
+                upsert.executeUpdate();
+                
+                // Step 2: Get the tag ID
+                findId.setString(1, tag);
+                try (ResultSet rs = findId.executeQuery()) {
+                    if (rs.next()) {
+                        // Step 3: Link question to tag (ignore duplicates)
+                        link.setLong(1, questionId);
+                        link.setLong(2, rs.getLong(1));
+                        link.executeUpdate();
+                    } else {
+                        LOGGER.warning("Tag was upserted but not found: " + tag);
+                    }
+                }
+            }
+        }
+    }
+
     private void replaceTags(Connection connection, Long questionId, List<String> tags) throws SQLException {
         List<String> safeTags = tags == null ? Collections.emptyList() : tags;
         try (PreparedStatement delete = connection.prepareStatement(CLEAR_TAGS_SQL)) {
@@ -606,6 +743,15 @@ public final class QuestionRepository {
         question.setUserId(rs.getLong("user_id"));
         question.setTitle(rs.getString("title"));
         question.setContent(rs.getString("content"));
+        
+        // Get context field (might be null in older data)
+        try {
+            question.setContext(rs.getString("context"));
+        } catch (SQLException e) {
+            // Context column might not exist in older DB schema
+            question.setContext(null);
+        }
+        
         long subjectId = rs.getLong("subject_id");
         if (!rs.wasNull()) {
             question.setSubjectId(subjectId);

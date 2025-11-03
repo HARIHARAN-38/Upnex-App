@@ -58,6 +58,7 @@ public class HomeScreen extends JPanel {
     private final JPanel centerColumn;
     private final JPanel rightColumn;
     private final JPanel heroBar;
+    private QuestionFeedPanel questionFeedPanel;
     
     // Filter manager for unified filter state
     private final FilterManager filterManager = FilterManager.getInstance();
@@ -259,7 +260,7 @@ public class HomeScreen extends JPanel {
         headerPanel.add(resetFiltersButton, BorderLayout.EAST);
         
         // Question feed panel
-        QuestionFeedPanel questionFeedPanel = new QuestionFeedPanel();
+        questionFeedPanel = new QuestionFeedPanel();
         questionFeedPanel.setFeedListener(new QuestionFeedPanel.QuestionFeedListener() {
             @Override
             public void onQuestionSelected(Question question) {
@@ -287,6 +288,10 @@ public class HomeScreen extends JPanel {
         askButton.setBackground(AppTheme.PRIMARY);
         askButton.setForeground(Color.WHITE);
         askButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        askButton.addActionListener(e -> {
+            Logger.getInstance().info("Navigating to Add Question screen");
+            ViewNavigator.getInstance().navigateTo(com.upnext.app.App.ADD_QUESTION_SCREEN);
+        });
         
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.setOpaque(false);
@@ -431,6 +436,25 @@ public class HomeScreen extends JPanel {
                 "An error occurred while opening the question.",
                 "Navigation Error"
             );
+        }
+    }
+    
+    /**
+     * Adds a new question to the top of the question feed.
+     * This method is called after a question is successfully created
+     * to refresh the feed with the new content.
+     * 
+     * @param question The newly created question to add to the feed
+     */
+    public void addNewQuestionToFeed(Question question) {
+        Logger.getInstance().info("Adding new question to feed: " + question.getTitle());
+        
+        // For now, we'll trigger a refresh of the feed
+        // In the future, this could be enhanced to prepend the question directly
+        if (questionFeedPanel != null) {
+            SwingUtilities.invokeLater(() -> {
+                questionFeedPanel.prependQuestion(question);
+            });
         }
     }
 }

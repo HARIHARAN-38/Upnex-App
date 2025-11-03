@@ -8,65 +8,69 @@ Left: UpNex logo text using PRIMARY color.
 Center: Full-width search bar with placeholder “Search questions, topics, or users…”. Implement lightweight fuzzy search: tokenize title/body/tags, lowercase keywords, count matches, support partial matches using LIKE '%term%' or trigram similarity. Typing filters the center panel list live.
 Right: circular avatar/menu icon button; clicking navigates to profile page. Use SURFACE background, PRIMARY border hover states.
 Main Content Panels
+Goal
+Create an "Add Question" page for the UpNext desktop app that follows the project's AppTheme and integrates with existing JDBC data layer (database name: upnex, host: 127.0.0.1, user: root, password: hari). The page must open from the home "Ask a question" button and post new questions as question cards on the home page with tags and optional context.
 
-Subject Navigation (left column)
-Card on SURFACE with shadow, 24px padding.
-Heading “Subject Navigation”.
-Vertical list of subjects (Mathematics, Physics, Chemistry, Biology, History, Literature, Computer Science, Economics). Active selection highlighted with PRIMARY background and white text. Clicking filters questions by subject.
-Section “Trending Tags” below with pill tags (calculus, quantum, algorithms, organic-chemistry, world-war, shakespeare, machine-learning, microeconomics). Pills toggle on/off; combine with subject/search filters.
-Question Feed (center column)
-Top filter chips aligned horizontally: Hot (default), New, Unanswered, Solved. Toggle states change query ordering/filter.
-Question cards stacked vertically with 16px separation. Each card (SURFACE, 16px radius, subtle shadow) contains:
-Left vertical vote control: up arrow, score, down arrow, using PRIMARY_DARK for active states.
-Content block:
-Bold title.
-Optional excerpt body text.
-Tag row: primary subject tag badge (PRIMARY background) plus status chip (Solved green, Unanswered amber via theme variations).
-Meta row: answers count badge on left, time since posted, total answers text on right.
-Clicking a card opens Question Detail page showing full question and answers.
-Profile & Actions (right column)
-Top CTA button “Ask a Question” (PRIMARY background, ACCENT hover) linking to Question Post page.
-Profile card below: SURFACE panel with avatar, username, role subtitle, and metrics list (Questions Asked, Answers Given, Total Upvotes) plus “Member Since” date. Values pulled from user model. Entire card clickable to open profile page.
-Interactions & States
+UI & Visuals
 
-All filters (subject, tag, top chips, search) combine to produce current question set.
-Empty states show friendly message using TEXT_SECONDARY.
-Hover/pressed states align with AppTheme colors.
-Ensure keyboard navigation: search focus on load, Enter triggers search.
-Responsive behavior: panels stack vertically on narrow widths but preserve order (search bar remains top).
-Routing
+Theme: Use colors and fonts from AppTheme (PRIMARY #1F6FEB, PRIMARY_DARK #0D3A75, ACCENT #FF7B72, BACKGROUND #F5F7FB, SURFACE #FFFFFF; font stack Segoe UI; base 14pt; headings bold 18pt). Use rounded corners, soft drop shadows, and a subtle gradient background for the page container.
+Layout: Desktop-first responsive layout matching app grid: central surface panel with drop shadow and padding. Use spacing consistent with other screens.
+Controls:
+Title input: single-line text field placeholder "Enter your question…" — required, max 255 chars.
+Context input: multi-line text area placeholder "Add more context (optional)" — optional, max 2000 chars.
+Tag input: single-line input with plus button. When user types a tag and presses the + icon or Enter, the tag is added to a visual tag list pill. Duplicates are ignored; trim whitespace; limit to 10 tags. Each tag pill has a small × to remove it.
+Buttons: "Post" primary button (PRIMARY color). "Cancel" secondary text button. Disable Post until Title is non-empty.
+Accessibility: labels for inputs, focus ring using PRIMARY color, tooltips for icons.
+Behavior & Validation
 
-Menu/avatar → Profile screen.
-Ask a Question button → Post Question screen.
-Question card → Question detail screen.
-Deliver design and implementation following this specification, keeping colors, typography, and spacing consistent with AppTheme.
+Title required; show inline validation message if empty on Post attempt.
+Context optional.
+Tag entry: pressing Enter or clicking + adds tag. Tag sanitized (lowercase) and stored as text. Multiple tags allowed.
+When Post clicked:
+Assemble payload: title, optional context, tags (array), user_id (current user; use logged-in user repo), created_at timestamp.
+Validate on client; then call repository backend method to persist.
+On success: close Add Question page/modal and insert new question card at top of home feed (live update).
+On failure: show error toast with reason.
+Back-end contract & data shapes
 
-Overall Flow: App loads with UpNex home screen using AppTheme colors/fonts. Layout is three-column grid; all filters combine (subject, trending tags, toolbar chips, search) to produce visible question set. Responsive stacking for narrow widths while preserving flow (hero, subject panel, feed, profile).
+Question DTO / domain object:
+id: Long (generated)
+userId: Long
+title: String (<=255)
+context: Text / String (nullable)
+upvotes: int default 0
+downvotes: int default 0
+answerCount: int default 0
+isSolved: boolean default false
+viewCount: int default 0
+createdAt: Timestamp
+updatedAt: Timestamp
+Tag: name String
+Insert semantics:
+Insert question row -> get generated id.
+For each tag: upsert into tags (usage_count++), then insert into question_tags (question_id, tag_id).
+Use a transaction.
+DB Schema changes (if needed)
 
-Hero Section
+Ensure questions table has context TEXT NULL. If it doesn't exist, alter:
+ALTER TABLE questions ADD COLUMN context TEXT;
+Ensure users.id and all FK columns use same type: BIGINT UNSIGNED or BIGINT (match existing users.id). Use BIGINT consistently.
+Ensure question_tags exists as junction table with PK(question_id, tag_id), FK to questions(id) and tags(id).
+Ensure tags.name is unique and tags.id is BIGINT.
+Provide migration file: sql/008_add_question_context_and_constraints.sql with idempotent statements (IF NOT EXISTS / ADD COLUMN IF NOT EXISTS pattern).
+JDBC & Data Layer integration
 
-Logo (navigates to home).
-Search bar performs lightweight fuzzy search (tokenize title/body/tags, lowercase, match count, partial LIKE '%term%' or trigram). Results update feed live; Enter triggers search.
-Avatar/menu button routes to profile page.
-Left Panel: Subject Navigation
+Use existing JDBC connector jar in lib. Add or confirm JdbcConnectionProvider uses:
+URL: jdbc:mysql://127.0.0.1:3306/upnex
+User: root
+Password: hari
+Expose a QuestionRepository.save(Question question) method that handles the transaction described above.
+Ensure QuestionRepository uses PreparedStatement with proper Types for NULL subject_id and context.
+Update or add tests: src/test/java/.../QuestionRepositoryAddTest.java for happy path and tag handling.
 
-Select one subject at a time; selection instantly filters feed.
-“Trending Tags” pills toggle on/off (multi-select) and refine feed further.
-Center Panel: Question Feed
-Each question card: up/down vote controls (persisted score), bold title, optional excerpt, primary subject badge, status chip, answer count badge, timestamp,. Card click opens Question Detail page (full content + answers).
-Empty-state messaging when filters produce no results.
-Right Panel: Profile & Actions
-
-“Ask a Question” button → Post Question page.
-Profile card shows avatar, username, role tagline, metrics (questions asked, answers given, total upvotes), member-since date; clicking card opens profile.
-Supporting Rules
-
-All navigation uses existing router; ensure back navigation from detail/post screens returns with filters intact.
-Apply AppTheme colors (PRIMARY, PRIMARY_DARK, ACCENT, BACKGROUND, SURFACE) and fonts (Segoe UI base 14pt, headings 18pt bold). Rounded corners, soft shadows, gradients per theme.
-Keyboard accessibility: tab order logical, Enter in search executes, buttons focusable.
-Data bindings pull live stats for profile metrics and question metadata.
 
 there is jdbc connector jar file in lib directory create a jdbc connection file the connects database: name = upnex, pass = hari, its in 127. local host ip. and also the data that are getting from this page should be present in the user table so make sure to alter according to that
 
 
 based on the above info create a detailed road map with proper file names and structure in CurrentRoadmap.md make it like [ ] step 1 so its easy to mark as done after implementation
+

@@ -13,6 +13,7 @@ public class Question {
     private Long userId;
     private String title;
     private String content;
+    private String context; // Additional context or background information
     private Long subjectId;
     private String subjectName; // Transient field for UI display
     private int upvotes;
@@ -30,10 +31,11 @@ public class Question {
     }
     
     // Constructor with essential fields
-    public Question(Long userId, String title, String content, Long subjectId) {
+    public Question(Long userId, String title, String content, String context, Long subjectId) {
         this.userId = userId;
         this.title = title;
         this.content = content;
+        this.context = context;
         this.subjectId = subjectId;
         this.upvotes = 0;
         this.downvotes = 0;
@@ -41,6 +43,11 @@ public class Question {
         this.isSolved = false;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+    }
+    
+    // Backward-compatible constructor without context
+    public Question(Long userId, String title, String content, Long subjectId) {
+        this(userId, title, content, null, subjectId);
     }
 
     /**
@@ -113,6 +120,24 @@ public class Question {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    /**
+     * Gets the question context.
+     * 
+     * @return The additional context or background information for the question
+     */
+    public String getContext() {
+        return context;
+    }
+
+    /**
+     * Sets the question context.
+     * 
+     * @param context The additional context or background information for the question
+     */
+    public void setContext(String context) {
+        this.context = context;
     }
 
     /**
@@ -406,6 +431,7 @@ public class Question {
                 "id=" + id +
                 ", userId=" + userId +
                 ", title='" + title + '\'' +
+                ", context='" + context + '\'' +
                 ", subjectId=" + subjectId +
                 ", upvotes=" + upvotes +
                 ", downvotes=" + downvotes +

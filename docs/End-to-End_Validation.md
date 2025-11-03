@@ -136,6 +136,131 @@ During end-to-end validation, pay attention to:
 3. **Memory usage**: Application should not exhibit memory leaks during extended use
 4. **Database performance**: Filter and search operations should be optimized
 
+## Telemetry and Logging Validation (Step 43)
+
+### Overview
+
+As part of Step 43 implementation, comprehensive telemetry has been added to track user interactions and system operations. This section outlines validation procedures for the telemetry system.
+
+### Telemetry Validation Steps
+
+#### 1. Service Layer Telemetry
+
+| Step | Action | Expected Log Markers | Pass/Fail |
+| --- | --- | --- | --- |
+| 1 | Create a question successfully | `[QUESTION_CREATE_START]`, `[QUESTION_CREATE_AUTH]`, `[QUESTION_CREATE_VALIDATION]`, `[QUESTION_CREATE_SUCCESS]` | |
+| 2 | Attempt to create question while signed out | `[QUESTION_CREATE_START]`, `[QUESTION_CREATE_AUTH_FAILED]` | |
+| 3 | Create question with invalid data | `[QUESTION_CREATE_START]`, `[QUESTION_CREATE_VALIDATION_FAILED]` | |
+| 4 | Update an existing question | `[QUESTION_UPDATE_START]`, `[QUESTION_UPDATE_AUTH]`, `[QUESTION_UPDATE_SUCCESS]` | |
+| 5 | Delete a question | `[QUESTION_DELETE_START]`, `[QUESTION_DELETE_AUTH]`, `[QUESTION_DELETE_SUCCESS]` | |
+
+#### 2. User Interface Telemetry
+
+| Step | Action | Expected Log Markers | Pass/Fail |
+| --- | --- | --- | --- |
+| 1 | Add a tag to question form | `[UI_TAG_ADD_SUCCESS]` with tag name and count | |
+| 2 | Remove a tag from question form | `[UI_TAG_REMOVE_SUCCESS]` with remaining count | |
+| 3 | Submit question form successfully | `[UI_QUESTION_CREATE_START]`, `[UI_QUESTION_CREATE_SUCCESS]` | |
+| 4 | Submit invalid question form | `[UI_FORM_VALIDATION_FAILED]` with error details | |
+| 5 | Add duplicate tag | `[UI_TAG_VALIDATION_FAILED]` with duplicate message | |
+| 6 | Exceed tag limit | `[UI_TAG_VALIDATION_FAILED]` with limit message | |
+
+#### 3. User Metrics Telemetry
+
+| Step | Action | Expected Log Markers | Pass/Fail |
+| --- | --- | --- | --- |
+| 1 | Successfully create a question | `[USER_METRICS_UPDATE_SUCCESS]`, `[USER_METRICS_UPDATE]` with incremented count | |
+| 2 | Verify metrics in profile card | Profile should show increased questions_asked count | |
+
+#### 4. Tag Analytics Telemetry
+
+| Step | Action | Expected Log Markers | Pass/Fail |
+| --- | --- | --- | --- |
+| 1 | Create question with tags | `[QUESTION_TAG_ANALYTICS]` with tag list | |
+| 2 | Update question with new tags | `[QUESTION_TAG_ANALYTICS]` with updated tag list | |
+
+### Log Monitoring Guidelines
+
+#### Log Levels
+
+- **INFO**: Successful operations, normal flow markers
+- **WARNING**: Validation failures, authorization issues, recoverable errors  
+- **ERROR**: System failures, database errors, unrecoverable issues
+
+#### Performance Monitoring
+
+All telemetry markers include timing information where applicable:
+- `Duration: XXXms` appears in success markers
+- Monitor for operations exceeding acceptable thresholds:
+  - Question creation: < 500ms
+  - Question update: < 300ms  
+  - Question delete: < 200ms
+
+#### Telemetry Pattern Validation
+
+Use the `TestLogCapture` utility class to validate telemetry patterns in automated tests:
+
+```java
+@Test
+public void validateQuestionCreationTelemetry() {
+    TestLogCapture logCapture = new TestLogCapture();
+    logCapture.startCapture();
+    
+    // Perform operation
+    questionService.createQuestion(title, content, context, tags);
+    
+    // Validate telemetry flow
+    TelemetryValidationResult result = logCapture.validateOperationFlow("QUESTION_CREATE");
+    assertTrue(result.hasStart());
+    assertTrue(result.hasSuccess());
+    assertTrue(result.isSuccessfulFlow());
+    
+    logCapture.stopCapture();
+}
+```
+
+### Telemetry Error Patterns
+
+#### Common Error Scenarios to Validate
+
+1. **Authentication Failures**: Should generate `AUTH_FAILED` markers
+2. **Validation Failures**: Should generate `VALIDATION_FAILED` markers with specific error details
+3. **Database Errors**: Should generate `FAILED` markers with appropriate error context
+4. **UI Validation Errors**: Should generate `UI_*_FAILED` markers with user-friendly error descriptions
+
+#### Performance Degradation Detection
+
+Monitor for the following patterns that indicate potential issues:
+
+- Operations taking longer than baseline measurements
+- Increasing error rates in telemetry logs
+- Missing telemetry markers indicating incomplete flows
+- Excessive warning messages suggesting system stress
+
+### Telemetry Coverage Verification
+
+Ensure all major user journeys generate appropriate telemetry:
+
+- [ ] Question creation flow (success and failure paths)
+- [ ] Question editing flow (success and failure paths)
+- [ ] Question deletion flow (success and failure paths)
+- [ ] User interaction flows (tag management, form validation)
+- [ ] User metrics updates (questions_asked incrementing)
+- [ ] Tag analytics collection (popular tags, usage patterns)
+
+### Step 43 Completion Criteria
+
+Step 43 is considered complete when:
+
+- [ ] All service layer operations generate structured telemetry
+- [ ] All UI interactions generate appropriate telemetry markers
+- [ ] User metrics are properly updated and logged
+- [ ] Tag analytics are captured for insights
+- [ ] All telemetry validation tests pass
+- [ ] Performance monitoring shows acceptable operation times
+- [ ] Error patterns are correctly identified and logged
+- [ ] This documentation is updated with telemetry validation procedures
+
 ## Validation Completion Checklist
 
 - [ ] All manual validation scenarios completed
@@ -143,8 +268,11 @@ During end-to-end validation, pay attention to:
 - [ ] Filter persistence works between screens and sessions
 - [ ] Search functionality returns expected results
 - [ ] Performance is acceptable for all operations
+- [ ] **Telemetry system generates expected log markers**
+- [ ] **User metrics are properly tracked and updated**
+- [ ] **Tag analytics provide meaningful insights**
 - [ ] Any identified issues have been logged and prioritized
 
 ---
 
-*Last Updated: October 17, 2025*
+*Last Updated: October 26, 2025 - Added Step 43 Telemetry Validation*

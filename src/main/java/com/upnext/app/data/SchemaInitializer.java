@@ -80,6 +80,8 @@ public class SchemaInitializer {
                     try {
                         executeSchemaScript(connection, schemaContent);
                         verifyRequiredTables(connection);
+                        // Execute migration scripts for existing databases
+                        executeMigrations(connection);
                         // Ensure basic seed data exists for tests (users 1 and 2)
                         ensureSeedUsers(connection);
                         logger.info("Database schema initialized successfully");
@@ -100,50 +102,97 @@ public class SchemaInitializer {
         }
     }
     
+    /**
+     * Executes migration scripts to update existing databases.
+     * 
+     * @param connection Database connection
+     */
+    private static void executeMigrations(Connection connection) {
+        try {
+            // Execute migration 008 to add context column and ensure constraints
+            String migration008 = "/sql/008_add_question_context_and_constraints.sql";
+            InputStream migrationStream = SchemaInitializer.class.getResourceAsStream(migration008);
+            
+            if (migrationStream != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(migrationStream))) {
+                    String migrationContent = reader.lines().collect(Collectors.joining("\n"));
+                    
+                    try (Statement stmt = connection.createStatement()) {
+                        // Execute migration statements
+                        String[] statements = migrationContent.split(";");
+                        for (String statement : statements) {
+                            String trimmedStmt = statement.trim();
+                            if (!trimmedStmt.isEmpty() && !trimmedStmt.startsWith("--")) {
+                                try {
+                                    stmt.execute(trimmedStmt);
+                                } catch (SQLException e) {
+                                    // Ignore "column already exists" errors (code 1060)
+                                    if (e.getErrorCode() != 1060) {
+                                        throw e;
+                                    }
+                                }
+                            }
+                        }
+                        logger.info("Migration 008 executed successfully");
+                    }
+                } catch (Exception e) {
+                    logger.logException("Failed to execute migration 008", e);
+                }
+            } else {
+                logger.info("Migration 008 file not found, skipping migration");
+            }
+            
+            // Execute migration 009 to create question_votes table for Reddit-like voting
+            String migration009 = "/sql/009_create_question_votes_table.sql";
+            InputStream migration009Stream = SchemaInitializer.class.getResourceAsStream(migration009);
+            
+            if (migration009Stream != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(migration009Stream))) {
+                    String migrationContent = reader.lines().collect(Collectors.joining("\n"));
+                    
+                    try (Statement stmt = connection.createStatement()) {
+                        // Execute migration statements
+                        String[] statements = migrationContent.split(";");
+                        for (String statement : statements) {
+                            String trimmedStmt = statement.trim();
+                            if (!trimmedStmt.isEmpty() && !trimmedStmt.startsWith("--")) {
+                                try {
+                                    stmt.execute(trimmedStmt);
+                                } catch (SQLException e) {
+                                    // Ignore "table already exists" errors (code 1050)
+                                    if (e.getErrorCode() != 1050) {
+                                        throw e;
+                                    }
+                                }
+                            }
+                        }
+                        logger.info("Migration 009 executed successfully");
+                    }
+                } catch (Exception e) {
+                    logger.logException("Failed to execute migration 009", e);
+                }
+            } else {
+                logger.info("Migration 009 file not found, skipping migration");
+            }
+        } catch (Exception e) {
+            logger.logException("Error during migration execution", e);
+        }
+    }
+    
     private static void executeSchemaScript(Connection connection, String schemaContent) throws SQLException {
         try (Statement stmt = connection.createStatement()) {
-            // Drop any existing tables in the current schema to avoid
-            // foreign-key incompatibility with leftover tables (e.g. from
-            // previous runs or other projects). Disable FK checks during
-            // the cleanup so drops succeed regardless of constraints.
-            try {
-                stmt.execute("SET FOREIGN_KEY_CHECKS = 0");
-            } catch (SQLException e) {
-                // Some drivers may ignore this; continue anyway
-            }
-
-            java.sql.DatabaseMetaData meta = connection.getMetaData();
-            try (ResultSet rs = meta.getTables(connection.getCatalog(), null, "%", new String[]{"TABLE"})) {
-                java.util.List<String> tables = new java.util.ArrayList<>();
-                while (rs.next()) {
-                    String tbl = rs.getString("TABLE_NAME");
-                    // Skip system tables if any (defensive)
-                    if (tbl == null) continue;
-                    tables.add(tbl);
-                }
-
-                // Drop all tables found
-                for (String tbl : tables) {
-                    try {
-                        stmt.executeUpdate("DROP TABLE IF EXISTS `" + tbl + "`");
-                    } catch (SQLException e) {
-                        // ignore individual drop failures and continue
-                    }
-                }
-            }
-
-            try {
-                stmt.execute("SET FOREIGN_KEY_CHECKS = 1");
-            } catch (SQLException e) {
-                // ignore
-            }
-
-            // Now execute the schema script statements
+            // Execute the schema script statements
+            // The schema should use "CREATE TABLE IF NOT EXISTS" to avoid conflicts
             String[] statements = schemaContent.split(";");
             for (String statement : statements) {
                 String trimmedStmt = statement.trim();
                 if (!trimmedStmt.isEmpty()) {
-                    stmt.execute(trimmedStmt);
+                    try {
+                        stmt.execute(trimmedStmt);
+                    } catch (SQLException e) {
+                        // Log the error but continue with other statements
+                        logger.warning("Failed to execute schema statement: " + trimmedStmt + " - " + e.getMessage());
+                    }
                 }
             }
         }
@@ -201,6 +250,7 @@ public class SchemaInitializer {
                 "subject_id BIGINT, " +
                 "title VARCHAR(255) NOT NULL, " +
                 "content TEXT NOT NULL, " +
+                "context TEXT, " +
                 "upvotes INT NOT NULL DEFAULT 0, " +
                 "downvotes INT NOT NULL DEFAULT 0, " +
                 "answer_count INT NOT NULL DEFAULT 0, " +

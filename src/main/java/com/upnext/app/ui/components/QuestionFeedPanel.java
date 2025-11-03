@@ -25,10 +25,14 @@ import javax.swing.border.EmptyBorder;
 
 import com.upnext.app.core.Logger;
 import com.upnext.app.data.question.QuestionRepository;
+import com.upnext.app.data.question.QuestionVoteRepository;
+import com.upnext.app.domain.User;
 import com.upnext.app.domain.question.Question;
 import com.upnext.app.domain.question.QuestionSearchCriteria;
+import com.upnext.app.domain.question.QuestionVote.VoteType;
 import com.upnext.app.domain.question.Subject;
 import com.upnext.app.domain.question.Tag;
+import com.upnext.app.service.AuthService;
 import com.upnext.app.ui.theme.AppTheme;
 
 /**
@@ -58,6 +62,7 @@ public class QuestionFeedPanel extends JPanel implements QuestionCard.QuestionCa
     // Data and state
     private final List<Question> questions = new ArrayList<>();
     private final QuestionRepository questionRepository;
+    private final QuestionVoteRepository voteRepository;
     private int currentPage = 0;
     private boolean hasMoreQuestions = true;
     private QuestionSearchCriteria currentCriteria = new QuestionSearchCriteria();
@@ -68,6 +73,7 @@ public class QuestionFeedPanel extends JPanel implements QuestionCard.QuestionCa
      */
     public QuestionFeedPanel() {
         questionRepository = QuestionRepository.getInstance();
+        voteRepository = QuestionVoteRepository.getInstance();
         
         setLayout(new BorderLayout());
         setOpaque(false);
@@ -363,6 +369,34 @@ public class QuestionFeedPanel extends JPanel implements QuestionCard.QuestionCa
         revalidate();
         repaint();
     }
+
+    /**
+     * Inserts a newly created question at the top of the feed so that users see
+     * their contribution immediately without waiting for a full reload.
+     *
+     * @param question The question to prepend to the feed
+     */
+    public void prependQuestion(Question question) {
+        if (question == null) {
+            return;
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            // Remove an existing copy of the same question if present
+            questions.removeIf(existing -> existing.getId() != null && existing.getId().equals(question.getId()));
+
+            // Insert at the top and trim to current page size
+            questions.add(0, question);
+            if (questions.size() > PAGE_SIZE) {
+                questions.subList(PAGE_SIZE, questions.size()).clear();
+            }
+
+            // Update paging state and redraw cards
+            boolean shouldShowLoadMore = hasMoreQuestions || questions.size() >= PAGE_SIZE;
+            loadMoreButton.setVisible(shouldShowLoadMore);
+            updateFeed();
+        });
+    }
     
     /**
      * Resets the feed to start fresh with new filters.
@@ -470,14 +504,9 @@ public class QuestionFeedPanel extends JPanel implements QuestionCard.QuestionCa
         } else {
             // Select based on sort option
             switch (currentCriteria.getSortOption()) {
-                case NEWEST:
-                    newButton.setSelected(true);
-                    break;
-                case MOST_UPVOTED:
-                    hotButton.setSelected(true);
-                    break;
-                default:
-                    newButton.setSelected(true); // Default to "New"
+                case NEWEST -> newButton.setSelected(true);
+                case MOST_UPVOTED -> hotButton.setSelected(true);
+                default -> newButton.setSelected(true); // Default to "New"
             }
         }
     }
@@ -519,22 +548,39 @@ public class QuestionFeedPanel extends JPanel implements QuestionCard.QuestionCa
     @Override
     public void onUpvote(Question question) {
         try {
-            // Increment upvotes
-            question.incrementUpvotes();
+            // Get current user
+            User currentUser = AuthService.getInstance().getCurrentUser();
+            if (currentUser == null) {
+                showErrorMessage("Please sign in to vote on questions.");
+                return;
+            }
             
-            // Update in database
+            // Cast the vote using the new Reddit-like system
+            var voteResult = voteRepository.castVote(currentUser.getId(), question.getId(), VoteType.UPVOTE);
+            
+            // Recalculate and update vote counts from the database
+            int[] voteCounts = voteRepository.countVotes(question.getId());
+            question.setUpvotes(voteCounts[0]);
+            question.setDownvotes(voteCounts[1]);
+            
+            // Update question vote counts in database
             questionRepository.updateVoteCounts(question.getId(), question.getUpvotes(), question.getDownvotes());
             
             // Find and update the card in the UI
             for (Component component : feedPanel.getComponents()) {
-                if (component instanceof QuestionCard) {
-                    QuestionCard card = (QuestionCard) component;
-                    if (card.getQuestion().getId().equals(question.getId())) {
-                        card.updateVoteCount();
-                        break;
-                    }
+                if (component instanceof QuestionCard card && card.getQuestion().getId().equals(question.getId())) {
+                    card.updateVoteCount();
+                    break;
                 }
             }
+            
+            // Show feedback based on vote result
+            String message = switch (voteResult) {
+                case CREATED -> "Upvoted!";
+                case UPDATED -> "Changed to upvote!";
+                case REMOVED -> "Upvote removed!";
+            };
+            LOGGER.info("Vote action: " + message + " for question " + question.getId());
             
             if (feedListener != null) {
                 feedListener.onQuestionVoted(question);
@@ -548,22 +594,39 @@ public class QuestionFeedPanel extends JPanel implements QuestionCard.QuestionCa
     @Override
     public void onDownvote(Question question) {
         try {
-            // Increment downvotes
-            question.incrementDownvotes();
+            // Get current user
+            User currentUser = AuthService.getInstance().getCurrentUser();
+            if (currentUser == null) {
+                showErrorMessage("Please sign in to vote on questions.");
+                return;
+            }
             
-            // Update in database
+            // Cast the vote using the new Reddit-like system
+            var voteResult = voteRepository.castVote(currentUser.getId(), question.getId(), VoteType.DOWNVOTE);
+            
+            // Recalculate and update vote counts from the database
+            int[] voteCounts = voteRepository.countVotes(question.getId());
+            question.setUpvotes(voteCounts[0]);
+            question.setDownvotes(voteCounts[1]);
+            
+            // Update question vote counts in database
             questionRepository.updateVoteCounts(question.getId(), question.getUpvotes(), question.getDownvotes());
             
             // Find and update the card in the UI
             for (Component component : feedPanel.getComponents()) {
-                if (component instanceof QuestionCard) {
-                    QuestionCard card = (QuestionCard) component;
-                    if (card.getQuestion().getId().equals(question.getId())) {
-                        card.updateVoteCount();
-                        break;
-                    }
+                if (component instanceof QuestionCard card && card.getQuestion().getId().equals(question.getId())) {
+                    card.updateVoteCount();
+                    break;
                 }
             }
+            
+            // Show feedback based on vote result
+            String message = switch (voteResult) {
+                case CREATED -> "Downvoted!";
+                case UPDATED -> "Changed to downvote!";
+                case REMOVED -> "Downvote removed!";
+            };
+            LOGGER.info("Vote action: " + message + " for question " + question.getId());
             
             if (feedListener != null) {
                 feedListener.onQuestionVoted(question);

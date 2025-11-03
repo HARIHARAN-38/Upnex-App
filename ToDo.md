@@ -1,1 +1,6 @@
-create a run.bat file that runs all  schema, the schema execution should be proper like a verifier it checks for tables if it doesnt exist it skips if exist it skips and says verified compiles and stores class file in proper bin. first compile using normal javac meithd and run using that if it failed use maven. everytime the script runs it should properly clear old classes and caches and create new ones.
+the add question page has too many bugs so you should fix all of the i san and seamlessly integrate them with everything in application 
+
+2.the description box is is not in correct shap for ref of shape and size use the addskill page's description box for the referencee of shape and size.
+3.the tag sector should be altered slightly  where everytime when the user writes the tag and enters the tag must display in the page below to the tag textbox as a chip which also should have the deleting function inside the chip itself like a 'x' icon at the end.
+after compleately fixing the above bugs you need to check for the integration to the app and also make sure that after adding the question it shouls display the question in the question card in the question area with appropriate question ,its answer count at right bottom and apppropriate tags below question the the up and dowvote feture at left part of the question card where one user can only once can up or downvote the question like reddit for ref see this img :![alt text](image.png)
+it alsopshould seamlessly integrate with searching fuction also.
