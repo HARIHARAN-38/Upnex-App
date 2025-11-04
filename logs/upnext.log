@@ -25713,3 +25713,41 @@ java.lang.IllegalArgumentException: Cannot format given Object as a Date
 [2025-11-04 22:41:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
 [2025-11-04 22:41:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, programming, 2, 10, 0]
 [2025-11-04 22:41:19] [INFO] Navigate to user profile: hari (ID: 3)
+[2025-11-04 22:45:55] [INFO] Logger initialized
+[2025-11-04 22:45:55] [INFO] Starting UpNext application
+[2025-11-04 22:45:55] [INFO] Checking database connection and schema on startup...
+[2025-11-04 22:45:55] [INFO] Initializing database schema...
+[2025-11-04 22:45:56] [INFO] Migration 008 executed successfully
+[2025-11-04 22:45:56] [INFO] Migration 009 executed successfully
+[2025-11-04 22:45:56] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 22:45:56] [INFO] Database schema initialized successfully
+[2025-11-04 22:45:56] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:45:56] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 22:45:56] [INFO] Answer votes table initialized
+[2025-11-04 22:45:56] [INFO] Showing profile page
+[2025-11-04 22:45:56] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 22:46:13] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-04 22:46:13] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-04 22:46:13] [INFO] Retrieving skills for user ID: 3
+[2025-11-04 22:46:13] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:46:13] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:46:13] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-04 22:46:22] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:46:22] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-04 22:46:23] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:46:23] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-04 22:46:24] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:46:24] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-04 22:46:26] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:46:26] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-04 22:46:31] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:46:31] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:46:31] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:46:50] [INFO] Updated vote: user=3, question=5, vote=DOWNVOTE
+[2025-11-04 22:46:50] [INFO] Vote Recorded: Downvote recorded
+[2025-11-04 22:46:56] [INFO] Removed vote: user=3, question=5
+[2025-11-04 22:46:56] [INFO] Vote Recorded: Vote removed
+[2025-11-04 22:47:04] [INFO] Navigating to profile for user: VISHNU (id=7)
+[2025-11-04 22:47:17] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:47:17] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:47:17] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
