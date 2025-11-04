@@ -73,8 +73,10 @@ public final class QuestionRepository {
     private static final String DELETE_QUESTION_SQL = "DELETE FROM questions WHERE id = ?";
 
     private static final String FIND_BY_ID_SQL =
-            "SELECT q.*, s.name AS subject_name FROM questions q " +
-                    "LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.id = ?";
+        "SELECT q.*, s.name AS subject_name, u.name AS user_name FROM questions q " +
+            "LEFT JOIN subjects s ON q.subject_id = s.id " +
+            "LEFT JOIN users u ON q.user_id = u.id " +
+            "WHERE q.id = ?";
 
     private static final String FIND_PAGE_SQL =
             "SELECT q.*, s.name AS subject_name FROM questions q " +

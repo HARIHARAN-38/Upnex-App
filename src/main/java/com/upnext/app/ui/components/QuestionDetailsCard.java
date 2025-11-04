@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -138,8 +137,8 @@ public class QuestionDetailsCard extends JPanel {
         add(userInfoPanel);
         add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
         
-        // Post date
-        postDateLabel = new JLabel();
+    // Post date
+    postDateLabel = new JLabel();
         postDateLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.ITALIC, 11f));
         postDateLabel.setForeground(AppTheme.TEXT_SECONDARY);
         postDateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -147,26 +146,9 @@ public class QuestionDetailsCard extends JPanel {
         add(postDateLabel);
         add(Box.createRigidArea(new Dimension(0, PADDING_MEDIUM)));
         
-        // Statistics section
-        JLabel statsTitle = new JLabel("Statistics:");
-        statsTitle.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 12f));
-        statsTitle.setForeground(AppTheme.TEXT_SECONDARY);
-        statsTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
-        viewCountLabel = new JLabel();
-        viewCountLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(11f));
-        viewCountLabel.setForeground(AppTheme.TEXT_SECONDARY);
-        viewCountLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
-        voteCountLabel = new JLabel();
-        voteCountLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(11f));
-        voteCountLabel.setForeground(AppTheme.TEXT_SECONDARY);
-        voteCountLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
-        add(statsTitle);
-        add(Box.createRigidArea(new Dimension(0, PADDING_TINY)));
-        add(viewCountLabel);
-        add(voteCountLabel);
+    // Statistics section removed as per updated design requirements
+    viewCountLabel = new JLabel();
+    voteCountLabel = new JLabel();
         
         // Add glue to push content to top
         add(Box.createVerticalGlue());
@@ -209,19 +191,18 @@ public class QuestionDetailsCard extends JPanel {
         // Add click handlers for user profile navigation
         addUserProfileClickHandlers(question.getUserId(), username);
         
-        // Update post date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
-        String formattedDate = dateFormat.format(question.getCreatedAt());
-        postDateLabel.setText("Posted on " + formattedDate);
-        
-        // Update statistics
-        viewCountLabel.setText("• " + question.getViewCount() + " views");
-        
-        String voteText = "• " + question.getUpvotes() + " upvotes";
-        if (question.getDownvotes() > 0) {
-            voteText += ", " + question.getDownvotes() + " downvotes";
+        // Update post date (use java.time formatting)
+        try {
+            java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy");
+            String formattedDate = question.getCreatedAt() != null
+                    ? dtf.format(question.getCreatedAt())
+                    : "unknown date";
+            postDateLabel.setText("Posted on " + formattedDate);
+        } catch (Exception ex) {
+            postDateLabel.setText("Posted on unknown date");
         }
-        voteCountLabel.setText(voteText);
+        
+        // Statistics are intentionally not displayed in the details card
         
         revalidate();
         repaint();

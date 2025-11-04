@@ -85,21 +85,25 @@ public class AnswerInputPanel extends JPanel {
         titlePanel.add(titleLabel);
         
         // Create input section
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
-        inputPanel.setOpaque(false);
+    JPanel inputPanel = new JPanel();
+    inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+    inputPanel.setOpaque(false);
+    inputPanel.setAlignmentX(LEFT_ALIGNMENT);
+    // Ensure the input section always gets enough height under BoxLayout
+    inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 260));
         
         // Text area with enhanced styling
         answerTextArea = new JTextArea();
         answerTextArea.setFont(AppTheme.PRIMARY_FONT.deriveFont(14f));
         answerTextArea.setLineWrap(true);
         answerTextArea.setWrapStyleWord(true);
-        answerTextArea.setRows(6);
+        answerTextArea.setRows(8);
         answerTextArea.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(0xDDDDDD), 1),
             new EmptyBorder(PADDING_SMALL, PADDING_SMALL, PADDING_SMALL, PADDING_SMALL)
         ));
         answerTextArea.setBackground(Color.WHITE);
+        answerTextArea.setOpaque(true);
         
         // Add placeholder text effect
         String placeholderText = "Write your answer here... Be clear, helpful, and provide detailed explanations.";
@@ -136,11 +140,16 @@ public class AnswerInputPanel extends JPanel {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { updateCharacterCount(); }
         });
         
-        // Create scroll pane for text area
-        JScrollPane scrollPane = new JScrollPane(answerTextArea);
-        scrollPane.setBorder(null);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    // Create scroll pane for text area (ensure visible height)
+    JScrollPane scrollPane = new JScrollPane(answerTextArea);
+    scrollPane.setBorder(null);
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    // Explicit sizing so the box is always visible within BoxLayout
+    scrollPane.setPreferredSize(new Dimension(500, 160));
+    scrollPane.setMinimumSize(new Dimension(300, 120));
+    scrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 220));
+    scrollPane.setAlignmentX(LEFT_ALIGNMENT);
         
         // Character count label
         characterCountLabel = new JLabel("0 / " + MAX_ANSWER_LENGTH + " characters");
@@ -149,7 +158,7 @@ public class AnswerInputPanel extends JPanel {
         characterCountLabel.setAlignmentX(LEFT_ALIGNMENT);
         
         // Submit button
-        submitButton = new JButton("Post Answer");
+    submitButton = new JButton("Post Answer");
         submitButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 14f));
         submitButton.setBackground(AppTheme.PRIMARY);
         submitButton.setForeground(Color.WHITE);
@@ -157,6 +166,7 @@ public class AnswerInputPanel extends JPanel {
         submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         submitButton.setFocusPainted(false);
         submitButton.addActionListener(this::handleSubmit);
+    submitButton.setVisible(true);
         
         // Add hover effects
         submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -176,7 +186,7 @@ public class AnswerInputPanel extends JPanel {
         });
         
         // Button panel with right alignment
-        buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+    buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttonPanel.setOpaque(false);
         buttonPanel.add(submitButton);
         

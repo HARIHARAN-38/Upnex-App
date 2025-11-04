@@ -48,8 +48,9 @@ public class VotePanel extends JPanel {
         setAlignmentY(Component.TOP_ALIGNMENT);
         
         // Create upvote button
-        upvoteButton = new JButton("▲");
-        upvoteButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 16f));
+    upvoteButton = new JButton("▲");
+    // Use the same font as Home screen (Dialog) to ensure triangle glyphs render consistently
+    upvoteButton.setFont(new Font("Dialog", Font.PLAIN, 16));
         upvoteButton.setForeground(AppTheme.ACCENT);
         upvoteButton.setBorderPainted(false);
         upvoteButton.setContentAreaFilled(false);
@@ -91,8 +92,8 @@ public class VotePanel extends JPanel {
         updateVoteCountColor(0);
         
         // Create downvote button
-        downvoteButton = new JButton("▼");
-        downvoteButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 16f));
+    downvoteButton = new JButton("▼");
+    downvoteButton.setFont(new Font("Dialog", Font.PLAIN, 16));
         downvoteButton.setForeground(AppTheme.ACCENT);
         downvoteButton.setBorderPainted(false);
         downvoteButton.setContentAreaFilled(false);

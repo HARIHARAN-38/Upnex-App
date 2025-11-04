@@ -47,6 +47,7 @@ import com.upnext.app.service.SearchService;
 import com.upnext.app.ui.components.AnswerInputPanel;
 import com.upnext.app.ui.components.FeedbackManager;
 import com.upnext.app.ui.components.FilterManager;
+import com.upnext.app.ui.components.HeroBar;
 import com.upnext.app.ui.components.QuestionDetailsCard;
 import com.upnext.app.ui.components.TagChip;
 import com.upnext.app.ui.components.VotePanel;
@@ -106,6 +107,7 @@ public class QuestionDetailScreen extends JPanel {
     private final JPanel mainContentPanel;
     private final QuestionDetailsCard questionDetailsCard;
     private final JScrollPane contentScrollPane;
+    private final HeroBar heroBar;
     private boolean isMobileLayout = false;
     
     /**
@@ -128,8 +130,11 @@ public class QuestionDetailScreen extends JPanel {
     filterManager = FilterManager.getInstance();
     questionVoteRepository = QuestionVoteRepository.getInstance();
         
-        // Create header with breadcrumb navigation
-        JPanel headerPanel = new JPanel(new BorderLayout());
+    // Create hero section (top navigation bar with search)
+    heroBar = new HeroBar();
+
+    // Create header with breadcrumb navigation (under hero bar)
+    JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
         headerPanel.setBorder(new EmptyBorder(0, 0, PADDING_MEDIUM, 0));
         
@@ -335,8 +340,13 @@ public class QuestionDetailScreen extends JPanel {
             }
         });
 
-        // Add components to main layout
-        add(headerPanel, BorderLayout.NORTH);
+        // Add components to main layout (hero at top, then breadcrumbs)
+        JPanel northWrapper = new JPanel();
+        northWrapper.setLayout(new BoxLayout(northWrapper, BoxLayout.Y_AXIS));
+        northWrapper.setOpaque(false);
+        northWrapper.add(heroBar);
+        northWrapper.add(headerPanel);
+        add(northWrapper, BorderLayout.NORTH);
         add(mainContentPanel, BorderLayout.CENTER);
     }
     
@@ -361,6 +371,8 @@ public class QuestionDetailScreen extends JPanel {
                 question -> {
                     this.currentQuestion = question;
                     displayQuestion(question);
+                    // Update left-side details card
+                    questionDetailsCard.setQuestion(question);
                     loadAnswers(questionId);
                     loadRelatedQuestions(question);
                     
@@ -775,8 +787,24 @@ public class QuestionDetailScreen extends JPanel {
     private void loadRelatedQuestions(Question question) {
         relatedQuestionsPanel.removeAll();
         
-        // Get related questions
-        List<Question> relatedQuestions = searchService.getRelatedQuestions(question, 5);
+        // Prefer questions that share the same tags (exact match filtering)
+        List<Question> relatedQuestions;
+        try {
+            var criteria = new com.upnext.app.domain.question.QuestionSearchCriteria()
+                    .setTags(question.getTags())
+                    .setLimit(10);
+            relatedQuestions = questionRepository.search(criteria);
+            // Exclude the current question
+            relatedQuestions.removeIf(q -> q.getId().equals(question.getId()));
+            // Keep top 5
+            if (relatedQuestions.size() > 5) {
+                relatedQuestions = relatedQuestions.subList(0, 5);
+            }
+        } catch (SQLException ex) {
+            LOGGER.logException("Error finding related questions by tags", ex);
+            // Fallback to service-based heuristic if tag query fails
+            relatedQuestions = searchService.getRelatedQuestions(question, 5);
+        }
         
         if (relatedQuestions.isEmpty()) {
             JLabel noRelatedLabel = new JLabel("No related questions found");
