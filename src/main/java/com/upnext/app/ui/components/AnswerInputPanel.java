@@ -38,6 +38,11 @@ public class AnswerInputPanel extends JPanel {
     // Layout constants
     private static final int PADDING_MEDIUM = 16;
     private static final int PADDING_SMALL = 8;
+    private static final int TEXTAREA_MIN_WIDTH = 480;
+    private static final int TEXTAREA_PREF_WIDTH = 680;
+    private static final int TEXTAREA_MIN_HEIGHT = 140;
+    private static final int TEXTAREA_PREF_HEIGHT = 190;
+    private static final int PANEL_PREF_WIDTH = TEXTAREA_PREF_WIDTH + PADDING_MEDIUM * 2;
     private static final int MIN_ANSWER_LENGTH = 10;
     private static final int MAX_ANSWER_LENGTH = 5000;
     
@@ -70,40 +75,41 @@ public class AnswerInputPanel extends JPanel {
         setOpaque(true);
         setBackground(AppTheme.SURFACE);
         setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(0xE0E0E0)),
-            new EmptyBorder(PADDING_MEDIUM, 0, PADDING_MEDIUM, 0)
+            BorderFactory.createLineBorder(new Color(0xE2E8F0), 1),
+            new EmptyBorder(PADDING_MEDIUM, PADDING_MEDIUM, PADDING_MEDIUM, PADDING_MEDIUM)
         ));
+        setAlignmentX(LEFT_ALIGNMENT);
+        setPreferredSize(new Dimension(PANEL_PREF_WIDTH, TEXTAREA_PREF_HEIGHT + 160));
+        setMaximumSize(new Dimension(PANEL_PREF_WIDTH, TEXTAREA_PREF_HEIGHT + 220));
         
         // Create title section
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         titlePanel.setOpaque(false);
         
         titleLabel = new JLabel("Your Answer");
-        titleLabel.setFont(AppTheme.HEADING_FONT.deriveFont(Font.BOLD, 16f));
+    titleLabel.setFont(AppTheme.HEADING_FONT.deriveFont(Font.BOLD, 18f));
         titleLabel.setForeground(AppTheme.TEXT_PRIMARY);
         
         titlePanel.add(titleLabel);
         
         // Create input section
-    JPanel inputPanel = new JPanel();
-    inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
-    inputPanel.setOpaque(false);
-    inputPanel.setAlignmentX(LEFT_ALIGNMENT);
-    // Ensure the input section always gets enough height under BoxLayout
-    inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 260));
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setOpaque(false);
+        inputPanel.setAlignmentX(LEFT_ALIGNMENT);
+    inputPanel.setBorder(new EmptyBorder(PADDING_SMALL, 0, 0, 0));
+    inputPanel.setMaximumSize(new Dimension(TEXTAREA_PREF_WIDTH, TEXTAREA_PREF_HEIGHT + 120));
         
         // Text area with enhanced styling
-        answerTextArea = new JTextArea();
+        answerTextArea = new JTextArea(8, 50);
         answerTextArea.setFont(AppTheme.PRIMARY_FONT.deriveFont(14f));
         answerTextArea.setLineWrap(true);
         answerTextArea.setWrapStyleWord(true);
-        answerTextArea.setRows(8);
-        answerTextArea.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0xDDDDDD), 1),
-            new EmptyBorder(PADDING_SMALL, PADDING_SMALL, PADDING_SMALL, PADDING_SMALL)
-        ));
+        answerTextArea.setMargin(new java.awt.Insets(12, 12, 12, 12));
+        answerTextArea.setBorder(BorderFactory.createLineBorder(new Color(0xD1D5DB), 1));
         answerTextArea.setBackground(Color.WHITE);
         answerTextArea.setOpaque(true);
+        answerTextArea.setCaretColor(AppTheme.TEXT_PRIMARY);
         
         // Add placeholder text effect
         String placeholderText = "Write your answer here... Be clear, helpful, and provide detailed explanations.";
@@ -141,15 +147,15 @@ public class AnswerInputPanel extends JPanel {
         });
         
     // Create scroll pane for text area (ensure visible height)
-    JScrollPane scrollPane = new JScrollPane(answerTextArea);
-    scrollPane.setBorder(null);
-    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    // Explicit sizing so the box is always visible within BoxLayout
-    scrollPane.setPreferredSize(new Dimension(500, 160));
-    scrollPane.setMinimumSize(new Dimension(300, 120));
-    scrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 220));
-    scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        JScrollPane scrollPane = new JScrollPane(answerTextArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+    scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0xD1D5DB), 1));
+    scrollPane.setPreferredSize(new Dimension(TEXTAREA_PREF_WIDTH, TEXTAREA_PREF_HEIGHT));
+    scrollPane.setMinimumSize(new Dimension(TEXTAREA_MIN_WIDTH, TEXTAREA_MIN_HEIGHT));
+    scrollPane.setMaximumSize(new Dimension(TEXTAREA_PREF_WIDTH, TEXTAREA_PREF_HEIGHT + 80));
         
         // Character count label
         characterCountLabel = new JLabel("0 / " + MAX_ANSWER_LENGTH + " characters");
@@ -158,15 +164,19 @@ public class AnswerInputPanel extends JPanel {
         characterCountLabel.setAlignmentX(LEFT_ALIGNMENT);
         
         // Submit button
-    submitButton = new JButton("Post Answer");
+        submitButton = new JButton("Post Answer");
         submitButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 14f));
         submitButton.setBackground(AppTheme.PRIMARY);
         submitButton.setForeground(Color.WHITE);
-        submitButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        submitButton.setBorder(new EmptyBorder(10, 28, 10, 28));
+        submitButton.setBorderPainted(false);
         submitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         submitButton.setFocusPainted(false);
+        submitButton.setContentAreaFilled(true);
+        submitButton.setOpaque(true);
+        submitButton.setPreferredSize(new Dimension(150, 40));
         submitButton.addActionListener(this::handleSubmit);
-    submitButton.setVisible(true);
+        submitButton.setVisible(true);
         
         // Add hover effects
         submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -186,15 +196,20 @@ public class AnswerInputPanel extends JPanel {
         });
         
         // Button panel with right alignment
-    buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(submitButton);
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+    buttonPanel.setOpaque(false);
+    buttonPanel.add(Box.createHorizontalGlue());
+    buttonPanel.add(submitButton);
         
         // Create bottom panel for character count and button
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setOpaque(false);
-        bottomPanel.add(characterCountLabel, BorderLayout.WEST);
-        bottomPanel.add(buttonPanel, BorderLayout.EAST);
+    JPanel bottomPanel = new JPanel();
+    bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+    bottomPanel.setOpaque(false);
+    bottomPanel.setAlignmentX(LEFT_ALIGNMENT);
+    bottomPanel.add(characterCountLabel);
+    bottomPanel.add(Box.createHorizontalGlue());
+    bottomPanel.add(buttonPanel);
         
         // Add components to input panel
         inputPanel.add(scrollPane);
@@ -281,9 +296,19 @@ public class AnswerInputPanel extends JPanel {
         if (isSubmitting) {
             submitButton.setText("Posting...");
             submitButton.setBackground(AppTheme.TEXT_SECONDARY);
+            submitButton.setForeground(Color.WHITE);
+            submitButton.setBorder(new EmptyBorder(10, 28, 10, 28));
         } else {
             submitButton.setText("Post Answer");
-            submitButton.setBackground(isValid ? AppTheme.PRIMARY : AppTheme.TEXT_SECONDARY);
+            if (isValid) {
+                submitButton.setBackground(AppTheme.PRIMARY);
+                submitButton.setForeground(Color.WHITE);
+                submitButton.setBorder(new EmptyBorder(10, 28, 10, 28));
+            } else {
+                submitButton.setBackground(new Color(0xCBD5E1));
+                submitButton.setForeground(Color.WHITE);
+                submitButton.setBorder(new EmptyBorder(10, 28, 10, 28));
+            }
         }
     }
     
@@ -292,7 +317,7 @@ public class AnswerInputPanel extends JPanel {
      * 
      * @param event The action event (unused)
      */
-    private void handleSubmit(ActionEvent event) {
+    private void handleSubmit(ActionEvent ignored) {
         if (isSubmitting) {
             return;
         }

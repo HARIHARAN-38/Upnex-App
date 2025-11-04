@@ -1,18 +1,35 @@
 package com.upnext.app.ui.components;
 
 // No need for Logger in this class
-import com.upnext.app.domain.question.Question;
-import com.upnext.app.ui.theme.AppTheme;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import com.upnext.app.domain.question.Question;
+import com.upnext.app.ui.theme.AppTheme;
 
 /**
  * Card component that displays a question with metadata and vote controls.
@@ -36,6 +53,7 @@ public class QuestionCard extends JPanel {
     private JButton downvoteButton;
     private JLabel voteCountLabel;
     private JPanel tagsPanel;
+    private static final int ICON_SIZE = 18;
     
     // Model
     private Question question;
@@ -128,10 +146,9 @@ public class QuestionCard extends JPanel {
         panel.setOpaque(false);
         panel.setBorder(new EmptyBorder(0, 0, 0, INNER_PADDING));
         
-        // Upvote button
-        upvoteButton = new JButton("▲");
-        upvoteButton.setFont(new Font("Dialog", Font.PLAIN, 16));
-        upvoteButton.setForeground(AppTheme.TEXT_SECONDARY);
+    // Upvote button (icon from resources)
+    upvoteButton = new JButton();
+    upvoteButton.setIcon(loadIcon("/ui/icons/upvote.png", ICON_SIZE, ICON_SIZE));
         upvoteButton.setBorderPainted(false);
         upvoteButton.setContentAreaFilled(false);
         upvoteButton.setFocusPainted(false);
@@ -153,10 +170,9 @@ public class QuestionCard extends JPanel {
         voteCountLabel.setForeground(AppTheme.TEXT_PRIMARY);
         voteCountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        // Downvote button
-        downvoteButton = new JButton("▼");
-        downvoteButton.setFont(new Font("Dialog", Font.PLAIN, 16));
-        downvoteButton.setForeground(AppTheme.TEXT_SECONDARY);
+    // Downvote button (icon from resources)
+    downvoteButton = new JButton();
+    downvoteButton.setIcon(loadIcon("/ui/icons/downvote.png", ICON_SIZE, ICON_SIZE));
         downvoteButton.setBorderPainted(false);
         downvoteButton.setContentAreaFilled(false);
         downvoteButton.setFocusPainted(false);
@@ -180,6 +196,16 @@ public class QuestionCard extends JPanel {
         panel.add(downvoteButton);
         
         return panel;
+    }
+
+    private static ImageIcon loadIcon(String resourcePath, int w, int h) {
+        java.net.URL url = QuestionCard.class.getResource(resourcePath);
+        if (url == null) {
+            return new ImageIcon();
+        }
+        ImageIcon raw = new ImageIcon(url);
+        Image scaled = raw.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
     }
     
     /**

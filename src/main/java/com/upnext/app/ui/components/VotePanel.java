@@ -5,16 +5,20 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageProducer;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.GrayFilter;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.upnext.app.ui.animations.AnimationUtils;
 import com.upnext.app.ui.theme.AppTheme;
 
 /**
@@ -31,14 +35,20 @@ public class VotePanel extends JPanel {
     // State
     private Long itemId;
     private int currentVoteCount;
-    private boolean isUpvoteActive = false;
-    private boolean isDownvoteActive = false;
+    // active-state flags removed (no longer read)
     private boolean isEnabled = true;
     
     // Callbacks
     private BiConsumer<Long, Boolean> onVoteAction; // itemId, isUpvote
     private Consumer<String> onError;
     
+    // Icons
+    private static final int ICON_SIZE = 18;
+    private final ImageIcon upIcon;
+    private final ImageIcon downIcon;
+    private final ImageIcon upIconDisabled;
+    private final ImageIcon downIconDisabled;
+
     /**
      * Creates a new vote panel.
      */
@@ -46,11 +56,15 @@ public class VotePanel extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
         setAlignmentY(Component.TOP_ALIGNMENT);
+
+        // Load icons from classpath resources
+        upIcon = loadIcon("/ui/icons/upvote.png", ICON_SIZE, ICON_SIZE);
+        downIcon = loadIcon("/ui/icons/downvote.png", ICON_SIZE, ICON_SIZE);
+        upIconDisabled = createDisabledIcon(upIcon);
+        downIconDisabled = createDisabledIcon(downIcon);
         
-        // Create upvote button
-    upvoteButton = new JButton("▲");
-    // Use the same font as Home screen (Dialog) to ensure triangle glyphs render consistently
-    upvoteButton.setFont(new Font("Dialog", Font.PLAIN, 16));
+        // Create upvote button (use image icons)
+        upvoteButton = new JButton();
         upvoteButton.setForeground(AppTheme.ACCENT);
         upvoteButton.setBorderPainted(false);
         upvoteButton.setContentAreaFilled(false);
@@ -59,6 +73,8 @@ public class VotePanel extends JPanel {
         upvoteButton.setMaximumSize(new Dimension(40, 30));
         upvoteButton.setMinimumSize(new Dimension(40, 30));
         upvoteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        upvoteButton.setIcon(upIcon);
+        upvoteButton.setDisabledIcon(upIconDisabled);
         upvoteButton.addActionListener(e -> handleUpvote());
         
         // Add hover and active state effects for upvote with animations
@@ -66,18 +82,16 @@ public class VotePanel extends JPanel {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (isEnabled) {
-                    Color targetColor = new Color(0x28a745);
-                    Color currentColor = upvoteButton.getForeground();
-                    AnimationUtils.animateForegroundTransition(upvoteButton, currentColor, targetColor, 150);
+                    // Subtle background highlight on hover
+                    upvoteButton.setOpaque(true);
+                    upvoteButton.setBackground(new Color(40, 167, 69, 40));
                 }
             }
             
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 if (isEnabled) {
-                    Color targetColor = isUpvoteActive ? new Color(0x28a745) : AppTheme.ACCENT;
-                    Color currentColor = upvoteButton.getForeground();
-                    AnimationUtils.animateForegroundTransition(upvoteButton, currentColor, targetColor, 150);
+                    upvoteButton.setOpaque(false);
                 }
             }
         });
@@ -92,8 +106,7 @@ public class VotePanel extends JPanel {
         updateVoteCountColor(0);
         
         // Create downvote button
-    downvoteButton = new JButton("▼");
-    downvoteButton.setFont(new Font("Dialog", Font.PLAIN, 16));
+        downvoteButton = new JButton();
         downvoteButton.setForeground(AppTheme.ACCENT);
         downvoteButton.setBorderPainted(false);
         downvoteButton.setContentAreaFilled(false);
@@ -102,6 +115,8 @@ public class VotePanel extends JPanel {
         downvoteButton.setMaximumSize(new Dimension(40, 30));
         downvoteButton.setMinimumSize(new Dimension(40, 30));
         downvoteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        downvoteButton.setIcon(downIcon);
+        downvoteButton.setDisabledIcon(downIconDisabled);
         downvoteButton.addActionListener(e -> handleDownvote());
         
         // Add hover and active state effects for downvote with animations
@@ -109,18 +124,15 @@ public class VotePanel extends JPanel {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (isEnabled) {
-                    Color targetColor = new Color(0xdc3545);
-                    Color currentColor = downvoteButton.getForeground();
-                    AnimationUtils.animateForegroundTransition(downvoteButton, currentColor, targetColor, 150);
+                    downvoteButton.setOpaque(true);
+                    downvoteButton.setBackground(new Color(220, 53, 69, 40));
                 }
             }
             
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 if (isEnabled) {
-                    Color targetColor = isDownvoteActive ? new Color(0xdc3545) : AppTheme.ACCENT;
-                    Color currentColor = downvoteButton.getForeground();
-                    AnimationUtils.animateForegroundTransition(downvoteButton, currentColor, targetColor, 150);
+                    downvoteButton.setOpaque(false);
                 }
             }
         });
@@ -201,12 +213,10 @@ public class VotePanel extends JPanel {
      * @param isDownvoteActive Whether the downvote is active
      */
     public void setVoteState(boolean isUpvoteActive, boolean isDownvoteActive) {
-        this.isUpvoteActive = isUpvoteActive;
-        this.isDownvoteActive = isDownvoteActive;
         
         // Update button colors based on active state
-        upvoteButton.setForeground(isUpvoteActive ? new Color(0x28a745) : AppTheme.ACCENT);
-        downvoteButton.setForeground(isDownvoteActive ? new Color(0xdc3545) : AppTheme.ACCENT);
+    upvoteButton.setForeground(isUpvoteActive ? new Color(0x28a745) : AppTheme.ACCENT);
+    downvoteButton.setForeground(isDownvoteActive ? new Color(0xdc3545) : AppTheme.ACCENT);
         
         // Update button background for active state
         if (isUpvoteActive) {
@@ -393,5 +403,24 @@ public class VotePanel extends JPanel {
         panel.setMinimumSize(new Dimension(120, 35));
         
         return panel;
+    }
+
+    // Utilities
+    private static ImageIcon loadIcon(String resourcePath, int w, int h) {
+        java.net.URL url = VotePanel.class.getResource(resourcePath);
+        if (url == null) {
+            return new ImageIcon();
+        }
+        ImageIcon raw = new ImageIcon(url);
+        Image scaled = raw.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
+    }
+
+    private static ImageIcon createDisabledIcon(ImageIcon base) {
+        if (base == null || base.getImage() == null) return new ImageIcon();
+        GrayFilter filter = new GrayFilter(true, 60);
+        ImageProducer prod = new FilteredImageSource(base.getImage().getSource(), filter);
+        Image gray = java.awt.Toolkit.getDefaultToolkit().createImage(prod);
+        return new ImageIcon(gray.getScaledInstance(base.getIconWidth(), base.getIconHeight(), Image.SCALE_SMOOTH));
     }
 }

@@ -25436,3 +25436,280 @@ java.lang.IllegalArgumentException: Cannot format given Object as a Date
 [2025-11-04 19:57:13] [INFO] Question selected: why there is no pointers in java?
 [2025-11-04 19:57:13] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
 [2025-11-04 19:57:13] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 20:57:16] [INFO] Logger initialized
+[2025-11-04 20:57:16] [INFO] Starting UpNext application
+[2025-11-04 20:57:16] [INFO] Checking database connection and schema on startup...
+[2025-11-04 20:57:16] [INFO] Initializing database schema...
+[2025-11-04 20:57:17] [INFO] Migration 008 executed successfully
+[2025-11-04 20:57:17] [INFO] Migration 009 executed successfully
+[2025-11-04 20:57:17] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 20:57:17] [INFO] Database schema initialized successfully
+[2025-11-04 20:57:18] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 20:57:18] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 20:57:18] [INFO] Answer votes table initialized
+[2025-11-04 20:57:19] [INFO] Showing profile page
+[2025-11-04 20:57:19] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 21:10:59] [INFO] Logger initialized
+[2025-11-04 21:10:59] [INFO] Starting UpNext application
+[2025-11-04 21:10:59] [INFO] Checking database connection and schema on startup...
+[2025-11-04 21:10:59] [INFO] Initializing database schema...
+[2025-11-04 21:10:59] [INFO] Migration 008 executed successfully
+[2025-11-04 21:10:59] [INFO] Migration 009 executed successfully
+[2025-11-04 21:10:59] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 21:10:59] [INFO] Database schema initialized successfully
+[2025-11-04 21:10:59] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:10:59] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 21:11:00] [INFO] Answer votes table initialized
+[2025-11-04 21:11:00] [INFO] Showing profile page
+[2025-11-04 21:11:00] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 21:11:24] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-04 21:11:24] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-04 21:11:24] [INFO] Retrieving skills for user ID: 7
+[2025-11-04 21:11:24] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:11:24] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:11:24] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-04 21:11:28] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 21:11:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:11:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 21:25:05] [INFO] Logger initialized
+[2025-11-04 21:25:05] [INFO] Starting UpNext application
+[2025-11-04 21:25:06] [INFO] Checking database connection and schema on startup...
+[2025-11-04 21:25:06] [INFO] Initializing database schema...
+[2025-11-04 21:25:06] [INFO] Migration 008 executed successfully
+[2025-11-04 21:25:06] [INFO] Migration 009 executed successfully
+[2025-11-04 21:25:06] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 21:25:06] [INFO] Database schema initialized successfully
+[2025-11-04 21:25:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:25:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 21:25:06] [INFO] Answer votes table initialized
+[2025-11-04 21:25:07] [INFO] Showing profile page
+[2025-11-04 21:25:07] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 21:25:24] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-04 21:25:24] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-04 21:25:24] [INFO] Retrieving skills for user ID: 7
+[2025-11-04 21:25:24] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:25:24] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:25:24] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-04 21:25:28] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 21:25:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:25:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 21:29:35] [INFO] Logger initialized
+[2025-11-04 21:29:35] [INFO] Starting UpNext application
+[2025-11-04 21:29:35] [INFO] Checking database connection and schema on startup...
+[2025-11-04 21:29:35] [INFO] Initializing database schema...
+[2025-11-04 21:29:35] [INFO] Migration 008 executed successfully
+[2025-11-04 21:29:35] [INFO] Migration 009 executed successfully
+[2025-11-04 21:29:35] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 21:29:35] [INFO] Database schema initialized successfully
+[2025-11-04 21:29:36] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:29:36] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 21:29:36] [INFO] Answer votes table initialized
+[2025-11-04 21:29:36] [INFO] Showing profile page
+[2025-11-04 21:29:36] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 21:30:03] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-04 21:30:03] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-04 21:30:03] [INFO] Retrieving skills for user ID: 7
+[2025-11-04 21:30:03] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:30:03] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:30:03] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-04 21:30:06] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 21:30:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:30:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 21:45:01] [INFO] Logger initialized
+[2025-11-04 21:45:01] [INFO] Starting UpNext application
+[2025-11-04 21:45:02] [INFO] Checking database connection and schema on startup...
+[2025-11-04 21:45:02] [INFO] Initializing database schema...
+[2025-11-04 21:45:02] [INFO] Migration 008 executed successfully
+[2025-11-04 21:45:02] [INFO] Migration 009 executed successfully
+[2025-11-04 21:45:02] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 21:45:02] [INFO] Database schema initialized successfully
+[2025-11-04 21:45:02] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:45:02] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 21:45:02] [INFO] Answer votes table initialized
+[2025-11-04 21:45:03] [INFO] Showing profile page
+[2025-11-04 21:45:03] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 21:45:27] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-04 21:45:27] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-04 21:45:27] [INFO] Retrieving skills for user ID: 7
+[2025-11-04 21:45:27] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:45:27] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 21:45:27] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-04 21:45:30] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 21:45:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:45:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 21:51:20] [INFO] Submitting answer for question 5 by user 7
+[2025-11-04 21:51:20] [INFO] Answer Posted: Your answer has been posted successfully!
+[2025-11-04 21:51:22] [INFO] Answer display refreshed after new submission for question: 5
+[2025-11-04 21:51:22] [INFO] Answer submitted successfully for question 5
+[2025-11-04 21:51:29] [INFO] Answer 1 marked as unverified (upvotes: 1)
+[2025-11-04 21:51:29] [INFO] Vote processed for answer 1 by user 7 (upvote: true). New counts: 1 upvotes, 0 downvotes
+[2025-11-04 21:51:29] [INFO] Answer 1 vote updated. Upvotes=1, Downvotes=0
+[2025-11-04 21:51:29] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 21:51:47] [INFO] Answer 1 marked as unverified (upvotes: 0)
+[2025-11-04 21:51:47] [INFO] Vote processed for answer 1 by user 7 (upvote: false). New counts: 0 upvotes, 1 downvotes
+[2025-11-04 21:51:47] [INFO] Answer 1 vote updated. Upvotes=0, Downvotes=1
+[2025-11-04 21:51:47] [INFO] Vote Recorded: Downvote recorded successfully
+[2025-11-04 21:52:10] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:52:10] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, programming, 2, 10, 0]
+[2025-11-04 21:59:06] [INFO] Logger initialized
+[2025-11-04 21:59:06] [INFO] Starting UpNext application
+[2025-11-04 21:59:07] [INFO] Checking database connection and schema on startup...
+[2025-11-04 21:59:07] [INFO] Initializing database schema...
+[2025-11-04 21:59:07] [INFO] Migration 008 executed successfully
+[2025-11-04 21:59:07] [INFO] Migration 009 executed successfully
+[2025-11-04 21:59:07] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 21:59:07] [INFO] Database schema initialized successfully
+[2025-11-04 21:59:07] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:59:07] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 21:59:07] [INFO] Answer votes table initialized
+[2025-11-04 21:59:08] [INFO] Showing profile page
+[2025-11-04 21:59:08] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 21:59:29] [INFO] Attempting sign in for: abc.gmail.com
+[2025-11-04 21:59:29] [INFO] Sign-in attempt for email: abc.gmail.com
+[2025-11-04 21:59:29] [WARNING] Sign-in failed: user not found: abc.gmail.com
+[2025-11-04 21:59:29] [WARNING] Sign in failed: Invalid email or password
+[2025-11-04 21:59:29] [ERROR] Authentication Error: Invalid email or password
+[2025-11-04 21:59:37] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-04 21:59:37] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-04 21:59:37] [INFO] Retrieving skills for user ID: 3
+[2025-11-04 21:59:37] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 21:59:37] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 21:59:37] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-04 21:59:41] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 21:59:41] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 21:59:41] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:00:02] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:00:02] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:00:02] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:00:05] [INFO] Navigate to user profile: VISHNU (ID: 7)
+[2025-11-04 22:00:16] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:00:16] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:00:16] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:00:24] [INFO] Answer 1 marked as unverified (upvotes: 1)
+[2025-11-04 22:00:24] [INFO] Vote processed for answer 1 by user 3 (upvote: true). New counts: 1 upvotes, 1 downvotes
+[2025-11-04 22:00:24] [INFO] Answer 1 vote updated. Upvotes=1, Downvotes=1
+[2025-11-04 22:00:24] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 22:00:27] [INFO] Answer 1 marked as unverified (upvotes: 0)
+[2025-11-04 22:00:27] [INFO] Vote processed for answer 1 by user 3 (upvote: true). New counts: 0 upvotes, 1 downvotes
+[2025-11-04 22:00:27] [INFO] Answer 1 vote updated. Upvotes=0, Downvotes=1
+[2025-11-04 22:00:27] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 22:00:31] [INFO] Answer 1 marked as unverified (upvotes: 0)
+[2025-11-04 22:00:31] [INFO] Vote processed for answer 1 by user 3 (upvote: false). New counts: 0 upvotes, 2 downvotes
+[2025-11-04 22:00:31] [INFO] Answer 1 vote updated. Upvotes=0, Downvotes=2
+[2025-11-04 22:00:31] [INFO] Vote Recorded: Downvote recorded successfully
+[2025-11-04 22:00:34] [INFO] Answer 1 marked as unverified (upvotes: 1)
+[2025-11-04 22:00:34] [INFO] Vote processed for answer 1 by user 3 (upvote: true). New counts: 1 upvotes, 1 downvotes
+[2025-11-04 22:00:34] [INFO] Answer 1 vote updated. Upvotes=1, Downvotes=1
+[2025-11-04 22:00:34] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 22:01:49] [INFO] Logger initialized
+[2025-11-04 22:01:49] [INFO] Starting UpNext application
+[2025-11-04 22:01:49] [INFO] Checking database connection and schema on startup...
+[2025-11-04 22:01:49] [INFO] Initializing database schema...
+[2025-11-04 22:01:50] [INFO] Migration 008 executed successfully
+[2025-11-04 22:01:50] [INFO] Migration 009 executed successfully
+[2025-11-04 22:01:50] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 22:01:50] [INFO] Database schema initialized successfully
+[2025-11-04 22:01:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:01:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 22:01:51] [INFO] Answer votes table initialized
+[2025-11-04 22:01:52] [INFO] Showing profile page
+[2025-11-04 22:01:52] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 22:02:11] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-04 22:02:11] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-04 22:02:11] [INFO] Retrieving skills for user ID: 3
+[2025-11-04 22:02:11] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:02:11] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:02:11] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-04 22:02:13] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:02:13] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:02:13] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:02:21] [INFO] Answer 1 marked as unverified (upvotes: 0)
+[2025-11-04 22:02:21] [INFO] Vote processed for answer 1 by user 3 (upvote: true). New counts: 0 upvotes, 1 downvotes
+[2025-11-04 22:02:21] [INFO] Answer 1 vote updated. Upvotes=0, Downvotes=1
+[2025-11-04 22:02:21] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 22:02:25] [INFO] Answer 1 marked as unverified (upvotes: 1)
+[2025-11-04 22:02:25] [INFO] Vote processed for answer 1 by user 3 (upvote: true). New counts: 1 upvotes, 1 downvotes
+[2025-11-04 22:02:25] [INFO] Answer 1 vote updated. Upvotes=1, Downvotes=1
+[2025-11-04 22:02:25] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 22:02:32] [INFO] User signed out: abc@gmail.com
+[2025-11-04 22:02:35] [WARNING] Sign out attempted with no active user session
+[2025-11-04 22:02:44] [INFO] Navigating to profile system from profile card
+[2025-11-04 22:02:46] [INFO] User initiated logout from profile sidebar
+[2025-11-04 22:02:48] [WARNING] Sign out attempted with no active user session
+[2025-11-04 22:02:48] [INFO] User logging out from profile system
+[2025-11-04 22:02:48] [INFO] User successfully logged out
+[2025-11-04 22:03:05] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-04 22:03:05] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-04 22:03:05] [INFO] Retrieving skills for user ID: 7
+[2025-11-04 22:03:05] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 22:03:05] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-04 22:03:05] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-04 22:03:09] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:03:09] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:03:09] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:03:12] [INFO] Answer 1 marked as unverified (upvotes: 2)
+[2025-11-04 22:03:12] [INFO] Vote processed for answer 1 by user 7 (upvote: true). New counts: 2 upvotes, 0 downvotes
+[2025-11-04 22:03:12] [INFO] Answer 1 vote updated. Upvotes=2, Downvotes=0
+[2025-11-04 22:03:12] [INFO] Vote Recorded: Upvote recorded successfully
+[2025-11-04 22:23:10] [INFO] Logger initialized
+[2025-11-04 22:23:10] [INFO] Starting UpNext application
+[2025-11-04 22:23:10] [INFO] Checking database connection and schema on startup...
+[2025-11-04 22:23:10] [INFO] Initializing database schema...
+[2025-11-04 22:23:11] [INFO] Migration 008 executed successfully
+[2025-11-04 22:23:11] [INFO] Migration 009 executed successfully
+[2025-11-04 22:23:11] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 22:23:11] [INFO] Database schema initialized successfully
+[2025-11-04 22:23:11] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:23:11] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 22:23:11] [INFO] Answer votes table initialized
+[2025-11-04 22:23:11] [INFO] Showing profile page
+[2025-11-04 22:23:11] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 22:23:37] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-04 22:23:37] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-04 22:23:37] [INFO] Retrieving skills for user ID: 3
+[2025-11-04 22:23:37] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:23:37] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:23:37] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-04 22:23:40] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:23:40] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:23:40] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:24:17] [INFO] Navigate to user profile: VISHNU (ID: 7)
+[2025-11-04 22:24:22] [INFO] User initiated logout from profile sidebar
+[2025-11-04 22:24:30] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:24:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:24:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:40:09] [INFO] Logger initialized
+[2025-11-04 22:40:09] [INFO] Starting UpNext application
+[2025-11-04 22:40:09] [INFO] Checking database connection and schema on startup...
+[2025-11-04 22:40:09] [INFO] Initializing database schema...
+[2025-11-04 22:40:10] [INFO] Migration 008 executed successfully
+[2025-11-04 22:40:10] [INFO] Migration 009 executed successfully
+[2025-11-04 22:40:10] [INFO] Migration 011 file not found, skipping migration
+[2025-11-04 22:40:10] [INFO] Database schema initialized successfully
+[2025-11-04 22:40:10] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:40:10] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-04 22:40:10] [INFO] Answer votes table initialized
+[2025-11-04 22:40:11] [INFO] Showing profile page
+[2025-11-04 22:40:11] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-04 22:40:31] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-04 22:40:31] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-04 22:40:31] [INFO] Retrieving skills for user ID: 3
+[2025-11-04 22:40:31] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:40:31] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-04 22:40:31] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-04 22:40:37] [INFO] Created new vote: user=3, question=5, vote=UPVOTE
+[2025-11-04 22:40:37] [INFO] Vote action: Upvoted! for question 5
+[2025-11-04 22:40:37] [INFO] Question voted: why there is no pointers in java? (Upvotes: 2, Downvotes: 0)
+[2025-11-04 22:40:40] [INFO] Updated vote: user=3, question=5, vote=DOWNVOTE
+[2025-11-04 22:40:40] [INFO] Vote action: Changed to downvote! for question 5
+[2025-11-04 22:40:40] [INFO] Question voted: why there is no pointers in java? (Upvotes: 1, Downvotes: 1)
+[2025-11-04 22:40:42] [INFO] Updated vote: user=3, question=5, vote=UPVOTE
+[2025-11-04 22:40:42] [INFO] Vote action: Changed to upvote! for question 5
+[2025-11-04 22:40:42] [INFO] Question voted: why there is no pointers in java? (Upvotes: 2, Downvotes: 0)
+[2025-11-04 22:40:44] [INFO] Question selected: why there is no pointers in java?
+[2025-11-04 22:40:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:40:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-04 22:41:04] [INFO] Question selected: what is the use of gc in java?
+[2025-11-04 22:41:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-04 22:41:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, programming, 2, 10, 0]
+[2025-11-04 22:41:19] [INFO] Navigate to user profile: hari (ID: 3)

@@ -188,14 +188,16 @@ public class QuestionDetailScreen extends JPanel {
         headerPanel.add(backButton, BorderLayout.EAST);
         
         // Create content panel
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setOpaque(false);
+    JPanel contentPanel = new JPanel();
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+    contentPanel.setOpaque(false);
+    contentPanel.setBorder(new EmptyBorder(PADDING_MEDIUM, PADDING_MEDIUM, PADDING_MEDIUM, PADDING_MEDIUM));
         
         // Question panel
-        questionPanel = new JPanel();
-        questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
-        questionPanel.setOpaque(false);
+    questionPanel = new JPanel();
+    questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
+    questionPanel.setOpaque(false);
+    questionPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         questionPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0xE0E0E0)),
             new EmptyBorder(0, 0, PADDING_MEDIUM, 0)
@@ -248,7 +250,7 @@ public class QuestionDetailScreen extends JPanel {
     metadataLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         // Create question vote panel
-        questionVotePanel = VotePanel.createHorizontal();
+    questionVotePanel = new VotePanel();
         questionVotePanel.setOnVoteAction(this::handleQuestionVote);
         questionVotePanel.setOnError(error -> FeedbackManager.showError(this, error, "Vote Error"));
         questionVotePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -266,8 +268,9 @@ public class QuestionDetailScreen extends JPanel {
         questionPanel.add(Box.createRigidArea(new Dimension(0, PADDING_MEDIUM)));
         
         // Answers section
-        JPanel answersSection = new JPanel(new BorderLayout(0, PADDING_SMALL));
-        answersSection.setOpaque(false);
+    JPanel answersSection = new JPanel(new BorderLayout(0, PADDING_SMALL));
+    answersSection.setOpaque(false);
+    answersSection.setAlignmentX(Component.LEFT_ALIGNMENT);
         answersSection.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0xE0E0E0)),
             new EmptyBorder(PADDING_MEDIUM, 0, PADDING_MEDIUM, 0)
@@ -286,12 +289,14 @@ public class QuestionDetailScreen extends JPanel {
         answersSection.add(answersPanel, BorderLayout.CENTER);
         
         // Create enhanced answer input panel
-        answerInputPanel = new AnswerInputPanel();
+    answerInputPanel = new AnswerInputPanel();
+    answerInputPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         answerInputPanel.setOnAnswerSubmitted(this::handleNewAnswer);
         
         // Related questions section
-        JPanel relatedQuestionsSection = new JPanel(new BorderLayout(0, PADDING_SMALL));
-        relatedQuestionsSection.setOpaque(false);
+    JPanel relatedQuestionsSection = new JPanel(new BorderLayout(0, PADDING_SMALL));
+    relatedQuestionsSection.setOpaque(false);
+    relatedQuestionsSection.setAlignmentX(Component.LEFT_ALIGNMENT);
         relatedQuestionsSection.setBorder(new EmptyBorder(PADDING_MEDIUM, 0, 0, 0));
         
         relatedQuestionsHeaderLabel = new JLabel("Related Questions");
@@ -313,10 +318,11 @@ public class QuestionDetailScreen extends JPanel {
         contentPanel.add(relatedQuestionsSection);
         
         // Create scroll pane for content
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.setBorder(null);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
+    JScrollPane scrollPane = new JScrollPane(contentPanel);
+    scrollPane.setBorder(null);
+    scrollPane.setOpaque(false);
+    scrollPane.getViewport().setOpaque(false);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         // Create responsive main content panel with enhanced styling
         mainContentPanel = createEnhancedContentPanel();
