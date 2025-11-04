@@ -232,7 +232,11 @@ public class AddQuestionViewModel {
         if (tagName == null) {
             return false;
         }
-        return normalizedTagNames.contains(tagName.trim().toLowerCase());
+        String candidate = tagName.trim();
+        if (candidate.isEmpty()) {
+            return false;
+        }
+        return normalizedTagNames.contains(candidate);
     }
     
     /**

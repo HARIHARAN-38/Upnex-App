@@ -262,6 +262,25 @@ public class Answer {
     public void updateTimestamp() {
         this.updatedAt = LocalDateTime.now();
     }
+    
+    /**
+     * Checks if this answer is verified (has 10 or more upvotes).
+     * Verified answers are considered high-quality and trustworthy.
+     * 
+     * @return True if the answer has 10 or more upvotes, false otherwise
+     */
+    public boolean isVerified() {
+        return this.upvotes >= 10;
+    }
+    
+    /**
+     * Gets the net vote score (upvotes - downvotes).
+     * 
+     * @return The net vote score
+     */
+    public int getNetVotes() {
+        return this.upvotes - this.downvotes;
+    }
 
     @Override
     public String toString() {

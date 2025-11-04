@@ -20,7 +20,15 @@ import com.upnext.app.service.search.TokenUtils;
 
 /**
  * Service class for searching and retrieving questions with advanced features.
- * Provides fuzzy search capabilities using token utilities and result ranking.
+ * Provides comprehensive search capabilities with the following features:
+ * 
+ * - Fuzzy search with tokenization and similarity matching
+ * - Lowercase matching with LIKE '%term%' queries
+ * - Live filtering integration with the question feed
+ * - Search across question titles, content, tags, and user names
+ * - Real-time debounced search via HeroBar integration
+ * - Result ranking by relevance scores
+ * - Support for exact and fuzzy matching strategies
  */
 public class SearchService {
     private static final Logger LOGGER = Logger.getInstance();

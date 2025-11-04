@@ -174,6 +174,39 @@ public class SchemaInitializer {
             } else {
                 logger.info("Migration 009 file not found, skipping migration");
             }
+            
+            // Execute migration 011 to add performance indexes
+            String migration011 = "/sql/011_performance_indexes.sql";
+            InputStream migration011Stream = SchemaInitializer.class.getResourceAsStream(migration011);
+            
+            if (migration011Stream != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(migration011Stream))) {
+                    String migrationContent = reader.lines().collect(Collectors.joining("\n"));
+                    
+                    try (Statement stmt = connection.createStatement()) {
+                        // Execute migration statements
+                        String[] statements = migrationContent.split(";");
+                        for (String statement : statements) {
+                            String trimmedStmt = statement.trim();
+                            if (!trimmedStmt.isEmpty() && !trimmedStmt.startsWith("--")) {
+                                try {
+                                    stmt.execute(trimmedStmt);
+                                } catch (SQLException e) {
+                                    // Ignore "index already exists" errors (code 1061)
+                                    if (e.getErrorCode() != 1061) {
+                                        logger.warning("Index creation warning: " + e.getMessage());
+                                    }
+                                }
+                            }
+                        }
+                        logger.info("Migration 011 (performance indexes) executed successfully");
+                    }
+                } catch (Exception e) {
+                    logger.logException("Failed to execute migration 011", e);
+                }
+            } else {
+                logger.info("Migration 011 file not found, skipping migration");
+            }
         } catch (Exception e) {
             logger.logException("Error during migration execution", e);
         }

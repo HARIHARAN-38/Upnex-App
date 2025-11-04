@@ -123,9 +123,9 @@ public class HeroBar extends JPanel {
         profilePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, PADDING_SMALL, 0));
         profilePanel.setOpaque(false);
         
-        // Avatar with user initials
+        // Avatar with user initials (hidden for home page - profile accessed via profile card)
         avatarLabel = createAvatarLabel();
-        avatarLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        avatarLabel.setVisible(false); // Hide avatar on home page
         
         // Sign out button
         signOutButton = new JButton("Sign Out");
@@ -140,19 +140,13 @@ public class HeroBar extends JPanel {
             // Note: Navigation back to sign-in screen will be handled in App.java
         });
         
-        // Create profile menu
+        // Create profile menu (kept for compatibility but hidden)
         profileMenu = createProfileMenu();
         
-        // Set up avatar click listener for profile menu
-        avatarLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                profileMenu.show(avatarLabel, 0, avatarLabel.getHeight());
-            }
-        });
+        // Avatar click listener disabled for home page
+        // Profile navigation is now handled by the profile card "View Full Profile" button
         
-        // Add components to profile panel
-        profilePanel.add(avatarLabel);
+        // Add components to profile panel (only sign out button visible)
         profilePanel.add(signOutButton);
         
         // Add components to the hero bar
@@ -320,13 +314,18 @@ public class HeroBar extends JPanel {
         JMenuItem profileMenuItem = new JMenuItem("View Profile");
         profileMenuItem.setFont(AppTheme.PRIMARY_FONT);
         profileMenuItem.addActionListener(e -> {
-            // Will be implemented in future with proper navigation
-            JOptionPane.showMessageDialog(
-                this,
-                "Profile page coming soon!",
-                "Feature Preview",
-                JOptionPane.INFORMATION_MESSAGE
-            );
+            try {
+                Logger.getInstance().info("Navigating to profile layout from HeroBar");
+                ViewNavigator.getInstance().navigateTo("profile-layout");
+            } catch (Exception ex) {
+                Logger.getInstance().error("Error navigating to profile layout: " + ex.getMessage());
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Error opening profile page. Please try again.",
+                    "Navigation Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
         });
         
         // Account Settings menu item
@@ -362,12 +361,14 @@ public class HeroBar extends JPanel {
     
     /**
      * Updates the avatar label with user initials from name
+     * Note: Avatar is hidden on home page - profile accessed via profile card
      */
     public void updateProfileDisplay() {
         User currentUser = AuthService.getInstance().getCurrentUser();
         if (currentUser != null) {
             avatarLabel.setText(getInitials(currentUser.getName()));
-            avatarLabel.setVisible(true);
+            // Keep avatar hidden - profile navigation is via profile card
+            avatarLabel.setVisible(false);
         } else {
             avatarLabel.setText("?");
             avatarLabel.setVisible(false);

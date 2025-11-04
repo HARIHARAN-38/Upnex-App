@@ -57,7 +57,7 @@ public class HomeScreen extends JPanel {
     private final JPanel leftColumn;
     private final JPanel centerColumn;
     private final JPanel rightColumn;
-    private final JPanel heroBar;
+    private final HeroBar heroBar;
     private QuestionFeedPanel questionFeedPanel;
     
     // Filter manager for unified filter state
@@ -99,7 +99,7 @@ public class HomeScreen extends JPanel {
         welcomeLabel.setBorder(new EmptyBorder(PADDING_SMALL, 0, PADDING_MEDIUM, 0));
         
         // Hero bar (top bar with logo, search, and user profile)
-        heroBar = createHeroBar();
+    heroBar = createHeroBar();
         
         // Three-column container using custom layout
         JPanel columnsPanel = new JPanel() {
@@ -152,7 +152,7 @@ public class HomeScreen extends JPanel {
         contentPanel.add(columnsPanel, BorderLayout.CENTER);
         
         // Add to main layout
-        add(heroBar, BorderLayout.NORTH);
+    add(heroBar, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
         
         // Set initial welcome message
@@ -164,7 +164,7 @@ public class HomeScreen extends JPanel {
      * 
      * @return The hero bar panel
      */
-    private JPanel createHeroBar() {
+    private HeroBar createHeroBar() {
         HeroBar heroBarComponent = new HeroBar();
         
         // Set search callback to handle search from hero bar
@@ -175,8 +175,7 @@ public class HomeScreen extends JPanel {
                 try {
                     long questionId = Long.parseLong(query.substring(9));
                     Logger.getInstance().info("Question selected from search: " + questionId);
-                    // Future: Navigate to question detail view
-                    // ViewNavigator.getInstance().navigateToQuestionDetail(questionId);
+                    SwingUtilities.invokeLater(() -> navigateToQuestionDetail(questionId));
                 } catch (NumberFormatException e) {
                     Logger.getInstance().error("Invalid question ID format: " + query);
                 }
@@ -190,6 +189,24 @@ public class HomeScreen extends JPanel {
         signOutButton = heroBarComponent.getSignOutButton();
         
         return heroBarComponent;
+    }
+
+    /**
+     * Exposes the hero bar for integration tests.
+     *
+     * @return the hero bar component
+     */
+    public HeroBar getHeroBar() {
+        return heroBar;
+    }
+
+    /**
+     * Exposes the question feed panel for integration tests.
+     *
+     * @return the question feed panel
+     */
+    public QuestionFeedPanel getQuestionFeedPanel() {
+        return questionFeedPanel;
     }
     
     /**

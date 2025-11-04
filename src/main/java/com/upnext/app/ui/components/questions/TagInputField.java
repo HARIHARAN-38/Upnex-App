@@ -141,12 +141,12 @@ public class TagInputField extends JPanel {
     /**
      * Handles tag input when Enter is pressed or other tag addition events.
      */
-    private void handleTagInput() {
+    private boolean handleTagInput() {
         String input = inputField.getText().trim();
         
         // Skip if empty or is placeholder text
         if (input.isEmpty() || input.equals(PLACEHOLDER_TEXT)) {
-            return;
+            return false;
         }
         
         // Call the callback to attempt tag addition
@@ -161,7 +161,11 @@ public class TagInputField extends JPanel {
                     setPlaceholderText(inputField, PLACEHOLDER_TEXT);
                 }
             }
+
+            return success;
         }
+
+        return false;
     }
     
     /**
@@ -169,7 +173,27 @@ public class TagInputField extends JPanel {
      */
     @Override
     public void requestFocus() {
-        inputField.requestFocus();
+        requestInputFocus();
+    }
+
+    /**
+     * Requests focus for the underlying input field and reports whether the request succeeded.
+     * This helper uses both requestFocusInWindow and requestFocus to improve reliability in tests.
+     *
+     * @return true if the input field gained focus or the request was queued, false otherwise
+     */
+    public boolean requestInputFocus() {
+        if (!inputField.isEnabled() || !inputField.isFocusable()) {
+            return false;
+        }
+
+        boolean focused = inputField.requestFocusInWindow();
+        if (!focused) {
+            inputField.requestFocus();
+            focused = inputField.isFocusOwner() || inputField.hasFocus();
+        }
+
+        return focused || inputField.isFocusOwner() || inputField.hasFocus();
     }
     
     /**
@@ -203,6 +227,15 @@ public class TagInputField extends JPanel {
             inputField.setText(text);
             inputField.setForeground(AppTheme.TEXT_PRIMARY);
         }
+    }
+
+    /**
+     * Submits the current text content as if the user pressed Enter.
+     *
+     * @return true if the tag was added successfully, false otherwise
+     */
+    public boolean submitCurrentInput() {
+        return handleTagInput();
     }
     
     /**

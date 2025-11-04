@@ -1,8 +1,11 @@
 package com.upnext.app.ui.components;
 
-import com.upnext.app.core.Logger;
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
+
 import javax.swing.JOptionPane;
+
+import com.upnext.app.core.Logger;
 
 /**
  * Provides consistent feedback to users through dialogs and logging.
@@ -39,6 +42,11 @@ public final class FeedbackManager {
             case ERROR -> logger.error(title + ": " + message);
         }
         
+        // Skip dialog rendering when running in headless environments (e.g., automated tests)
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
+
         // Convert to JOptionPane message type
         int optionPaneType = switch (type) {
             case SUCCESS -> JOptionPane.INFORMATION_MESSAGE;

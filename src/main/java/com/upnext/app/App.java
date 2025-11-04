@@ -17,6 +17,7 @@ import com.upnext.app.ui.navigation.ViewNavigator;
 import com.upnext.app.ui.screens.AddQuestionScreen;
 import com.upnext.app.ui.screens.CreateAccountScreen;
 import com.upnext.app.ui.screens.HomeScreen;
+import com.upnext.app.ui.screens.ProfileLayout;
 import com.upnext.app.ui.screens.QuestionDetailScreen;
 import com.upnext.app.ui.screens.SignInScreen;
 import com.upnext.app.ui.screens.SkillAddScreen;
@@ -35,6 +36,7 @@ public final class App {
     public static final String SKILL_ADD_SCREEN = "add-skill";
     public static final String QUESTION_DETAIL_SCREEN = "question-detail";
     public static final String ADD_QUESTION_SCREEN = "add-question";
+    public static final String PROFILE_LAYOUT_SCREEN = "profile-layout";
     
     private static final Logger logger = Logger.getInstance();
     
@@ -88,6 +90,7 @@ public final class App {
             SkillAddScreen skillAddScreen = new SkillAddScreen();
             QuestionDetailScreen questionDetailScreen = new QuestionDetailScreen();
             AddQuestionScreen addQuestionScreen = new AddQuestionScreen();
+            ProfileLayout profileLayout = new ProfileLayout();
             
             navigator.registerScreen(SIGN_IN_SCREEN, signInScreen);
             navigator.registerScreen(CREATE_ACCOUNT_SCREEN, createAccountScreen);
@@ -96,9 +99,10 @@ public final class App {
             navigator.registerScreen(SKILL_ADD_SCREEN, skillAddScreen);
             navigator.registerScreen(QUESTION_DETAIL_SCREEN, questionDetailScreen);
             navigator.registerScreen(ADD_QUESTION_SCREEN, addQuestionScreen);
+            navigator.registerScreen(PROFILE_LAYOUT_SCREEN, profileLayout);
             
             // Setup navigation
-            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen, questionDetailScreen, addQuestionScreen);
+            setupNavigation(signInScreen, createAccountScreen, homeScreen, skillsetScreen, skillAddScreen, questionDetailScreen, addQuestionScreen, profileLayout);
             
             // Start with sign-in screen
             navigator.navigateTo(SIGN_IN_SCREEN);
@@ -122,6 +126,7 @@ public final class App {
      * @param skillAddScreen The skill add screen
      * @param questionDetailScreen The question detail screen
      * @param addQuestionScreen The add question screen
+     * @param profileLayout The profile layout screen
      */
     private static void setupNavigation(
             SignInScreen signInScreen,
@@ -130,7 +135,8 @@ public final class App {
             SkillsetScreen skillsetScreen,
             SkillAddScreen skillAddScreen,
             QuestionDetailScreen questionDetailScreen,
-            AddQuestionScreen addQuestionScreen) {
+            AddQuestionScreen addQuestionScreen,
+            ProfileLayout profileLayout) {
         
         final ViewNavigator navigator = ViewNavigator.getInstance();
         final AuthService authService = AuthService.getInstance();

@@ -299,4 +299,31 @@ public class SearchServiceTest {
             return new ArrayList<>(source == null ? Collections.emptyList() : source);
         }
     }
+    
+    /**
+     * Test comprehensive search functionality that was enhanced in Step 58.
+     * Verifies that search works across titles, content, tags, and user names.
+     */
+    @Test
+    void testComprehensiveSearchFunctionality() {
+        // This test verifies that the SearchService integrates with the enhanced
+        // QuestionRepository search that now supports searching across:
+        // - Question titles and content
+        // - Tags associated with questions  
+        // - User names who posted questions
+        // The actual database integration is tested in QuestionRepositoryTest
+        
+        StubQuestionDataAccess dataAccess = new StubQuestionDataAccess();
+        SearchService service = new SearchService(dataAccess);
+        
+        List<Question> expectedResults = List.of(question(1L, "Test Query", "Test content"));
+        dataAccess.addSearchResponse("test query", expectedResults);
+
+        // Test that search calls the repository with proper criteria and returns early when exact matches exist
+        List<Question> results = service.search("test query", 10, 0);
+        assertEquals(expectedResults, results);
+        
+        assertEquals(1, dataAccess.getSearchInvocationCount(), 
+                    "Search should invoke repository search");
+    }
 }

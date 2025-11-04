@@ -40,16 +40,22 @@ public class QuestionVoteRepository {
         String sql = "SELECT id, user_id, question_id, vote_type, created_at, updated_at " +
                     "FROM question_votes WHERE user_id = ? AND question_id = ?";
         
-        try (Connection connection = JdbcConnectionProvider.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            
-            statement.setLong(1, userId);
-            statement.setLong(2, questionId);
-            
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(mapResultSetToVote(resultSet));
+        Connection connection = null;
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setLong(1, userId);
+                statement.setLong(2, questionId);
+                
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return Optional.of(mapResultSetToVote(resultSet));
+                    }
                 }
+            }
+        } finally {
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
             }
         }
         
@@ -95,19 +101,25 @@ public class QuestionVoteRepository {
     private void createVote(Long userId, Long questionId, VoteType voteType) throws SQLException {
         String sql = "INSERT INTO question_votes (user_id, question_id, vote_type) VALUES (?, ?, ?)";
         
-        try (Connection connection = JdbcConnectionProvider.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            
-            statement.setLong(1, userId);
-            statement.setLong(2, questionId);
-            statement.setString(3, voteType.getValue());
-            
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new SQLException("Failed to create vote");
+        Connection connection = null;
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setLong(1, userId);
+                statement.setLong(2, questionId);
+                statement.setString(3, voteType.getValue());
+                
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("Failed to create vote");
+                }
+                
+                logger.info("Created new vote: user=" + userId + ", question=" + questionId + ", vote=" + voteType);
             }
-            
-            logger.info("Created new vote: user=" + userId + ", question=" + questionId + ", vote=" + voteType);
+        } finally {
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
+            }
         }
     }
     
@@ -118,19 +130,25 @@ public class QuestionVoteRepository {
         String sql = "UPDATE question_votes SET vote_type = ?, updated_at = CURRENT_TIMESTAMP " +
                     "WHERE user_id = ? AND question_id = ?";
         
-        try (Connection connection = JdbcConnectionProvider.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            
-            statement.setString(1, voteType.getValue());
-            statement.setLong(2, userId);
-            statement.setLong(3, questionId);
-            
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new SQLException("Failed to update vote");
+        Connection connection = null;
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, voteType.getValue());
+                statement.setLong(2, userId);
+                statement.setLong(3, questionId);
+                
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("Failed to update vote");
+                }
+                
+                logger.info("Updated vote: user=" + userId + ", question=" + questionId + ", vote=" + voteType);
             }
-            
-            logger.info("Updated vote: user=" + userId + ", question=" + questionId + ", vote=" + voteType);
+        } finally {
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
+            }
         }
     }
     
@@ -140,18 +158,24 @@ public class QuestionVoteRepository {
     private void removeVote(Long userId, Long questionId) throws SQLException {
         String sql = "DELETE FROM question_votes WHERE user_id = ? AND question_id = ?";
         
-        try (Connection connection = JdbcConnectionProvider.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            
-            statement.setLong(1, userId);
-            statement.setLong(2, questionId);
-            
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new SQLException("Failed to remove vote");
+        Connection connection = null;
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setLong(1, userId);
+                statement.setLong(2, questionId);
+                
+                int rowsAffected = statement.executeUpdate();
+                if (rowsAffected == 0) {
+                    throw new SQLException("Failed to remove vote");
+                }
+                
+                logger.info("Removed vote: user=" + userId + ", question=" + questionId);
             }
-            
-            logger.info("Removed vote: user=" + userId + ", question=" + questionId);
+        } finally {
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
+            }
         }
     }
     
@@ -168,18 +192,24 @@ public class QuestionVoteRepository {
                     "SUM(CASE WHEN vote_type = 'downvote' THEN 1 ELSE 0 END) as downvotes " +
                     "FROM question_votes WHERE question_id = ?";
         
-        try (Connection connection = JdbcConnectionProvider.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            
-            statement.setLong(1, questionId);
-            
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new int[] {
-                        resultSet.getInt("upvotes"),
-                        resultSet.getInt("downvotes")
-                    };
+        Connection connection = null;
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setLong(1, questionId);
+                
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return new int[] {
+                            resultSet.getInt("upvotes"),
+                            resultSet.getInt("downvotes")
+                        };
+                    }
                 }
+            }
+        } finally {
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
             }
         }
         

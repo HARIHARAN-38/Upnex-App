@@ -436,9 +436,15 @@ public final class QuestionRepository {
             return Collections.emptyList();
         }
         SearchQueryBuilder builder = new SearchQueryBuilder(criteria);
+        String sql = builder.build();
+        List<Object> parameters = builder.getParametersSnapshot();
+
+        LOGGER.debug("[QUESTION_SEARCH_SQL] " + sql);
+        LOGGER.debug("[QUESTION_SEARCH_PARAMS] " + parameters);
+
         JdbcConnectionProvider provider = JdbcConnectionProvider.getInstance();
         Connection connection = provider.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(builder.build())) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             builder.apply(statement);
             try (ResultSet rs = statement.executeQuery()) {
                 List<Question> questions = new ArrayList<>();
@@ -527,6 +533,32 @@ public final class QuestionRepository {
             }
             
             return answers;
+        } finally {
+            provider.releaseConnection(connection);
+        }
+    }
+    
+    /**
+     * Gets the tags associated with a question.
+     * 
+     * @param questionId The question ID
+     * @return A list of tag names
+     * @throws SQLException If a database error occurs
+     */
+    public List<String> getTagsForQuestion(Long questionId) throws SQLException {
+        Objects.requireNonNull(questionId, "questionId");
+        
+        JdbcConnectionProvider provider = JdbcConnectionProvider.getInstance();
+        Connection connection = provider.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(FIND_TAGS_SQL)) {
+            statement.setLong(1, questionId);
+            try (ResultSet rs = statement.executeQuery()) {
+                List<String> tags = new ArrayList<>();
+                while (rs.next()) {
+                    tags.add(rs.getString("name"));
+                }
+                return tags;
+            }
         } finally {
             provider.releaseConnection(connection);
         }
@@ -881,10 +913,16 @@ public final class QuestionRepository {
             }
             List<String> clauses = new ArrayList<>();
             if (hasText(criteria.getSearchText())) {
-                clauses.add("(q.title LIKE ? OR q.content LIKE ?)");
+                // Enhanced search across title, content, tags, and user names
+                clauses.add("(q.title LIKE ? OR q.content LIKE ? OR " +
+                           "EXISTS (SELECT 1 FROM question_tags qt2 INNER JOIN tags t2 ON qt2.tag_id = t2.id " +
+                           "WHERE qt2.question_id = q.id AND t2.name LIKE ?) OR " +
+                           "EXISTS (SELECT 1 FROM users u WHERE u.id = q.user_id AND u.name LIKE ?))");
                 String likeValue = '%' + criteria.getSearchText() + '%';
-                parameters.add(likeValue);
-                parameters.add(likeValue);
+                parameters.add(likeValue); // title
+                parameters.add(likeValue); // content
+                parameters.add(likeValue); // tags
+                parameters.add(likeValue); // user names
             }
             if (criteria.getSubjectId() != null) {
                 clauses.add("q.subject_id = ?");
@@ -931,6 +969,10 @@ public final class QuestionRepository {
             parameters.add(criteria.getLimit());
             parameters.add(criteria.getOffset());
             return sql.toString();
+        }
+
+        private List<Object> getParametersSnapshot() {
+            return new ArrayList<>(parameters);
         }
 
         private void apply(PreparedStatement statement) throws SQLException {

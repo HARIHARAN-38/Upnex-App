@@ -7,10 +7,17 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -25,11 +32,24 @@ import javax.swing.border.EmptyBorder;
 
 import com.upnext.app.App;
 import com.upnext.app.core.Logger;
+import com.upnext.app.data.question.AnswerRepository;
+import com.upnext.app.data.question.AnswerRepository.VoteResult;
 import com.upnext.app.data.question.QuestionRepository;
+import com.upnext.app.data.question.QuestionVoteRepository;
+import com.upnext.app.data.question.TagRepository;
+import com.upnext.app.domain.User;
 import com.upnext.app.domain.question.Answer;
 import com.upnext.app.domain.question.Question;
+import com.upnext.app.domain.question.QuestionVote;
+import com.upnext.app.domain.question.Tag;
+import com.upnext.app.service.AuthService;
 import com.upnext.app.service.SearchService;
+import com.upnext.app.ui.components.AnswerInputPanel;
 import com.upnext.app.ui.components.FeedbackManager;
+import com.upnext.app.ui.components.FilterManager;
+import com.upnext.app.ui.components.QuestionDetailsCard;
+import com.upnext.app.ui.components.TagChip;
+import com.upnext.app.ui.components.VotePanel;
 import com.upnext.app.ui.navigation.ViewNavigator;
 import com.upnext.app.ui.theme.AppTheme;
 
@@ -43,6 +63,17 @@ public class QuestionDetailScreen extends JPanel {
     // Layout constants
     private static final int PADDING_MEDIUM = 16;
     private static final int PADDING_SMALL = 8;
+    private static final int PADDING_LARGE = 24;
+    
+    // Responsive breakpoints
+    private static final int MOBILE_BREAKPOINT = 768;
+    private static final int TABLET_BREAKPOINT = 1024;
+    private static final int DESKTOP_BREAKPOINT = 1200;
+    
+    // Layout dimensions
+    private static final int SIDEBAR_WIDTH_DESKTOP = 300;
+    private static final int SIDEBAR_WIDTH_TABLET = 250;
+    private static final int MIN_CONTENT_WIDTH = 400;
     
     // UI components
     private final JButton backButton;
@@ -52,13 +83,30 @@ public class QuestionDetailScreen extends JPanel {
     private final JLabel titleLabel;
     private final JTextArea contentArea;
     private final JLabel metadataLabel;
+    private final JLabel questionAuthorNameLabel;
+    private final JLabel questionAuthorAvatarLabel;
+    private final JLabel questionAuthorMetaLabel;
+    private final JPanel questionTagPanel;
     private final JLabel answersHeaderLabel;
     private final JLabel relatedQuestionsHeaderLabel;
+    private final AnswerInputPanel answerInputPanel;
+    private final VotePanel questionVotePanel;
     
     // Data
     private Question currentQuestion;
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final TagRepository tagRepository;
     private final SearchService searchService;
+    private final AuthService authService;
+    private final FilterManager filterManager;
+    private final QuestionVoteRepository questionVoteRepository;
+    
+    // Responsive layout components
+    private final JPanel mainContentPanel;
+    private final QuestionDetailsCard questionDetailsCard;
+    private final JScrollPane contentScrollPane;
+    private boolean isMobileLayout = false;
     
     /**
      * Creates a new question detail screen.
@@ -66,26 +114,73 @@ public class QuestionDetailScreen extends JPanel {
     public QuestionDetailScreen() {
         setLayout(new BorderLayout(0, PADDING_MEDIUM));
         setBackground(AppTheme.BACKGROUND);
-        setBorder(new EmptyBorder(PADDING_MEDIUM, PADDING_MEDIUM, PADDING_MEDIUM, PADDING_MEDIUM));
+        
+        // Enhanced responsive padding - more on larger screens
+        int responsivePadding = PADDING_MEDIUM;
+        setBorder(new EmptyBorder(responsivePadding, responsivePadding, responsivePadding, responsivePadding));
         
         // Initialize repositories and services
-        questionRepository = QuestionRepository.getInstance();
-        searchService = SearchService.getInstance();
+    questionRepository = QuestionRepository.getInstance();
+    answerRepository = AnswerRepository.getInstance();
+    tagRepository = TagRepository.getInstance();
+    searchService = SearchService.getInstance();
+    authService = AuthService.getInstance();
+    filterManager = FilterManager.getInstance();
+    questionVoteRepository = QuestionVoteRepository.getInstance();
         
-        // Create header with back button
+        // Create header with breadcrumb navigation
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
         headerPanel.setBorder(new EmptyBorder(0, 0, PADDING_MEDIUM, 0));
         
-        backButton = new JButton("← Back to Questions");
-        backButton.setFont(AppTheme.PRIMARY_FONT);
+        // Create breadcrumb panel
+        JPanel breadcrumbPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        breadcrumbPanel.setOpaque(false);
+        
+        JLabel homeLabel = new JLabel("Home");
+        homeLabel.setFont(AppTheme.PRIMARY_FONT);
+        homeLabel.setForeground(AppTheme.ACCENT);
+        homeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        homeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navigateBack();
+            }
+            
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                homeLabel.setForeground(AppTheme.PRIMARY);
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                homeLabel.setForeground(AppTheme.ACCENT);
+            }
+        });
+        
+        JLabel separatorLabel = new JLabel(" → ");
+        separatorLabel.setFont(AppTheme.PRIMARY_FONT);
+        separatorLabel.setForeground(AppTheme.TEXT_SECONDARY);
+        
+        JLabel currentPageLabel = new JLabel("Question");
+        currentPageLabel.setFont(AppTheme.PRIMARY_FONT);
+        currentPageLabel.setForeground(AppTheme.TEXT_SECONDARY);
+        
+        breadcrumbPanel.add(homeLabel);
+        breadcrumbPanel.add(separatorLabel);
+        breadcrumbPanel.add(currentPageLabel);
+        
+        // Legacy back button for additional navigation option
+        backButton = new JButton("← Back");
+        backButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(12f));
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setForeground(AppTheme.ACCENT);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> navigateBack());
         
-        headerPanel.add(backButton, BorderLayout.WEST);
+        headerPanel.add(breadcrumbPanel, BorderLayout.WEST);
+        headerPanel.add(backButton, BorderLayout.EAST);
         
         // Create content panel
         JPanel contentPanel = new JPanel();
@@ -101,45 +196,68 @@ public class QuestionDetailScreen extends JPanel {
             new EmptyBorder(0, 0, PADDING_MEDIUM, 0)
         ));
         
-        titleLabel = new JLabel();
-        titleLabel.setFont(AppTheme.HEADING_FONT.deriveFont(Font.BOLD, 24f));
-        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    titleLabel = new JLabel();
+    titleLabel.setFont(AppTheme.HEADING_FONT.deriveFont(Font.BOLD, 24f));
+    titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    questionAuthorAvatarLabel = new JLabel("👤");
+    questionAuthorAvatarLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(18f));
+    questionAuthorAvatarLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    questionAuthorAvatarLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    questionAuthorNameLabel = new JLabel();
+    questionAuthorNameLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD));
+    questionAuthorNameLabel.setForeground(AppTheme.ACCENT);
+    questionAuthorNameLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    questionAuthorNameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    questionAuthorMetaLabel = new JLabel();
+    questionAuthorMetaLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.ITALIC, 12f));
+    questionAuthorMetaLabel.setForeground(AppTheme.TEXT_SECONDARY);
+    questionAuthorMetaLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    JPanel questionAuthorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, PADDING_SMALL, 0));
+    questionAuthorPanel.setOpaque(false);
+    questionAuthorPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    questionAuthorPanel.add(questionAuthorAvatarLabel);
+    questionAuthorPanel.add(questionAuthorNameLabel);
+    questionAuthorPanel.add(questionAuthorMetaLabel);
+
+    contentArea = new JTextArea();
+    contentArea.setFont(AppTheme.PRIMARY_FONT);
+    contentArea.setLineWrap(true);
+    contentArea.setWrapStyleWord(true);
+    contentArea.setEditable(false);
+    contentArea.setBackground(AppTheme.BACKGROUND);
+    contentArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+    contentArea.setBorder(new EmptyBorder(PADDING_MEDIUM, 0, PADDING_SMALL, 0));
+
+    questionTagPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 4));
+    questionTagPanel.setOpaque(false);
+    questionTagPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    questionTagPanel.setVisible(false);
+
+    metadataLabel = new JLabel();
+    metadataLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.PLAIN, 12f));
+    metadataLabel.setForeground(AppTheme.TEXT_SECONDARY);
+    metadataLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        contentArea = new JTextArea();
-        contentArea.setFont(AppTheme.PRIMARY_FONT);
-        contentArea.setLineWrap(true);
-        contentArea.setWrapStyleWord(true);
-        contentArea.setEditable(false);
-        contentArea.setBackground(AppTheme.BACKGROUND);
-        contentArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contentArea.setBorder(new EmptyBorder(PADDING_MEDIUM, 0, PADDING_MEDIUM, 0));
-        
-        metadataLabel = new JLabel();
-        metadataLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.ITALIC, 12f));
-        metadataLabel.setForeground(AppTheme.TEXT_SECONDARY);
-        metadataLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
-        JPanel votingPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, PADDING_MEDIUM, 0));
-        votingPanel.setOpaque(false);
-        votingPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
-        JButton upvoteButton = new JButton("▲ Upvote");
-        upvoteButton.setFont(AppTheme.PRIMARY_FONT);
-        upvoteButton.addActionListener(e -> upvoteQuestion());
-        
-        JButton downvoteButton = new JButton("▼ Downvote");
-        downvoteButton.setFont(AppTheme.PRIMARY_FONT);
-        downvoteButton.addActionListener(e -> downvoteQuestion());
-        
-        votingPanel.add(upvoteButton);
-        votingPanel.add(downvoteButton);
+        // Create question vote panel
+        questionVotePanel = VotePanel.createHorizontal();
+        questionVotePanel.setOnVoteAction(this::handleQuestionVote);
+        questionVotePanel.setOnError(error -> FeedbackManager.showError(this, error, "Vote Error"));
+        questionVotePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         // Add components to question panel
-        questionPanel.add(titleLabel);
-        questionPanel.add(contentArea);
-        questionPanel.add(metadataLabel);
-        questionPanel.add(Box.createRigidArea(new Dimension(0, PADDING_MEDIUM)));
-        questionPanel.add(votingPanel);
+    questionPanel.add(titleLabel);
+    questionPanel.add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
+    questionPanel.add(questionAuthorPanel);
+    questionPanel.add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
+    questionPanel.add(contentArea);
+    questionPanel.add(questionTagPanel);
+    questionPanel.add(metadataLabel);
+    questionPanel.add(Box.createRigidArea(new Dimension(0, PADDING_MEDIUM)));
+        questionPanel.add(questionVotePanel);
         questionPanel.add(Box.createRigidArea(new Dimension(0, PADDING_MEDIUM)));
         
         // Answers section
@@ -162,50 +280,9 @@ public class QuestionDetailScreen extends JPanel {
         answersSection.add(answersHeaderLabel, BorderLayout.NORTH);
         answersSection.add(answersPanel, BorderLayout.CENTER);
         
-        // Answer input area
-        JPanel answerInputPanel = new JPanel(new BorderLayout(0, PADDING_SMALL));
-        answerInputPanel.setOpaque(false);
-        answerInputPanel.setBorder(new EmptyBorder(PADDING_MEDIUM, 0, PADDING_MEDIUM, 0));
-        
-        JLabel yourAnswerLabel = new JLabel("Your Answer");
-        yourAnswerLabel.setFont(AppTheme.HEADING_FONT.deriveFont(16f));
-        
-        JTextArea answerTextArea = new JTextArea();
-        answerTextArea.setFont(AppTheme.PRIMARY_FONT);
-        answerTextArea.setLineWrap(true);
-        answerTextArea.setWrapStyleWord(true);
-        answerTextArea.setRows(5);
-        answerTextArea.setBorder(BorderFactory.createLineBorder(new Color(0xDDDDDD)));
-        
-        JScrollPane answerScrollPane = new JScrollPane(answerTextArea);
-        answerScrollPane.setBorder(new EmptyBorder(PADDING_SMALL, 0, PADDING_SMALL, 0));
-        
-        JButton submitAnswerButton = new JButton("Submit Answer");
-        submitAnswerButton.setBackground(AppTheme.PRIMARY);
-        submitAnswerButton.setForeground(Color.WHITE);
-        submitAnswerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        submitAnswerButton.addActionListener(e -> {
-            // Submit answer implementation
-            String answerText = answerTextArea.getText().trim();
-            if (!answerText.isEmpty()) {
-                submitAnswer(answerText);
-                answerTextArea.setText("");
-            } else {
-                FeedbackManager.showWarning(
-                    this,
-                    "Please enter your answer before submitting.",
-                    "Empty Answer"
-                );
-            }
-        });
-        
-        JPanel submitButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        submitButtonPanel.setOpaque(false);
-        submitButtonPanel.add(submitAnswerButton);
-        
-        answerInputPanel.add(yourAnswerLabel, BorderLayout.NORTH);
-        answerInputPanel.add(answerScrollPane, BorderLayout.CENTER);
-        answerInputPanel.add(submitButtonPanel, BorderLayout.SOUTH);
+        // Create enhanced answer input panel
+        answerInputPanel = new AnswerInputPanel();
+        answerInputPanel.setOnAnswerSubmitted(this::handleNewAnswer);
         
         // Related questions section
         JPanel relatedQuestionsSection = new JPanel(new BorderLayout(0, PADDING_SMALL));
@@ -235,10 +312,32 @@ public class QuestionDetailScreen extends JPanel {
         scrollPane.setBorder(null);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
+
+        // Create responsive main content panel with enhanced styling
+        mainContentPanel = createEnhancedContentPanel();
+        mainContentPanel.setOpaque(false);
         
+        // Create question details card for sidebar
+        questionDetailsCard = new QuestionDetailsCard();
+        questionDetailsCard.setQuestion(currentQuestion);
+        
+        // Store content scroll pane for responsive layout switching
+        contentScrollPane = scrollPane;
+        
+        // Initialize responsive layout
+        setupResponsiveLayout();
+        
+        // Add component listener for responsive layout adjustments
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                adjustLayoutForScreenSize();
+            }
+        });
+
         // Add components to main layout
         add(headerPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+        add(mainContentPanel, BorderLayout.CENTER);
     }
     
     /**
@@ -264,6 +363,9 @@ public class QuestionDetailScreen extends JPanel {
                     displayQuestion(question);
                     loadAnswers(questionId);
                     loadRelatedQuestions(question);
+                    
+                    // Set question ID for answer input panel
+                    answerInputPanel.setQuestionId(questionId);
                     
                     // Increment view count in background
                     incrementViewCount(questionId);
@@ -315,31 +417,151 @@ public class QuestionDetailScreen extends JPanel {
     private void displayQuestion(Question question) {
         titleLabel.setText(question.getTitle());
         contentArea.setText(question.getContent());
-        
-        // Format date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a");
-        String formattedDate = dateFormat.format(question.getCreatedAt());
-        
-        // Build metadata string
-        StringBuilder metadataBuilder = new StringBuilder();
-        metadataBuilder.append("Asked by ").append(question.getUserName())
-                      .append(" on ").append(formattedDate);
-        
-        if (question.getSubjectName() != null && !question.getSubjectName().isEmpty()) {
-            metadataBuilder.append(" in ").append(question.getSubjectName());
-        }
-        
-        metadataBuilder.append(" • ").append(question.getViewCount()).append(" views");
-        metadataBuilder.append(" • ").append(question.getUpvotes()).append(" upvotes");
-        
-        metadataLabel.setText(metadataBuilder.toString());
-        
-        // Update answer header
-        answersHeaderLabel.setText(question.getAnswerCount() > 0 ? 
-                                 question.getAnswerCount() + " Answers" : 
-                                 "No Answers Yet");
+
+        String authorName = question.getUserName() != null && !question.getUserName().isBlank()
+            ? question.getUserName()
+            : "Anonymous";
+        questionAuthorNameLabel.setText(authorName);
+        questionAuthorAvatarLabel.setToolTipText("View " + authorName + "'s profile");
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy 'at' h:mm a");
+        String formattedDate = question.getCreatedAt() != null
+            ? dateFormatter.format(question.getCreatedAt())
+            : "an unknown date";
+        questionAuthorMetaLabel.setText("asked on " + formattedDate);
+
+        configureAuthorInteractions(question.getUserId(), authorName);
+
+        metadataLabel.setText(buildQuestionStatistics(question));
+
+        // Initialize vote panel with current vote count
+        int netVotes = question.getUpvotes() - question.getDownvotes();
+        questionVotePanel.setVoteCount(netVotes);
+        questionVotePanel.setItemId(question.getId());
+
+        displayQuestionTags(question);
+
+        answersHeaderLabel.setText(question.getAnswerCount() > 0
+            ? question.getAnswerCount() + " Answers"
+            : "No Answers Yet");
     }
     
+    /**
+     * Displays the question tags as clickable chips.
+     * 
+     * @param question The question whose tags to display
+     */
+    private void displayQuestionTags(Question question) {
+        questionTagPanel.removeAll();
+
+        try {
+            List<String> tags = questionRepository.getTagsForQuestion(question.getId());
+            if (tags.isEmpty()) {
+                questionTagPanel.setVisible(false);
+            } else {
+                JLabel tagsLabel = new JLabel("Tags:");
+                tagsLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 12f));
+                tagsLabel.setForeground(AppTheme.TEXT_SECONDARY);
+                questionTagPanel.add(tagsLabel);
+
+                for (String tag : tags) {
+                    TagChip tagChip = TagChip.createCompact(tag);
+                    tagChip.setOnClickCallback(this::applyTagFilter);
+                    questionTagPanel.add(tagChip);
+                }
+
+                questionTagPanel.setVisible(true);
+            }
+        } catch (SQLException e) {
+            LOGGER.logException("Error loading tags for question: " + question.getId(), e);
+            questionTagPanel.setVisible(false);
+        }
+
+        questionTagPanel.revalidate();
+        questionTagPanel.repaint();
+    }
+    
+    private void configureAuthorInteractions(Long userId, String userName) {
+        resetMouseListeners(questionAuthorAvatarLabel);
+        resetMouseListeners(questionAuthorNameLabel);
+
+        java.awt.event.MouseAdapter avatarAdapter = new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navigateToProfileLayout(userId, userName);
+            }
+        };
+        questionAuthorAvatarLabel.addMouseListener(avatarAdapter);
+
+        java.awt.event.MouseAdapter nameAdapter = new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navigateToProfileLayout(userId, userName);
+            }
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                questionAuthorNameLabel.setForeground(AppTheme.PRIMARY);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                questionAuthorNameLabel.setForeground(AppTheme.ACCENT);
+            }
+        };
+        questionAuthorNameLabel.addMouseListener(nameAdapter);
+    }
+
+    private void resetMouseListeners(JLabel label) {
+        for (var listener : label.getMouseListeners()) {
+            label.removeMouseListener(listener);
+        }
+    }
+
+    private String buildQuestionStatistics(Question question) {
+        StringBuilder stats = new StringBuilder();
+
+        if (question.getSubjectName() != null && !question.getSubjectName().isBlank()) {
+            stats.append("Subject: ").append(question.getSubjectName()).append(" • ");
+        }
+
+        stats.append(question.getViewCount()).append(" views");
+        stats.append(" • ").append(question.getUpvotes()).append(" upvotes");
+        if (question.getDownvotes() > 0) {
+            stats.append(", ").append(question.getDownvotes()).append(" downvotes");
+        }
+        stats.append(" • ").append(question.getAnswerCount()).append(
+            question.getAnswerCount() == 1 ? " answer" : " answers");
+
+        return stats.toString();
+    }
+
+    private void applyTagFilter(String tagName) {
+        if (tagName == null || tagName.isBlank()) {
+            return;
+        }
+
+        try {
+            filterManager.clearAllFilters();
+            Tag filterTag = tagRepository.findByName(tagName)
+                .orElseGet(() -> new Tag(tagName));
+            filterManager.setSelectedTags(List.of(filterTag));
+            ViewNavigator.getInstance().navigateTo(App.HOME_SCREEN);
+        } catch (SQLException e) {
+            LOGGER.logException("Error applying tag filter for: " + tagName, e);
+            FeedbackManager.showWarning(
+                this,
+                "Unable to filter by tag right now. Please try again.",
+                "Tag Filter Error"
+            );
+        }
+    }
+
+    private void navigateToProfileLayout(Long userId, String userName) {
+        LOGGER.info("Navigating to profile for user: " + userName + " (id=" + userId + ")");
+        ViewNavigator.getInstance().navigateTo(App.PROFILE_LAYOUT_SCREEN);
+    }
+
     /**
      * Loads answers for the question.
      * 
@@ -358,6 +580,18 @@ public class QuestionDetailScreen extends JPanel {
                 noAnswersLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
                 answersPanel.add(noAnswersLabel);
             } else {
+                // Sort answers by verification status first, then by net vote score (highest first)
+                answers.sort((a1, a2) -> {
+                    // Verified answers come first
+                    if (a1.isVerified() != a2.isVerified()) {
+                        return a1.isVerified() ? -1 : 1;
+                    }
+                    // Within each group, sort by net vote score (upvotes - downvotes)
+                    int score1 = a1.getUpvotes() - a1.getDownvotes();
+                    int score2 = a2.getUpvotes() - a2.getDownvotes();
+                    return Integer.compare(score2, score1);
+                });
+                
                 for (Answer answer : answers) {
                     JPanel answerCard = createAnswerCard(answer);
                     answersPanel.add(answerCard);
@@ -383,13 +617,47 @@ public class QuestionDetailScreen extends JPanel {
      * @return A panel containing the answer card
      */
     private JPanel createAnswerCard(Answer answer) {
-        JPanel card = new JPanel();
-        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setOpaque(false);
+        JPanel card = new JPanel(new BorderLayout(PADDING_MEDIUM, 0));
+        card.setOpaque(true);
+        card.setBackground(AppTheme.SURFACE);
+        
+        // Enhanced border with shadow effect for better separation
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0xEEEEEE)),
-            new EmptyBorder(PADDING_SMALL, PADDING_SMALL, PADDING_SMALL, PADDING_SMALL)
+            BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0xDDDDDD)),
+                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0xF8F9FA))
+            ),
+            new EmptyBorder(PADDING_MEDIUM, PADDING_SMALL, PADDING_MEDIUM, PADDING_SMALL)
         ));
+        
+        // Left side - voting panel using VotePanel component
+        VotePanel votingPanel = VotePanel.createCompact();
+        votingPanel.setItemId(answer.getId());
+        votingPanel.setOnVoteAction((answerId, isUpvote) -> handleAnswerVote(answerId, isUpvote));
+        votingPanel.setOnError(error -> FeedbackManager.showError(this, error, "Vote Error"));
+        
+        // Calculate and set initial vote count
+        int netVoteScore = answer.getUpvotes() - answer.getDownvotes();
+        votingPanel.setVoteCount(netVoteScore);
+        
+        // Right side - content panel
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setOpaque(false);
+        contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        // Verified answer badge if applicable
+        if (answer.isVerified()) {
+            JLabel verifiedBadge = new JLabel("✓ Verified Answer");
+            verifiedBadge.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD, 11f));
+            verifiedBadge.setForeground(new Color(0x28a745));
+            verifiedBadge.setOpaque(true);
+            verifiedBadge.setBackground(new Color(0xd4edda));
+            verifiedBadge.setBorder(new EmptyBorder(2, 6, 2, 6));
+            verifiedBadge.setAlignmentX(Component.LEFT_ALIGNMENT);
+            contentPanel.add(verifiedBadge);
+            contentPanel.add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
+        }
         
         // Answer content
         JTextArea answerContent = new JTextArea(answer.getContent());
@@ -400,22 +668,103 @@ public class QuestionDetailScreen extends JPanel {
         answerContent.setBackground(AppTheme.BACKGROUND);
         answerContent.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        // Answer metadata
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a");
-        String formattedDate = dateFormat.format(answer.getCreatedAt());
+        // User info and metadata panel
+        JPanel userInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        userInfoPanel.setOpaque(false);
+        userInfoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        JLabel answerMetadataLabel = new JLabel("Answered by " + answer.getUserName() + 
-                                      " on " + formattedDate);
-        answerMetadataLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.ITALIC, 12f));
-        answerMetadataLabel.setForeground(AppTheme.TEXT_SECONDARY);
-        answerMetadataLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // User avatar placeholder (clickable)
+        JLabel avatarLabel = new JLabel("👤");
+        avatarLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(16f));
+        avatarLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        avatarLabel.setToolTipText("View " + answer.getUserName() + "'s profile");
+        avatarLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navigateToProfileLayout(answer.getUserId(), answer.getUserName());
+            }
+        });
         
-        // Add to card
-        card.add(answerContent);
-        card.add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
-        card.add(answerMetadataLabel);
+        // User name (clickable)
+        JLabel userNameLabel = new JLabel(answer.getUserName());
+        userNameLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.BOLD));
+        userNameLabel.setForeground(AppTheme.ACCENT);
+        userNameLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        userNameLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navigateToProfileLayout(answer.getUserId(), answer.getUserName());
+            }
+            
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                userNameLabel.setForeground(AppTheme.PRIMARY);
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                userNameLabel.setForeground(AppTheme.ACCENT);
+            }
+        });
+        
+        // Answer date
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy 'at' h:mm a");
+        String formattedDate = answer.getCreatedAt() != null
+            ? dateFormatter.format(answer.getCreatedAt())
+            : "an unknown time";
+        JLabel dateLabel = new JLabel(" answered on " + formattedDate);
+        dateLabel.setFont(AppTheme.PRIMARY_FONT.deriveFont(Font.ITALIC, 12f));
+        dateLabel.setForeground(AppTheme.TEXT_SECONDARY);
+        
+        userInfoPanel.add(avatarLabel);
+        userInfoPanel.add(Box.createRigidArea(new Dimension(4, 0)));
+        userInfoPanel.add(userNameLabel);
+        userInfoPanel.add(dateLabel);
+        
+        // Add components to content panel
+        contentPanel.add(answerContent);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, PADDING_SMALL)));
+        contentPanel.add(userInfoPanel);
+        
+        // Add panels to card
+        card.add(votingPanel, BorderLayout.WEST);
+        card.add(contentPanel, BorderLayout.CENTER);
         
         return card;
+    }
+    
+    /**
+     * Handles voting on an answer with VotePanel callback compatibility.
+     * 
+     * @param answerId The ID of the answer to vote on
+     * @param isUpvote true for upvote, false for downvote
+     */
+    private void handleAnswerVote(Long answerId, Boolean isUpvote) {
+        try {
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                FeedbackManager.showWarning(this, "Please log in to vote", "Authentication Required");
+                return;
+            }
+            
+            VoteResult result = answerRepository.voteAnswer(answerId, currentUser.getId(), isUpvote);
+            LOGGER.info("Answer " + answerId + " vote updated. Upvotes=" + result.getUpvotes()
+                + ", Downvotes=" + result.getDownvotes());
+            
+            // Show success feedback
+            FeedbackManager.showInfo(this, 
+                (isUpvote ? "Upvote" : "Downvote") + " recorded successfully", 
+                "Vote Recorded");
+            
+            // Note: The VotePanel will be updated automatically via the loadAnswers refresh
+            // Refresh the answers display to show updated vote counts
+            if (currentQuestion != null) {
+                loadAnswers(currentQuestion.getId());
+            }
+            
+        } catch (SQLException e) {
+            FeedbackManager.showError(this, "Database error while voting: " + e.getMessage(), "Database Error");
+        }
     }
     
     /**
@@ -515,113 +864,288 @@ public class QuestionDetailScreen extends JPanel {
     /**
      * Upvotes the current question.
      */
-    private void upvoteQuestion() {
-        if (currentQuestion == null) return;
-        
+    private void handleQuestionVote(Long questionId, Boolean isUpvote) {
+        if (currentQuestion == null || !Objects.equals(currentQuestion.getId(), questionId)) {
+            FeedbackManager.showError(this, "Question not found", "Error");
+            return;
+        }
+
+        if (isUpvote == null) {
+            FeedbackManager.showWarning(this, "Unable to process vote", "Vote Error");
+            return;
+        }
+
         try {
-            currentQuestion.incrementUpvotes();
-            questionRepository.updateVoteCounts(
-                currentQuestion.getId(),
-                currentQuestion.getUpvotes(),
-                currentQuestion.getDownvotes()
-            );
-            
-            // Update metadata display
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy 'at' h:mm a");
-            String formattedDate = dateFormat.format(currentQuestion.getCreatedAt());
-            
-            StringBuilder metadataBuilder = new StringBuilder();
-            metadataBuilder.append("Asked by ").append(currentQuestion.getUserName())
-                         .append(" on ").append(formattedDate);
-            
-            if (currentQuestion.getSubjectName() != null && !currentQuestion.getSubjectName().isEmpty()) {
-                metadataBuilder.append(" in ").append(currentQuestion.getSubjectName());
+            User currentUser = authService.getCurrentUser();
+            if (currentUser == null) {
+                FeedbackManager.showWarning(this, "Please log in to vote", "Authentication Required");
+                return;
             }
-            
-            metadataBuilder.append(" • ").append(currentQuestion.getViewCount()).append(" views");
-            metadataBuilder.append(" • ").append(currentQuestion.getUpvotes()).append(" upvotes");
-            
-            metadataLabel.setText(metadataBuilder.toString());
+
+            QuestionVote.VoteType voteType = isUpvote ? QuestionVote.VoteType.UPVOTE : QuestionVote.VoteType.DOWNVOTE;
+            QuestionVoteRepository.VoteResult voteResult = questionVoteRepository.castVote(currentUser.getId(), questionId, voteType);
+
+            int[] counts = questionVoteRepository.countVotes(questionId);
+            int upvotes = counts[0];
+            int downvotes = counts[1];
+
+            currentQuestion.setUpvotes(upvotes);
+            currentQuestion.setDownvotes(downvotes);
+            questionRepository.updateVoteCounts(questionId, upvotes, downvotes);
+
+            questionVotePanel.setVoteCount(upvotes - downvotes);
+
+            String message;
+            if (voteResult == QuestionVoteRepository.VoteResult.REMOVED) {
+                message = "Vote removed";
+            } else {
+                message = isUpvote ? "Upvote recorded" : "Downvote recorded";
+            }
+
+            FeedbackManager.showInfo(this, message, "Vote Recorded");
+
         } catch (SQLException e) {
-            LOGGER.logException("Failed to upvote question: " + currentQuestion.getId(), e);
-            FeedbackManager.showError(
-                this,
-                "Failed to upvote question. Please try again later.",
-                "Error"
-            );
+            FeedbackManager.showError(this, "Database error while voting: " + e.getMessage(), "Database Error");
         }
     }
     
     /**
-     * Downvotes the current question.
-     */
-    private void downvoteQuestion() {
-        if (currentQuestion == null) return;
-        
-        try {
-            currentQuestion.incrementDownvotes();
-            questionRepository.updateVoteCounts(
-                currentQuestion.getId(),
-                currentQuestion.getUpvotes(),
-                currentQuestion.getDownvotes()
-            );
-        } catch (SQLException e) {
-            LOGGER.logException("Failed to downvote question: " + currentQuestion.getId(), e);
-            FeedbackManager.showError(
-                this,
-                "Failed to downvote question. Please try again later.",
-                "Error"
-            );
-        }
-    }
-    
-    /**
-     * Submits an answer for the current question.
+     * Handles a new answer being submitted successfully.
+     * Refreshes the answers display and updates the question's answer count.
      * 
-     * @param answerContent The answer content
+     * @param newAnswer The newly submitted answer (unused - we refresh from database)
      */
-    private void submitAnswer(String answerContent) {
-        if (currentQuestion == null) return;
+    private void handleNewAnswer(Answer newAnswer) {
+        if (currentQuestion == null || newAnswer == null) {
+            return;
+        }
         
         try {
-            Answer answer = new Answer();
-            answer.setQuestionId(currentQuestion.getId());
-            answer.setContent(answerContent);
-            // User would be set from AuthService in a complete implementation
-            
-            questionRepository.saveAnswer(answer);
-            
             // Update the question's answer count
             currentQuestion.incrementAnswerCount();
             
-            // Refresh answers display
+            // Refresh answers display to show the new answer at the top
             loadAnswers(currentQuestion.getId());
             
             // Update answers header
             answersHeaderLabel.setText(currentQuestion.getAnswerCount() + " Answers");
             
-            FeedbackManager.showSuccess(
-                this,
-                "Your answer was submitted successfully.",
-                "Answer Submitted"
-            );
-        } catch (SQLException e) {
-            LOGGER.logException("Failed to submit answer for question: " + currentQuestion.getId(), e);
-            FeedbackManager.showError(
-                this,
-                "Failed to submit answer. Please try again later.",
-                "Error"
-            );
+            LOGGER.info("Answer display refreshed after new submission for question: " + currentQuestion.getId());
+            
+        } catch (Exception e) {
+            LOGGER.logException("Error refreshing answers display after new submission", e);
+            // Don't show error to user as the answer was already saved successfully
         }
     }
     
     /**
-     * Navigates back to the home screen while preserving filter state.
+     * Navigates back to the home screen.
      * The filter state is automatically persisted by FilterManager across screens.
      */
     private void navigateBack() {
         // No additional action needed - FilterManager persists state
         // and the HomeScreen automatically uses this state when redisplayed
         ViewNavigator.getInstance().navigateTo(App.HOME_SCREEN);
+    }
+    
+    /**
+     * Sets up the initial responsive layout based on current screen size.
+     */
+    private void setupResponsiveLayout() {
+        adjustLayoutForScreenSize();
+    }
+    
+    /**
+     * Adjusts the layout based on current screen size to provide optimal
+     * user experience across different device types.
+     */
+    private void adjustLayoutForScreenSize() {
+        int screenWidth = getWidth();
+        boolean shouldUseMobileLayout = screenWidth <= MOBILE_BREAKPOINT;
+        
+        // Only update layout if the breakpoint has changed
+        if (shouldUseMobileLayout != isMobileLayout) {
+            isMobileLayout = shouldUseMobileLayout;
+            updateLayoutForBreakpoint();
+        }
+        
+        // Update sidebar width based on screen size
+        updateSidebarWidth(screenWidth);
+        
+        // Update responsive padding
+        updateResponsivePadding(screenWidth);
+    }
+    
+    /**
+     * Updates the layout structure based on the current breakpoint.
+     */
+    private void updateLayoutForBreakpoint() {
+        // Remove all components from main content panel
+        mainContentPanel.removeAll();
+        
+        if (isMobileLayout) {
+            // Mobile layout: Stack sidebar above content
+            setupMobileLayout();
+        } else {
+            // Desktop/Tablet layout: Side-by-side layout
+            setupDesktopLayout();
+        }
+        
+        // Refresh the layout
+        mainContentPanel.revalidate();
+        mainContentPanel.repaint();
+    }
+    
+    /**
+     * Sets up mobile-friendly stacked layout.
+     */
+    private void setupMobileLayout() {
+        // Use vertical BoxLayout for mobile
+        mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
+        
+        // Create a wrapper for the sidebar with proper alignment
+        JPanel sidebarWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        sidebarWrapper.setOpaque(false);
+        sidebarWrapper.add(questionDetailsCard);
+        sidebarWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        // Set maximum width for mobile
+        questionDetailsCard.setPreferredSize(new Dimension(Integer.MAX_VALUE, questionDetailsCard.getPreferredSize().height));
+        questionDetailsCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        
+        // Add components vertically
+        mainContentPanel.add(sidebarWrapper);
+        mainContentPanel.add(Box.createRigidArea(new Dimension(0, PADDING_MEDIUM)));
+        
+        // Create wrapper for content scroll pane
+        JPanel contentWrapper = new JPanel(new BorderLayout());
+        contentWrapper.setOpaque(false);
+        contentWrapper.add(contentScrollPane, BorderLayout.CENTER);
+        
+        mainContentPanel.add(contentWrapper);
+    }
+    
+    /**
+     * Sets up desktop/tablet side-by-side layout.
+     */
+    private void setupDesktopLayout() {
+        // Use BorderLayout for desktop
+        mainContentPanel.setLayout(new BorderLayout(PADDING_MEDIUM, 0));
+        
+        // Add sidebar to west and content to center
+        mainContentPanel.add(questionDetailsCard, BorderLayout.WEST);
+        mainContentPanel.add(contentScrollPane, BorderLayout.CENTER);
+    }
+    
+    /**
+     * Updates sidebar width based on screen size.
+     * 
+     * @param screenWidth Current screen width
+     */
+    private void updateSidebarWidth(int screenWidth) {
+        if (!isMobileLayout && questionDetailsCard != null) {
+            int sidebarWidth;
+            
+            if (screenWidth >= DESKTOP_BREAKPOINT) {
+                sidebarWidth = SIDEBAR_WIDTH_DESKTOP;
+            } else if (screenWidth >= TABLET_BREAKPOINT) {
+                sidebarWidth = SIDEBAR_WIDTH_TABLET;
+            } else {
+                // For smaller desktop screens, use a proportional width
+                sidebarWidth = Math.max(200, screenWidth / 4);
+            }
+            
+            // Ensure minimum content width is maintained
+            int maxSidebarWidth = screenWidth - MIN_CONTENT_WIDTH - PADDING_MEDIUM * 3;
+            sidebarWidth = Math.min(sidebarWidth, maxSidebarWidth);
+            
+            questionDetailsCard.setPreferredSize(new Dimension(sidebarWidth, 0));
+            questionDetailsCard.setMaximumSize(new Dimension(sidebarWidth, Integer.MAX_VALUE));
+        }
+    }
+    
+    /**
+     * Updates padding based on screen size for better spacing on larger screens.
+     * 
+     * @param screenWidth Current screen width
+     */
+    private void updateResponsivePadding(int screenWidth) {
+        int padding;
+        
+        if (screenWidth >= DESKTOP_BREAKPOINT) {
+            padding = PADDING_LARGE; // More padding on large screens
+        } else if (screenWidth >= TABLET_BREAKPOINT) {
+            padding = PADDING_MEDIUM;
+        } else {
+            padding = PADDING_SMALL; // Less padding on mobile
+        }
+        
+        setBorder(new EmptyBorder(padding, padding, padding, padding));
+        
+        // Also update the main content panel gap
+        if (mainContentPanel.getLayout() instanceof BorderLayout borderLayout) {
+            borderLayout.setHgap(padding);
+        }
+    }
+    
+    /**
+     * Paints the component with gradient background and drop shadows for enhanced visual appeal.
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        int width = getWidth();
+        int height = getHeight();
+        
+        // Create subtle gradient background
+        Color gradientStart = AppTheme.BACKGROUND;
+        Color gradientEnd = new Color(
+            Math.max(0, gradientStart.getRed() - 10),
+            Math.max(0, gradientStart.getGreen() - 10),
+            Math.max(0, gradientStart.getBlue() - 10)
+        );
+        
+        GradientPaint gradient = new GradientPaint(
+            0, 0, gradientStart,
+            0, height, gradientEnd
+        );
+        
+        g2.setPaint(gradient);
+        g2.fillRect(0, 0, width, height);
+        
+        g2.dispose();
+        super.paintComponent(g);
+    }
+    
+    /**
+     * Creates an enhanced content panel with subtle styling improvements.
+     * 
+     * @return Enhanced JPanel with responsive BorderLayout
+     */
+    private JPanel createEnhancedContentPanel() {
+        return new JPanel(new BorderLayout(PADDING_MEDIUM, 0)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Add subtle rounded corners and shadow effect for content areas
+                int width = getWidth();
+                int height = getHeight();
+                
+                // Draw subtle shadow
+                g2.setColor(new Color(0, 0, 0, 10));
+                g2.fillRoundRect(2, 2, width - 4, height - 4, 8, 8);
+                
+                // Draw main background
+                g2.setColor(AppTheme.SURFACE);
+                g2.fillRoundRect(0, 0, width - 2, height - 2, 6, 6);
+                
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
     }
 }

@@ -31,8 +31,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import com.upnext.app.App;
+import com.upnext.app.core.Logger;
 import com.upnext.app.domain.User;
 import com.upnext.app.service.AuthService;
+import com.upnext.app.ui.navigation.ViewNavigator;
 import com.upnext.app.ui.theme.AppTheme;
 
 /**
@@ -175,13 +178,19 @@ public class ProfileSummaryCard extends JPanel {
         viewProfileLink.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Will be implemented in future with proper navigation
-                JOptionPane.showMessageDialog(
-                    ProfileSummaryCard.this,
-                    "Profile page coming soon!",
-                    "Feature Preview",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
+                // Navigate to the profile system
+                try {
+                    Logger.getInstance().info("Navigating to profile system from profile card");
+                    ViewNavigator.getInstance().navigateTo(App.PROFILE_LAYOUT_SCREEN);
+                } catch (Exception ex) {
+                    Logger.getInstance().error("Failed to navigate to profile system: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(
+                        ProfileSummaryCard.this,
+                        "Unable to open profile page. Please try again.",
+                        "Navigation Error",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                }
             }
             
             @Override

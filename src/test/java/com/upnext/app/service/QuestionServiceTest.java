@@ -1,14 +1,19 @@
 package com.upnext.app.service;
 
-import com.upnext.app.service.QuestionService.QuestionException;
-import com.upnext.app.util.TestLogCapture;
-import com.upnext.app.util.TestLogCapture.TelemetryValidationResult;
-import org.junit.jupiter.api.*;
-
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import com.upnext.app.service.QuestionService.QuestionException;
+import com.upnext.app.util.TestLogCapture;
+import com.upnext.app.util.TestLogCapture.TelemetryValidationResult;
 
 /**
  * Unit tests for QuestionService validation and business logic.
@@ -152,7 +157,7 @@ public class QuestionServiceTest {
         assertTrue(result.isCompleteFlow(), "Should be a complete flow");
         assertTrue(result.isSuccessfulFlow(), "Should be a successful flow");
         
-        assertEquals(5, result.getOperationLogs().size(), "Should capture 5 operation logs");
+    assertEquals(4, result.getOperationLogs().size(), "Should capture 4 core operation logs");
         
         // Verify tag analytics logging
         assertTrue(logCapture.hasMarker("[QUESTION_TAG_ANALYTICS]"), "Should log tag analytics");

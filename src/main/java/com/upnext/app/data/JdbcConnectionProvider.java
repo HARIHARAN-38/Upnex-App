@@ -1,11 +1,15 @@
 package com.upnext.app.data;
 
-import com.upnext.app.config.DatabaseConfig;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.upnext.app.config.DatabaseConfig;
 
 /**
  * Provides JDBC connections to the application's database.
@@ -15,10 +19,10 @@ public class JdbcConnectionProvider {
     // Singleton instance
     private static JdbcConnectionProvider instance;
     
-    // Connection pool settings
-    private static final int MIN_POOL_SIZE = 3;
-    private static final int MAX_POOL_SIZE = 10;
-    private static final int CONNECTION_TIMEOUT_MS = 5000;
+    // Connection pool settings - increased for better concurrency
+    private static final int MIN_POOL_SIZE = 5;
+    private static final int MAX_POOL_SIZE = 20;
+    private static final int CONNECTION_TIMEOUT_MS = 10000;
     
     // Connection pool
     private final ConcurrentLinkedQueue<Connection> connectionPool;
@@ -89,7 +93,7 @@ public class JdbcConnectionProvider {
                     }
                     
                     try {
-                        Thread.sleep(100); // Wait a bit before checking again
+                        Thread.sleep(100); // Wait a bit before checking again // NOSONAR: intentional brief backoff while waiting for a pooled connection
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         throw new SQLException("Interrupted while waiting for a connection", e);
@@ -107,7 +111,7 @@ public class JdbcConnectionProvider {
             connection = createConnection();
         }
         
-        return connection;
+        return wrapConnection(connection);
     }
     
     /**
@@ -116,9 +120,11 @@ public class JdbcConnectionProvider {
      * @param connection The connection to release
      */
     public void releaseConnection(Connection connection) {
-        if (connection != null) {
-            connectionPool.offer(connection);
+        if (connection == null) {
+            return;
         }
+        Connection actual = unwrapConnection(connection);
+        returnConnection(actual);
     }
     
     /**
@@ -177,5 +183,94 @@ public class JdbcConnectionProvider {
      */
     public int getAvailableConnectionCount() {
         return connectionPool.size();
+    }
+
+    private Connection wrapConnection(Connection connection) {
+        if (connection == null) {
+            return null;
+        }
+        if (Proxy.isProxyClass(connection.getClass()) && Proxy.getInvocationHandler(connection) instanceof PooledConnectionHandler) {
+            return connection;
+        }
+        return (Connection) Proxy.newProxyInstance(
+                Connection.class.getClassLoader(),
+                new Class<?>[] { Connection.class },
+                new PooledConnectionHandler(connection, this));
+    }
+
+    private Connection unwrapConnection(Connection connection) {
+        if (connection == null) {
+            return null;
+        }
+        if (Proxy.isProxyClass(connection.getClass())) {
+            InvocationHandler handler = Proxy.getInvocationHandler(connection);
+            if (handler instanceof PooledConnectionHandler) {
+                return ((PooledConnectionHandler) handler).getDelegate();
+            }
+        }
+        return connection;
+    }
+
+    private void returnConnection(Connection connection) {
+        if (connection == null) {
+            return;
+        }
+        try {
+            if (connection.isClosed()) {
+                activeConnections.decrementAndGet();
+                return;
+            }
+            connection.setAutoCommit(true);
+            connectionPool.offer(connection);
+        } catch (SQLException e) {
+            activeConnections.decrementAndGet();
+            try {
+                connection.close();
+            } catch (SQLException ignored) {
+                // Best effort close
+            }
+        }
+    }
+
+    private static final class PooledConnectionHandler implements InvocationHandler {
+        private final Connection delegate;
+        private final JdbcConnectionProvider provider;
+        private volatile boolean released;
+
+        PooledConnectionHandler(Connection delegate, JdbcConnectionProvider provider) {
+            this.delegate = delegate;
+            this.provider = provider;
+            this.released = false;
+        }
+
+        Connection getDelegate() {
+            return delegate;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            String methodName = method.getName();
+            if ("close".equals(methodName)) {
+                releaseToPool();
+                return null;
+            }
+            if ("isClosed".equals(methodName)) {
+                if (released) {
+                    return false;
+                }
+            }
+            if ("unwrap".equals(methodName) && args != null && args.length == 1 && args[0] == Connection.class) {
+                return delegate;
+            }
+            return method.invoke(delegate, args);
+        }
+
+        private void releaseToPool() throws SQLException {
+            if (released) {
+                return;
+            }
+            released = true;
+            provider.returnConnection(delegate);
+        }
     }
 }

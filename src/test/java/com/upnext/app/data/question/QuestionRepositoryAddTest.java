@@ -17,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.upnext.app.data.JdbcConnectionProvider;
+import com.upnext.app.data.UserRepository;
+import com.upnext.app.domain.User;
 import com.upnext.app.domain.question.Question;
 import com.upnext.app.domain.question.Tag;
 
@@ -28,12 +30,15 @@ public class QuestionRepositoryAddTest {
     
     private QuestionRepository questionRepository;
     private TagRepository tagRepository;
+    private UserRepository userRepository;
+    private User testUser;
     
     private static final String CLEANUP_SQL = 
             "DELETE FROM question_tags; " +
             "DELETE FROM tags; " +
             "DELETE FROM answers; " +
             "DELETE FROM questions; " +
+            "DELETE FROM users WHERE email LIKE '%@example.com'; " +
             "DELETE FROM subjects; " +
             "ALTER TABLE questions AUTO_INCREMENT = 1; " +
             "ALTER TABLE answers AUTO_INCREMENT = 1; " +
@@ -44,7 +49,11 @@ public class QuestionRepositoryAddTest {
     public void setUp() throws SQLException {
         questionRepository = QuestionRepository.getInstance();
         tagRepository = TagRepository.getInstance();
+        userRepository = UserRepository.getInstance();
         cleanupDatabase();
+        
+        // Create test user
+        testUser = createTestUser("testuser@example.com", "Test User");
     }
     
     @AfterEach
@@ -70,7 +79,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_HappyPath() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "How to learn Java?", "I want to start learning Java programming.", "I have basic programming knowledge", null);
+        Question question = new Question(testUser.getId(), "How to learn Java?", "I want to start learning Java programming.", "I have basic programming knowledge", null);
         List<String> tags = Arrays.asList("java", "programming", "beginner");
         
         // Act
@@ -83,7 +92,7 @@ public class QuestionRepositoryAddTest {
         assertEquals("How to learn Java?", savedQuestion.getTitle());
         assertEquals("I want to start learning Java programming.", savedQuestion.getContent());
         assertEquals("I have basic programming knowledge", savedQuestion.getContext());
-        assertEquals(1L, savedQuestion.getUserId());
+        assertEquals(testUser.getId(), savedQuestion.getUserId());
         assertNotNull(savedQuestion.getCreatedAt());
         assertNotNull(savedQuestion.getUpdatedAt());
         
@@ -108,12 +117,12 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_DuplicateTagHandling() throws SQLException {
         // Arrange - Create first question with java tag
-        Question question1 = new Question(1L, "First Question", "First content", "First context", null);
+        Question question1 = new Question(testUser.getId(), "First Question", "First content", "First context", null);
         List<String> tags1 = Arrays.asList("java", "spring");
         questionRepository.saveWithTags(question1, tags1);
         
         // Act - Create second question with overlapping tags
-        Question question2 = new Question(2L, "Second Question", "Second content", "Second context", null);
+        Question question2 = new Question(testUser.getId(), "Second Question", "Second content", "Second context", null);
         List<String> tags2 = Arrays.asList("java", "hibernate", "spring");
         Question savedQuestion2 = questionRepository.saveWithTags(question2, tags2);
         
@@ -138,7 +147,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_DuplicateTagsInSameRequest() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", "Test context", null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", "Test context", null);
         List<String> tagsWithDuplicates = Arrays.asList("java", "JAVA", "Java", "programming", "programming");
         
         // Act
@@ -158,7 +167,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_EmptyAndNullTags() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", null, null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", null, null);
         List<String> tagsWithEmpties = Arrays.asList("java", "", null, "   ", "programming");
         
         // Act
@@ -173,7 +182,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_NoTags() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", null, null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", null, null);
         
         // Act - Test with null tags
         Question savedQuestion1 = questionRepository.saveWithTags(question, null);
@@ -183,7 +192,7 @@ public class QuestionRepositoryAddTest {
         assertEquals(0, savedQuestion1.getTags().size());
         
         // Act - Test with empty tags list
-        Question question2 = new Question(2L, "Test Question 2", "Test content 2", null, null);
+        Question question2 = new Question(testUser.getId(), "Test Question 2", "Test content 2", null, null);
         Question savedQuestion2 = questionRepository.saveWithTags(question2, Collections.emptyList());
         
         // Assert
@@ -194,7 +203,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_TooManyTags() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", null, null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", null, null);
         List<String> tooManyTags = Arrays.asList(
             "tag1", "tag2", "tag3", "tag4", "tag5", 
             "tag6", "tag7", "tag8", "tag9", "tag10", 
@@ -228,7 +237,7 @@ public class QuestionRepositoryAddTest {
         // the entire transaction (including question insert) is rolled back
         
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", null, null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", null, null);
         List<String> tags = Arrays.asList("java", "programming");
         
         // Save a question successfully first
@@ -248,7 +257,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_CaseNormalization() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", null, null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", null, null);
         List<String> mixedCaseTags = Arrays.asList("Java", "SPRING", "hibernate", "JPA");
         
         // Act
@@ -270,7 +279,7 @@ public class QuestionRepositoryAddTest {
     @Test
     public void testSaveWithTags_MaximumTagsAllowed() throws SQLException {
         // Arrange
-        Question question = new Question(1L, "Test Question", "Test content", null, null);
+        Question question = new Question(testUser.getId(), "Test Question", "Test content", null, null);
         List<String> maxTags = Arrays.asList(
             "tag1", "tag2", "tag3", "tag4", "tag5", 
             "tag6", "tag7", "tag8", "tag9", "tag10"
@@ -287,5 +296,14 @@ public class QuestionRepositoryAddTest {
         for (int i = 1; i <= 10; i++) {
             assertTrue(savedQuestion.getTags().contains("tag" + i));
         }
+    }
+    
+    private User createTestUser(String email, String name) throws SQLException {
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPasswordHash("test_hash");
+        user.setSalt("test_salt");
+        return userRepository.save(user);
     }
 }

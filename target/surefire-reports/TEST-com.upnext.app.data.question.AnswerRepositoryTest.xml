@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.upnext.app.data.question.AnswerRepositoryTest" time="1.257" tests="9" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="24"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="E:\Drive\My-Project\UpNext-App\target\test-classes;E:\Drive\My-Project\UpNext-App\target\classes;C:\Users\Admin\.m2\repository\com\mysql\mysql-connector-j\9.4.0\mysql-connector-j-9.4.0.jar;C:\Users\Admin\.m2\repository\com\google\protobuf\protobuf-java\4.31.1\protobuf-java-4.31.1.jar;C:\Users\Admin\.m2\repository\com\formdev\flatlaf\3.1.1\flatlaf-3.1.1.jar;C:\Users\Admin\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Admin\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Admin\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Admin\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Admin\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Admin\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Asia/Calcutta"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="24"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.boot.library.path" value="C:\Users\Admin\scoop\apps\openjdk24\current\bin"/>
+    <property name="sun.java.command" value="C:\Users\Admin\AppData\Local\Temp\surefire8972141979059731517\surefirebooter-20251104160017886_3.jar C:\Users\Admin\AppData\Local\Temp\surefire8972141979059731517 2025-11-04T16-00-17_747-jvmRun1 surefire-20251104160017886_1tmp surefire_0-20251104160017886_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="E:\Drive\My-Project\UpNext-App\target\test-classes;E:\Drive\My-Project\UpNext-App\target\classes;C:\Users\Admin\.m2\repository\com\mysql\mysql-connector-j\9.4.0\mysql-connector-j-9.4.0.jar;C:\Users\Admin\.m2\repository\com\google\protobuf\protobuf-java\4.31.1\protobuf-java-4.31.1.jar;C:\Users\Admin\.m2\repository\com\formdev\flatlaf\3.1.1\flatlaf-3.1.1.jar;C:\Users\Admin\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Admin\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Admin\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Admin\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Admin\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Admin\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\Admin"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-07-15"/>
+    <property name="java.home" value="C:\Users\Admin\scoop\apps\openjdk24\current"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="E:\Drive\My-Project\UpNext-App"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\Admin\AppData\Local\Temp\surefire8972141979059731517\surefirebooter-20251104160017886_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="24.0.2+12-54"/>
+    <property name="user.name" value="Admin"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\Admin\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\Admin\AppData\Local\Temp\"/>
+    <property name="java.version" value="24.0.2"/>
+    <property name="user.dir" value="E:\Drive\My-Project\UpNext-App"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Users\Admin\scoop\apps\openjdk24\current\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\PowerShell\7;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\MinGW\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\dotnet\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\Tailscale\;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files\PowerShell\7\;C:\Users\Admin\AppData\Local\Programs\Python\Launcher\;C:\Users\Admin\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\Admin\AppData\Local\Programs\Python\Python312\;C:\Users\Admin\scoop\apps\openjdk24\current\bin;C:\Users\Admin\scoop\apps\maven\current\bin;C:\Users\Admin\scoop\shims;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\bin;C:\msys64\mingw64\bin;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2025.2.3\bin;C:\Users\Admin\.dotnet\tools;C:\Users\Admin\AppData\Local\Yarn\bin;C:\Users\Admin\AppData\Roaming\npm;c:\Users\Admin\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="24.0.2+12-54"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="68.0"/>
+  </properties>
+  <testcase name="testFindAnswersByQuestionId" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.718">
+    <system-out><![CDATA[[2025-11-04 16:00:18] [INFO] Logger initialized
+[2025-11-04 16:00:18] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Answer votes table initialized
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 1
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing find answers by question ID
+[2025-11-04 16:00:19] [INFO] Found 1 answers for question 4
+[2025-11-04 16:00:19] [INFO] Find answers by question ID test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testInvalidVoteOperations" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.059">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 2
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing invalid vote operations
+[2025-11-04 16:00:19] [INFO] Invalid vote operations test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testVoteAnswerRemoveVote" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.061">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 3
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing vote removal functionality
+[2025-11-04 16:00:19] [INFO] Answer 3 marked as unverified (upvotes: 1)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 3 by user 11 (upvote: true). New counts: 1 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 3 marked as unverified (upvotes: 0)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 3 by user 11 (upvote: true). New counts: 0 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Vote removal test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testVoteAnswerUpvote" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.045">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 4
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing answer upvote functionality
+[2025-11-04 16:00:19] [INFO] Answer 4 marked as unverified (upvotes: 1)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 4 by user 13 (upvote: true). New counts: 1 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer upvote test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testMultipleUsersVoting" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.06">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 5
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing multiple users voting
+[2025-11-04 16:00:19] [INFO] Answer 5 marked as unverified (upvotes: 1)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 5 by user 15 (upvote: true). New counts: 1 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 5 marked as unverified (upvotes: 2)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 5 by user 16 (upvote: true). New counts: 2 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 5 marked as unverified (upvotes: 1)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 5 by user 16 (upvote: false). New counts: 1 upvotes, 1 downvotes
+[2025-11-04 16:00:19] [INFO] Multiple users voting test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testSaveAnswer" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.036">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 6
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing answer save functionality
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 7
+[2025-11-04 16:00:19] [INFO] Answer save test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testVoteAnswerChangeVote" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.044">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 8
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing vote change functionality
+[2025-11-04 16:00:19] [INFO] Answer 8 marked as unverified (upvotes: 1)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 8 by user 19 (upvote: true). New counts: 1 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 8 marked as unverified (upvotes: 0)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 8 by user 19 (upvote: false). New counts: 0 upvotes, 1 downvotes
+[2025-11-04 16:00:19] [INFO] Vote change test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testVoteAnswerDownvote" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.039">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 9
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing answer downvote functionality
+[2025-11-04 16:00:19] [INFO] Answer 9 marked as unverified (upvotes: 0)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 9 by user 21 (upvote: false). New counts: 0 upvotes, 1 downvotes
+[2025-11-04 16:00:19] [INFO] Answer downvote test passed
+]]></system-out>
+  </testcase>
+  <testcase name="testVerifiedAnswerLogic" classname="com.upnext.app.data.question.AnswerRepositoryTest" time="0.159">
+    <system-out><![CDATA[[2025-11-04 16:00:19] [INFO] Setting up AnswerRepository test
+[2025-11-04 16:00:19] [INFO] Test data cleanup completed
+[2025-11-04 16:00:19] [INFO] Answer saved successfully with ID: 10
+[2025-11-04 16:00:19] [INFO] Test setup completed
+[2025-11-04 16:00:19] [INFO] Testing verified answer logic
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 1)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 25 (upvote: true). New counts: 1 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 2)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 26 (upvote: true). New counts: 2 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 3)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 27 (upvote: true). New counts: 3 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 4)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 28 (upvote: true). New counts: 4 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 5)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 29 (upvote: true). New counts: 5 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 6)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 30 (upvote: true). New counts: 6 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 7)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 31 (upvote: true). New counts: 7 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 8)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 32 (upvote: true). New counts: 8 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as unverified (upvotes: 9)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 33 (upvote: true). New counts: 9 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as verified (upvotes: 10)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 34 (upvote: true). New counts: 10 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Answer 10 marked as verified (upvotes: 11)
+[2025-11-04 16:00:19] [INFO] Vote processed for answer 10 by user 23 (upvote: true). New counts: 11 upvotes, 0 downvotes
+[2025-11-04 16:00:19] [INFO] Verified answer logic test passed
+]]></system-out>
+  </testcase>
+</testsuite>

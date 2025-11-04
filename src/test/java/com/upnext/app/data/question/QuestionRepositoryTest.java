@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import com.upnext.app.data.JdbcConnectionProvider;
 import com.upnext.app.data.SchemaInitializer;
+import com.upnext.app.data.UserRepository;
+import com.upnext.app.domain.User;
 import com.upnext.app.domain.question.Question;
 import com.upnext.app.domain.question.QuestionSearchCriteria;
 import com.upnext.app.domain.question.Subject;
@@ -26,16 +28,23 @@ import com.upnext.app.domain.question.Subject;
 public class QuestionRepositoryTest {
     private QuestionRepository questionRepository;
     private SubjectRepository subjectRepository;
+    private UserRepository userRepository;
+    private Long userOneId;
+    private Long userTwoId;
+    private Long subjectId;
     
     private static final String CLEANUP_SQL = 
+            "DELETE FROM answer_votes; " +
             "DELETE FROM question_tags; " +
             "DELETE FROM tags; " +
             "DELETE FROM answers; " +
             "DELETE FROM questions; " +
+            "DELETE FROM users WHERE email LIKE 'test-user-%@example.com'; " +
             "DELETE FROM subjects; " +
             "ALTER TABLE questions AUTO_INCREMENT = 1; " +
             "ALTER TABLE answers AUTO_INCREMENT = 1; " +
             "ALTER TABLE subjects AUTO_INCREMENT = 1; " +
+            "ALTER TABLE users AUTO_INCREMENT = 1; " +
             "ALTER TABLE tags AUTO_INCREMENT = 1;";
     
     @BeforeEach
@@ -61,16 +70,21 @@ public class QuestionRepositoryTest {
         // Initialize repositories
         questionRepository = QuestionRepository.getInstance();
         subjectRepository = SubjectRepository.getInstance();
+        userRepository = UserRepository.getInstance();
         
-        // Create test subject
+        // Create test users
+        userOneId = createTestUser("test-user-1@example.com", "Test User One");
+        userTwoId = createTestUser("test-user-2@example.com", "Test User Two");
+        
+        // Create test subject and capture ID
         Subject subject = new Subject("Test Subject", "Test Subject Description");
-        subjectRepository.save(subject);
+        subjectId = subjectRepository.save(subject).getId();
     }
     
     @Test
     public void testSaveQuestion() throws SQLException {
         // Create a test question
-        Question question = new Question(1L, "Test Question", "Test Content", 1L);
+    Question question = new Question(userOneId, "Test Question", "Test Content", subjectId);
         question.addTag("test-tag");
         
         // Save the question
@@ -93,7 +107,7 @@ public class QuestionRepositoryTest {
     @Test
     public void testUpdateQuestion() throws SQLException {
         // Create and save a test question
-        Question question = new Question(1L, "Original Title", "Original Content", 1L);
+    Question question = new Question(userOneId, "Original Title", "Original Content", subjectId);
         Question savedQuestion = questionRepository.save(question);
         
         // Update the question
@@ -121,7 +135,7 @@ public class QuestionRepositoryTest {
     @Test
     public void testDeleteQuestion() throws SQLException {
         // Create and save a test question
-        Question question = new Question(1L, "Delete Test", "Delete Content", 1L);
+    Question question = new Question(userOneId, "Delete Test", "Delete Content", subjectId);
         Question savedQuestion = questionRepository.save(question);
         
         // Verify the question exists
@@ -140,27 +154,26 @@ public class QuestionRepositoryTest {
     @Test
     public void testFindByUserId() throws SQLException {
         // Create and save questions for different users
-        Question question1 = new Question(1L, "User 1 Question", "User 1 Content", 1L);
-        Question question2 = new Question(2L, "User 2 Question", "User 2 Content", 1L);
-        Question question3 = new Question(1L, "Another User 1 Question", "Another User 1 Content", 1L);
+    Question question1 = new Question(userOneId, "User 1 Question", "User 1 Content", subjectId);
+    Question question2 = new Question(userTwoId, "User 2 Question", "User 2 Content", subjectId);
+    Question question3 = new Question(userOneId, "Another User 1 Question", "Another User 1 Content", subjectId);
         
         questionRepository.save(question1);
         questionRepository.save(question2);
         questionRepository.save(question3);
         
         // Find questions for user 1
-        List<Question> user1Questions = questionRepository.findByUserId(1L, 10, 0);
+    List<Question> user1Questions = questionRepository.findByUserId(userOneId, 10, 0);
         
         // Verify the correct questions were found
-        assertEquals(2, user1Questions.size());
-        assertEquals(1L, user1Questions.get(0).getUserId().longValue());
-        assertEquals(1L, user1Questions.get(1).getUserId().longValue());
+    assertEquals(2, user1Questions.size());
+    assertTrue(user1Questions.stream().allMatch(q -> q.getUserId().equals(userOneId)));
     }
     
     @Test
     public void testUpdateVoteCounts() throws SQLException {
         // Create and save a test question
-        Question question = new Question(1L, "Vote Test", "Vote Content", 1L);
+    Question question = new Question(userOneId, "Vote Test", "Vote Content", subjectId);
         Question savedQuestion = questionRepository.save(question);
         
         // Update the vote counts
@@ -181,53 +194,63 @@ public class QuestionRepositoryTest {
     @Test
     public void testSearch() throws SQLException {
         // Create and save test questions with different attributes
-        Question question1 = new Question(1L, "Java Programming", "Content about Java", 1L);
+    Question question1 = new Question(userOneId, "Java Programming", "Content about Java", subjectId);
         question1.addTag("java");
-        question1.addTag("programming");
-        questionRepository.save(question1);
+    question1.addTag("programming");
+    questionRepository.save(question1);
         
-        Question question2 = new Question(2L, "Python Basics", "Introduction to Python", 1L);
+    Question question2 = new Question(userTwoId, "Python Basics", "Introduction to Python", subjectId);
         question2.addTag("python");
-        question2.addTag("programming");
-        questionRepository.save(question2);
+    question2.addTag("programming");
+    questionRepository.save(question2);
         
-        Question question3 = new Question(1L, "Advanced Java", "Advanced topics in Java", 1L);
+    Question question3 = new Question(userOneId, "Advanced Java", "Advanced topics in Java", subjectId);
         question3.addTag("java");
-        question3.addTag("advanced");
-        questionRepository.save(question3);
+    question3.addTag("advanced");
+    questionRepository.save(question3);
         
         // Search for Java questions
-        QuestionSearchCriteria javaCriteria = new QuestionSearchCriteria()
-                .setSearchText("Java");
+    QuestionSearchCriteria javaCriteria = new QuestionSearchCriteria()
+        .setSearchText("Java");
         List<Question> javaQuestions = questionRepository.search(javaCriteria);
         
         // Verify the correct questions were found
         assertEquals(2, javaQuestions.size());
         
         // Search for programming tag
-        QuestionSearchCriteria tagCriteria = new QuestionSearchCriteria()
-                .addTag("programming");
+    QuestionSearchCriteria tagCriteria = new QuestionSearchCriteria()
+        .addTag("programming");
         List<Question> programmingQuestions = questionRepository.search(tagCriteria);
         
         // Verify the correct questions were found
         assertEquals(2, programmingQuestions.size());
         
         // Search for questions by user 1
-        QuestionSearchCriteria userCriteria = new QuestionSearchCriteria()
-                .setUserId(1L);
-        List<Question> userQuestions = questionRepository.search(userCriteria);
+    QuestionSearchCriteria userCriteria = new QuestionSearchCriteria()
+        .setUserId(userOneId);
+    List<Question> userQuestions = questionRepository.search(userCriteria);
         
         // Verify the correct questions were found
-        assertEquals(2, userQuestions.size());
+    assertEquals(2, userQuestions.size());
+        assertTrue(userQuestions.stream().allMatch(q -> q.getUserId().equals(userOneId)));
         
         // Combined search: Java questions with advanced tag
-        QuestionSearchCriteria combinedCriteria = new QuestionSearchCriteria()
-                .setSearchText("Java")
-                .addTag("advanced");
+    QuestionSearchCriteria combinedCriteria = new QuestionSearchCriteria()
+        .setSearchText("Java")
+        .addTag("advanced");
         List<Question> combinedQuestions = questionRepository.search(combinedCriteria);
         
         // Verify the correct questions were found
         assertEquals(1, combinedQuestions.size());
         assertEquals("Advanced Java", combinedQuestions.get(0).getTitle());
+    }
+
+    private Long createTestUser(String email, String name) throws SQLException {
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPasswordHash("hash" + System.nanoTime());
+        user.setSalt("salt" + System.nanoTime());
+        return userRepository.save(user).getId();
     }
 }

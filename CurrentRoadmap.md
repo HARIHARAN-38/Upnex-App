@@ -235,3 +235,222 @@
   - ✅ Enhanced `docs/DatabaseAccess.md` with comprehensive schema documentation for questions table, tag relationships, and transactional patterns
   - ✅ Created new `docs/AddQuestionGuide.md` with comprehensive user-facing instructions, step-by-step guide, and troubleshooting tips
   - ✅ Expanded `docs/TestPlan.md` with comprehensive Add Question test scenarios covering unit tests, integration tests, UI tests, error handling, transaction rollback, and telemetry validation (25+ new test cases)
+
+# Profile System Implementation Roadmap
+
+- [x] Step 45: Profile System Foundation (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/ui/components/NavigationSidebar.java` with Profile, Help, About buttons and logout functionality
+  - ✅ Implemented `src/main/java/com/upnext/app/ui/screens/ProfileLayout.java` as base container combining top navigation + sidebar + content area
+  - ✅ Added proper AppTheme styling with hover effects, active states, and responsive layout handling
+
+- [x] Step 46: Profile Screen Implementation (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/ui/screens/ProfileScreen.java` with user header section (circular avatar, name, username, email)
+  - ✅ Implemented skill set display section showing user skills with proficiency bars and descriptions dynamically loaded from user data
+  - ✅ Added "Change Password" button with modal dialog functionality and proper form validation
+
+- [x] Step 47: Help & About Screens (Completed Nov 4, 2025)
+  - ✅ Implemented `src/main/java/com/upnext/app/ui/screens/HelpScreen.java` with collapsible FAQ sections (Account/Profile, Using Application, Technical Support)
+  - ✅ Created `src/main/java/com/upnext/app/ui/screens/AboutScreen.java` with Overview, Key Features, Team Info, and Version Information sections
+  - ✅ Ensured consistent layout and theming across all screens with proper scrolling and responsive design
+
+- [x] Step 48: Change Password Modal (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/ui/components/ChangePasswordDialog.java` modal dialog with proper form validation
+  - ✅ Implemented password field validation (current password, new password, confirmation matching, minimum length requirements)
+  - ✅ Added comprehensive error handling and user feedback with proper form clearing for security
+
+- [x] Step 49: Navigation Integration (Completed Nov 4, 2025)
+  - ✅ Updated `App.java` to register ProfileLayout screen with PROFILE_LAYOUT_SCREEN constant
+  - ✅ ~~Wired HeroBar avatar "View Profile" menu item to navigate to ProfileLayout instead of showing placeholder message~~ (Updated Nov 4)
+  - ✅ **Navigation Update**: Removed avatar from HeroBar on home page, replaced with "View Full Profile" button in ProfileSummaryCard
+  - ✅ Updated ProfileSummaryCard "View Full Profile" link to navigate to profile system instead of placeholder message
+  - ✅ HeroBar avatar functionality disabled for home page - profile access is now via home page profile card
+  - ✅ Implemented proper navigation flow between profile system screens with callback-based sidebar navigation
+
+- [ ] Step 50: Profile System Testing & Polish
+  - Create unit tests for NavigationSidebar, ProfileScreen, HelpScreen, AboutScreen
+  - Test navigation flow and logout functionality end-to-end
+  - Verify skill data loading and change password modal integration
+  - Add responsive layout testing and error handling validation
+
+# Question Answering Page Enhancement Roadmap
+
+## Phase 1: Database & Repository Enhancements
+
+- [x] Step 51: Database Schema Validation (Completed Nov 4, 2025)
+  - ✅ Verified existing database schema matches requirements (questions, answers, users, subjects, tags tables)
+  - ✅ Confirmed JDBC connection settings: URL: jdbc:mysql://127.0.0.1:3306/upnex, User: root, Password: hari
+  - ✅ Validated foreign key relationships and indexes are properly configured
+  - ✅ Tested connection with existing JdbcConnectionProvider.java
+  - ✅ Created comprehensive DatabaseSchemaValidator utility with automated testing
+  - ✅ Generated detailed validation report in `docs/DatabaseSchemaValidation.md`
+  - ✅ All required tables, columns, relationships, and indexes are present and properly configured
+
+- [x] Step 52: Answer Voting System Enhancement (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/domain/question/AnswerVote.java` domain model with comprehensive vote tracking
+  - ✅ Added answer_votes table migration in `sql/010_create_answer_votes_table.sql` with proper constraints and indexes
+  - ✅ Implemented comprehensive vote tracking system to prevent duplicate votes per user per answer
+  - ✅ Added `AnswerRepository.voteAnswer(Long answerId, Long userId, boolean isUpvote)` method with transaction support
+  - ✅ Implemented "Verified Answer" logic that automatically marks answers as verified when they reach 10+ upvotes
+  - ✅ Added comprehensive test suite in `AnswerRepositoryTest.java` with 9 test methods covering all voting scenarios
+  - ✅ Included vote change detection (upvote→downvote, vote removal), multi-user voting, and verified status transitions
+  - ✅ Implemented VoteResult inner class with vote counts and verification status tracking
+  - ✅ Added proper error handling for null parameters and database failures with transaction rollback
+
+- [x] Step 53: Question Navigation Enhancement (Completed Nov 4, 2025)
+  - ✅ Updated existing `QuestionDetailScreen.java` with enhanced breadcrumb navigation (Home → Question)
+  - ✅ Implemented clickable breadcrumb navigation back to home page with hover effects
+  - ✅ Question view count increment was already working properly
+  - ✅ Enhanced question display with clickable tag chips and improved metadata layout
+  - ✅ Added `getTagsForQuestion()` method to QuestionRepository for tag display functionality
+  - ✅ Improved answer display with voting buttons, vote counts, and "Verified Answer" badges for answers with 10+ upvotes
+  - ✅ Enhanced answer cards with user profile sections (clickable avatars and usernames)
+  - ✅ Implemented answer sorting by vote count (highest first) as specified in requirements
+  - ✅ Added comprehensive user interaction elements including hover effects and cursor changes
+
+## Phase 2: UI Component Enhancements
+
+- [x] Step 54: Left Panel Question Details Enhancement (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/ui/components/QuestionDetailsCard.java` reusable UI component
+  - ✅ Implemented comprehensive left sidebar displaying subject, tags list, posting user avatar, username, and post date
+  - ✅ Added clickable user avatar and username that navigates to user profile page
+  - ✅ Styled with AppTheme colors, proper spacing, and hover effects for interactive elements
+  - ✅ Integrated component into QuestionDetailScreen with three-panel layout (header, left sidebar, main content)
+  - ✅ Added tag chip display with clickable navigation functionality and proper visual styling
+  - ✅ Implemented user info section with avatar, profile links, and metadata display
+  - ✅ Added statistics display section for question metrics (view counts, vote counts)
+  - ✅ Fixed all test compilation issues with proper user creation in QuestionRepositoryAddTest
+  - ✅ All tests passing with comprehensive integration and proper database constraints
+
+- [x] Step 55: Enhanced Answer Display Components (Completed Nov 4, 2025)
+  - ✅ Updated existing answer cards in QuestionDetailScreen with comprehensive enhancements:
+    - ✅ Implemented proper upvote/downvote buttons with real-time vote count updates using AnswerRepository.voteAnswer()
+    - ✅ Added "Verified Answer" badge for answers with 10+ upvotes with distinctive green styling and checkmark icon
+    - ✅ Enhanced user profile section with clickable avatar and username navigation to profile pages
+    - ✅ Improved visual separation between answers with proper borders, spacing, and hover effects
+  - ✅ Implemented answer sorting by verification status first, then by net vote score (upvotes - downvotes)
+  - ✅ Added comprehensive authentication checks preventing unauthorized voting with user feedback
+  - ✅ Integrated with existing AnswerRepository voting system from Step 52 with proper error handling
+  - ✅ Applied AppTheme styling with hover effects, cursor changes, and consistent visual design
+  - ✅ All code changes compiled successfully and application runs properly with database connectivity confirmed
+
+- [x] Step 56: Answer Input Area Enhancement (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/ui/components/AnswerInputPanel.java` as a reusable component with comprehensive functionality
+    - ✅ Implemented rich text multiline input with proper text wrapping and formatting
+    - ✅ Added placeholder text with focus-based behavior for better UX
+    - ✅ Real-time character counting with visual feedback (10-5000 character range)
+    - ✅ Enhanced visual styling with AppTheme colors, borders, and hover effects
+  - ✅ Added comprehensive "Post Answer" button with validation and user authentication
+    - ✅ Integrated with AuthService for user authentication checks
+    - ✅ Added loading state with disabled button during submission
+    - ✅ Proper error handling with user-friendly feedback messages
+  - ✅ Implemented real-time answer addition functionality
+    - ✅ New answers automatically appear at the top of the answers list without page refresh
+    - ✅ Answer count updates automatically in the UI header
+    - ✅ Callback-based architecture for clean separation of concerns
+  - ✅ Added comprehensive validation and user feedback
+    - ✅ Content validation (minimum/maximum length, empty content checks)
+    - ✅ Authentication validation with clear error messages
+    - ✅ Success feedback with confirmation dialogs
+    - ✅ Background thread processing to prevent UI blocking
+  - ✅ Integrated into QuestionDetailScreen with proper wiring and replaced basic input area
+  - ✅ All functionality tested and verified - application compiles and runs successfully
+
+- [x] Step 57: Interactive Voting System (Completed Nov 4, 2025)
+  - ✅ Created `src/main/java/com/upnext/app/ui/components/VotePanel.java` reusable component with comprehensive voting functionality
+  - ✅ Implemented upvote/downvote buttons for both questions and answers with real-time vote count updates
+  - ✅ Added duplicate voting prevention with user authentication checks and database constraint validation
+  - ✅ Integrated with existing AnswerRepository.voteAnswer() system for consistent data handling
+  - ✅ Enhanced QuestionDetailScreen to use VotePanel component for both question and answer voting
+  - ✅ Applied AppTheme styling with hover states, active states, loading states, and proper cursor feedback
+  - ✅ Implemented callback architecture (BiConsumer<Long, Boolean>) for clean separation of concerns
+  - ✅ Added compact and horizontal layout variants for different UI contexts
+  - ✅ Comprehensive error handling with user-friendly feedback messages and database error management
+  - ✅ All functionality compiled successfully and integrated with existing voting system infrastructure
+
+## Phase 3: Search & Navigation Enhancements
+
+- [x] Step 58: Enhanced Search Functionality (Completed Nov 4, 2025)
+  - ✅ Verified existing HeroBar search implementation with debounced search and dropdown results
+  - ✅ Enhanced fuzzy search with comprehensive TokenUtils integration for tokenization and similarity matching
+  - ✅ Implemented LIKE '%term%' queries with case-insensitive matching across multiple fields
+  - ✅ Confirmed live filtering integration - HeroBar search updates question feed via FilterManager in real-time
+  - ✅ Enhanced database search to support comprehensive field coverage:
+    - ✅ Question titles (q.title LIKE ?)
+    - ✅ Question content (q.content LIKE ?)
+    - ✅ Associated tags (via question_tags and tags tables)
+    - ✅ User names who posted questions (via users table)
+  - ✅ Updated SearchService documentation to reflect comprehensive search capabilities
+  - ✅ Added test coverage for enhanced search functionality validation
+  - ✅ All code compiled successfully and search infrastructure fully operational
+
+- [x] Step 59: Tag System Enhancement
+  - ✅ Created `src/main/java/com/upnext/app/ui/components/TagChip.java` clickable component with:
+    - Rounded corners with custom paint component
+    - Hover effects with color transitions 
+    - Consumer<String> callback for click handling
+    - Compact and standard size variants via factory methods
+  - ✅ Integrated TagChip into QuestionDetailScreen tag display
+  - ✅ Implemented clickable tags that navigate back to home screen
+  - ✅ Added comprehensive tag component with professional styling
+  - ✅ All code compiled successfully and tag system fully operational
+
+- [x] Step 60: User Profile Integration
+  - ✅ Enhanced QuestionDetailsCard to navigate to ProfileLayout system for user profile access
+  - ✅ Updated navigateToUserProfile() method to use ViewNavigator.getInstance().navigateTo(App.PROFILE_LAYOUT_SCREEN)  
+  - ✅ Confirmed QuestionDetailScreen answer section already has clickable user avatars and usernames navigating to profile pages
+  - ✅ Verified consistent user profile display throughout question/answer components with proper hover effects and cursor changes
+  - ✅ Confirmed AnswerInputPanel already implements proper user session handling via AuthService integration
+  - ✅ All code compiled successfully and user profile navigation fully operational across the application
+
+## Phase 4: Additional Pages & Navigation
+
+- [x] Step 61: Help & About Pages Structure
+  - ✅ Verified existing HelpScreen.java fully matches requirements from Myidea.md with proper "Help & Support" title, collapsible FAQ sections, and comprehensive content structure
+  - ✅ Verified existing AboutScreen.java fully matches requirements with "About This Platform" title, Overview/Features/Team/Contact sections, and proper layout organization  
+  - ✅ Confirmed both pages are accessible via main navigation through ProfileLayout system with NavigationSidebar integration and functional page switching
+  - ✅ Content structure fully matches specifications:
+    - Help Page: Account/Profile management, Application usage, Technical support sections with collapsible interface
+    - About Page: Platform overview, Key features, Team information, Version details with proper sectioning
+  - ✅ Both screens use consistent AppTheme styling with proper scrolling, responsive design, and professional layout
+  - ✅ All code compiled successfully and Help/About navigation fully operational
+
+- [x] Step 62: Responsive Layout Improvements (Completed Nov 4, 2025)
+  - ✅ Updated QuestionDetailScreen two-column layout for better responsiveness with dynamic layout switching
+  - ✅ Implemented proper spacing and alignment across different screen sizes with responsive padding system
+  - ✅ Added comprehensive breakpoints for mobile (768px), tablet (1024px), and desktop (1200px) views
+  - ✅ Enhanced layout with AppTheme gradient background and drop shadows for improved visual aesthetics
+
+## Phase 5: Testing & Polish
+
+- [x] Step 63: Question Repository Testing (Completed Nov 4, 2025)
+  - ✅ Expanded `QuestionRepositoryAddTest` coverage and created `QuestionRepositoryExtendedTest`
+  - ✅ Added scenarios for tag normalization, pagination, complex search, and update workflows
+  - ✅ Verified answer saving, retrieval, voting, and verified-answer badge behaviour end to end
+  - ✅ Hardened `JdbcConnectionProvider` with pooled connection proxying to keep integration tests stable
+
+- [x] Step 64: UI Integration Testing
+  - ✅ Added `QuestionDetailScreenIntegrationTest` validating layout rendering, responsive breakpoint swaps, answer submission, vote handling, and navigation controls
+  - ✅ Connected vote panels to the correct item identifiers and improved `VotePanel` loading resets for deterministic UI feedback
+  - ✅ Enabled headless-safe notifications via `FeedbackManager` to keep automated UI tests non-blocking
+  - ✅ Confirmed answer workflow persists to the database and refreshes displayed content immediately after submissions
+
+- [x] Step 65: End-to-End Question Flow Testing (Completed Nov 4, 2025)
+  - ✅ Created comprehensive `EndToEndQuestionFlowTest.java` with full end-to-end testing coverage
+  - ✅ Implemented complete flow testing: Home → Question Card Click → Question Detail Page navigation
+  - ✅ Verified answer posting functionality with database integration and UI updates
+  - ✅ Tested voting system with vote count updates and verified answer badge functionality
+  - ✅ Validated user profile navigation from question/answer user avatars
+  - ✅ Confirmed search functionality and tag-based filtering with FilterManager integration
+  - ✅ Added comprehensive database cleanup utilities and test data creation helpers
+  - ✅ All test methods implemented with proper exception handling and EDT threading
+  - ✅ Test file compiles successfully with complete coverage of all specified requirements
+
+- [x] Step 66: Performance & Polish (Completed Nov 4, 2025)
+  - ✅ Optimized database queries with comprehensive indexing system in `sql/011_performance_indexes.sql`
+  - ✅ Added efficient pagination support via `PaginatedAnswerRepository.java` with proper metadata and page controls
+  - ✅ Implemented animated loading states with `LoadingPanel.java` component for all major operations
+  - ✅ Created comprehensive animation system in `AnimationUtils.java` with smooth transitions for voting, hover effects, and user feedback
+  - ✅ Enhanced `VotePanel.java` with animated color transitions and interactive feedback
+  - ✅ Added `PaginationPanel.java` component for navigation through large result sets
+  - ✅ Integrated performance indexes into `SchemaInitializer.java` for automatic deployment
+  - ✅ All components support responsive design with proper loading states and error handling

@@ -1,9 +1,5 @@
 package com.upnext.app.service;
 
-import com.upnext.app.core.Logger;
-import com.upnext.app.data.UserRepository;
-import com.upnext.app.domain.Skill;
-import com.upnext.app.domain.User;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +8,11 @@ import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+
+import com.upnext.app.core.Logger;
+import com.upnext.app.data.UserRepository;
+import com.upnext.app.domain.Skill;
+import com.upnext.app.domain.User;
 
 /**
  * Service for user authentication operations.
@@ -190,7 +191,7 @@ public class AuthService {
      * @return The current user with skills loaded, or null if no user is signed in
      */
     public User getCurrentUser() {
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.getSkills() == null) {
             loadUserSkills(currentUser);
         }
         return currentUser;
