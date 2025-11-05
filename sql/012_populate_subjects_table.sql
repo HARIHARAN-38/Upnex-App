@@ -1,0 +1,23 @@
+-- Insert comprehensive list of subjects for question categorization
+INSERT IGNORE INTO subjects (name, description) VALUES
+    ('Programming Languages', 'Questions about specific programming languages like Java, Python, C++, JavaScript, etc.'),
+    ('Web Development', 'Frontend, backend, full-stack development, HTML, CSS, JavaScript frameworks, web APIs'),
+    ('Mobile Development', 'Android, iOS, React Native, Flutter, mobile app development'),
+    ('Data Science', 'Machine learning, data analysis, statistics, data visualization, big data'),
+    ('Database', 'SQL, NoSQL, database design, optimization, data modeling'),
+    ('DevOps', 'CI/CD, containerization, cloud deployment, infrastructure, automation'),
+    ('Software Engineering', 'Design patterns, architecture, software development lifecycle, best practices'),
+    ('Algorithms & Data Structures', 'Problem solving, algorithmic thinking, data structures, complexity analysis'),
+    ('Computer Science', 'Theory, computer architecture, operating systems, networking'),
+    ('Mathematics', 'Discrete math, calculus, linear algebra, statistics, mathematical proofs'),
+    ('Physics', 'Classical mechanics, quantum physics, thermodynamics, electromagnetism'),
+    ('Chemistry', 'Organic, inorganic, physical chemistry, biochemistry'),
+    ('Biology', 'Molecular biology, genetics, ecology, anatomy, physiology'),
+    ('Technology', 'Emerging technologies, hardware, IoT, embedded systems'),
+    ('Security', 'Cybersecurity, cryptography, network security, ethical hacking'),
+    ('Artificial Intelligence', 'Machine learning, neural networks, natural language processing, computer vision'),
+    ('Game Development', 'Game engines, graphics programming, game design, 3D modeling'),
+    ('UI/UX Design', 'User interface design, user experience, design principles, prototyping'),
+    ('Business & Management', 'Project management, business analysis, entrepreneurship, leadership'),
+    ('Career & Education', 'Interview preparation, career advice, learning resources, certifications'),
+    ('General', 'Miscellaneous questions that don\'t fit into other categories');

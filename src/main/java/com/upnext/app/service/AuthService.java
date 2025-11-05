@@ -306,7 +306,70 @@ public class AuthService {
     public boolean isSignedIn() {
         return currentUser != null;
     }
-    
+
+    /**
+     * Deletes the currently signed-in user account after password verification.
+     * This will permanently delete all user data including:
+     * - User profile and account information
+     * - All questions and answers created by the user
+     * - All skills associated with the user
+     * - All voting history
+     * 
+     * @param password The user's current password for verification
+     * @throws AuthException If no user is signed in, password is incorrect, or deletion fails
+     */
+    public void deleteCurrentUserAccount(String password) throws AuthException {
+        if (currentUser == null) {
+            throw new AuthException("No user is currently signed in");
+        }
+        
+        User userToDelete = currentUser;
+        String userEmail = userToDelete.getEmail();
+        Long userId = userToDelete.getId();
+        
+        logger.info("Starting account deletion process for user: " + userEmail + " (ID: " + userId + ")");
+        
+        // Verify password before deletion
+        try {
+            // Hash the provided password with the user's salt
+            String providedPasswordHash = hashPassword(password, userToDelete.getSalt());
+            
+            if (!providedPasswordHash.equals(userToDelete.getPasswordHash())) {
+                logger.warning("Account deletion failed: incorrect password for user " + userEmail);
+                throw new AuthException("Incorrect password provided");
+            }
+            
+        } catch (NoSuchAlgorithmException e) {
+            logger.logException("Error hashing password during account deletion", e);
+            throw new AuthException("Error verifying password: " + e.getMessage(), e);
+        }
+        
+        try {
+            // Sign out the user first to clear session
+            signOut();
+            
+            // Delete the user from the database
+            // The database schema has ON DELETE CASCADE constraints, so this will automatically delete:
+            // - All user skills (skills table)
+            // - All user questions (questions table) 
+            // - All user answers (answers table)
+            // - All user question votes (question_votes table)
+            // - All user answer votes (answer_votes table)
+            boolean deleted = userRepository.delete(userId);
+            
+            if (!deleted) {
+                logger.error("Failed to delete user account from database: " + userEmail + " (ID: " + userId + ")");
+                throw new AuthException("Failed to delete account from database");
+            }
+            
+            logger.info("Successfully deleted user account: " + userEmail + " (ID: " + userId + ")");
+            
+        } catch (SQLException e) {
+            logger.logException("Database error during account deletion for user " + userEmail, e);
+            throw new AuthException("Database error during account deletion: " + e.getMessage(), e);
+        }
+    }
+
     /**
      * Generates a random salt for password hashing.
      * 

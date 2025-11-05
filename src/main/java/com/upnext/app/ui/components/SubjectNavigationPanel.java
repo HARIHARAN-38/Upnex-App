@@ -3,6 +3,7 @@ package com.upnext.app.ui.components;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -96,7 +98,33 @@ public class SubjectNavigationPanel extends JPanel {
         tagsTitle.setFont(AppTheme.HEADING_FONT.deriveFont(16f));
         tagsHeader.add(tagsTitle, BorderLayout.NORTH);
         
-        tagsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, TAG_SPACING, TAG_SPACING));
+        // Create a container that enforces 2-3 tags per row with proper scrolling
+        tagsPanel = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension size = super.getPreferredSize();
+                // Set fixed width to force wrapping - this ensures 2-3 tags per row
+                int fixedWidth = 180; // This should fit approximately 2-3 tags depending on text length
+                
+                // Calculate height based on number of components and rows needed
+                int componentCount = getComponentCount();
+                if (componentCount == 0) {
+                    return new Dimension(fixedWidth, 30);
+                }
+                
+                // Estimate rows needed (assuming average 2.5 tags per row)
+                int estimatedRows = Math.max(1, (int) Math.ceil(componentCount / 2.5));
+                int estimatedHeight = estimatedRows * 35; // 35px per row (tag height + gap)
+                
+                return new Dimension(fixedWidth, Math.max(estimatedHeight, size.height));
+            }
+            
+            @Override
+            public Dimension getMaximumSize() {
+                return getPreferredSize();
+            }
+        };
+        tagsPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 4));
         tagsPanel.setOpaque(false);
         tagsPanel.setBorder(new EmptyBorder(PADDING, 0, 0, 0));
         
@@ -111,21 +139,37 @@ public class SubjectNavigationPanel extends JPanel {
         tagsScrollPane.setOpaque(false);
         tagsScrollPane.getViewport().setOpaque(false);
         
-        // Main content panel
-        JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setOpaque(false);
-        contentPanel.add(subjectsHeader, BorderLayout.NORTH);
-        contentPanel.add(subjectsScrollPane, BorderLayout.CENTER);
+        // Enable both horizontal and vertical scrollbars when needed
+        tagsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tagsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         
-        // Tags section panel
+        // Subjects section panel
+        JPanel subjectsSection = new JPanel(new BorderLayout());
+        subjectsSection.setOpaque(false);
+        subjectsSection.add(subjectsHeader, BorderLayout.NORTH);
+        subjectsSection.add(subjectsScrollPane, BorderLayout.CENTER);
+        
+        // Tags section panel  
         JPanel tagsSection = new JPanel(new BorderLayout());
         tagsSection.setOpaque(false);
         tagsSection.add(tagsHeader, BorderLayout.NORTH);
         tagsSection.add(tagsScrollPane, BorderLayout.CENTER);
         
+        // Main content panel using BoxLayout to give both sections equal opportunity for space
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setOpaque(false);
+        
+        // Set preferred sizes to give tags more space (40% subjects, 60% tags)
+        subjectsSection.setPreferredSize(new Dimension(0, 200));
+        tagsSection.setPreferredSize(new Dimension(0, 300));
+        
+        contentPanel.add(subjectsSection);
+        contentPanel.add(Box.createVerticalStrut(PADDING));
+        contentPanel.add(tagsSection);
+        
         // Add to main layout
         add(contentPanel, BorderLayout.CENTER);
-        add(tagsSection, BorderLayout.SOUTH);
         
         // Load data
         loadSubjects();
@@ -281,24 +325,41 @@ public class SubjectNavigationPanel extends JPanel {
             for (Tag tag : trendingTags) {
                 JToggleButton tagButton = new JToggleButton(tag.getName());
                 tagButton.setOpaque(false);
-                tagButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(12f));
+                tagButton.setFont(AppTheme.PRIMARY_FONT.deriveFont(11f));
                 tagButton.setBorderPainted(true);
                 tagButton.setContentAreaFilled(false);
+                
+                // Create more pill-shaped border with rounded appearance
                 tagButton.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(AppTheme.ACCENT),
-                        new EmptyBorder(2, 5, 2, 5)));
-                tagButton.setForeground(AppTheme.TEXT_PRIMARY);
+                        BorderFactory.createLineBorder(new Color(0xD1D5DB), 1),
+                        new EmptyBorder(4, 8, 4, 8)));
+                        
+                tagButton.setForeground(AppTheme.TEXT_SECONDARY);
                 tagButton.setFocusPainted(false);
                 
-                // Selected state styling
+                // Set consistent size to ensure proper grid-like wrapping
+                // Calculate width based on text but keep it within reasonable bounds
+                int textWidth = tagButton.getFontMetrics(tagButton.getFont()).stringWidth(tag.getName());
+                int buttonWidth = Math.min(Math.max(70, textWidth + 20), 90); // Min 70px, max 90px
+                tagButton.setPreferredSize(new Dimension(buttonWidth, 28));
+                tagButton.setMinimumSize(new Dimension(buttonWidth, 28));
+                tagButton.setMaximumSize(new Dimension(buttonWidth, 28));
+                
+                // Selected state styling - more subtle like in the reference
                 tagButton.addChangeListener(changeEvent -> {
                     if (tagButton.isSelected()) {
-                        tagButton.setBackground(AppTheme.ACCENT);
-                        tagButton.setForeground(Color.WHITE);
+                        tagButton.setBackground(new Color(0xE0E7FF)); // Light blue background
+                        tagButton.setForeground(new Color(0x3B82F6)); // Blue text
                         tagButton.setContentAreaFilled(true);
+                        tagButton.setBorder(BorderFactory.createCompoundBorder(
+                                BorderFactory.createLineBorder(new Color(0x3B82F6), 1),
+                                new EmptyBorder(4, 8, 4, 8)));
                     } else {
                         tagButton.setContentAreaFilled(false);
-                        tagButton.setForeground(AppTheme.TEXT_PRIMARY);
+                        tagButton.setForeground(AppTheme.TEXT_SECONDARY);
+                        tagButton.setBorder(BorderFactory.createCompoundBorder(
+                                BorderFactory.createLineBorder(new Color(0xD1D5DB), 1),
+                                new EmptyBorder(4, 8, 4, 8)));
                     }
                 });
                 

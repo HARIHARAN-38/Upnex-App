@@ -45,6 +45,7 @@ public class NavigationSidebar extends JPanel {
     private final JButton profileButton;
     private final JButton helpButton;
     private final JButton aboutButton;
+    private final JButton deleteAccountButton;
     private final JButton logoutButton;
     
     // Current active page tracking
@@ -85,16 +86,31 @@ public class NavigationSidebar extends JPanel {
         navigationPanel.add(Box.createVerticalStrut(PADDING_SMALL));
         navigationPanel.add(aboutButton);
         
-        // Create logout section at bottom
+        // Create bottom section with delete account and logout buttons
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
+        bottomPanel.setOpaque(false);
+        
+        // Delete account button
+        deleteAccountButton = createDeleteAccountButton();
+        JPanel deleteAccountPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        deleteAccountPanel.setOpaque(false);
+        deleteAccountPanel.add(deleteAccountButton);
+        
+        // Logout button
+        logoutButton = createLogoutButton();
         JPanel logoutPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         logoutPanel.setOpaque(false);
-        
-        logoutButton = createLogoutButton();
         logoutPanel.add(logoutButton);
+        
+        // Add some spacing between delete account and logout buttons
+        bottomPanel.add(deleteAccountPanel);
+        bottomPanel.add(Box.createVerticalStrut(PADDING_SMALL));
+        bottomPanel.add(logoutPanel);
         
         // Add panels to main layout
         add(navigationPanel, BorderLayout.NORTH);
-        add(logoutPanel, BorderLayout.SOUTH);
+        add(bottomPanel, BorderLayout.SOUTH);
         
         // Set initial active button (inline to avoid overridable method call in constructor)
         activePage = PROFILE_PAGE;
@@ -198,6 +214,47 @@ public class NavigationSidebar extends JPanel {
     }
     
     /**
+     * Creates the delete account button with special styling.
+     * 
+     * @return Configured delete account button
+     */
+    private JButton createDeleteAccountButton() {
+        JButton button = new JButton("Delete Account");
+        button.setFont(AppTheme.PRIMARY_FONT.deriveFont(12f)); // Slightly smaller font
+        button.setPreferredSize(new Dimension(SIDEBAR_WIDTH - 32, BUTTON_HEIGHT));
+        button.setBackground(new Color(0xDC2626)); // Red background
+        button.setForeground(Color.WHITE);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Add border
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0xDC2626), 1, true),
+            new EmptyBorder(PADDING_SMALL, PADDING_MEDIUM, PADDING_SMALL, PADDING_MEDIUM)
+        ));
+        
+        // Add click handler
+        button.addActionListener(e -> handleDeleteAccount());
+        
+        // Add hover effects
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(0xB91C1C)); // Darker red on hover
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(new Color(0xDC2626)); // Original red
+            }
+        });
+        
+        return button;
+    }
+    
+    /**
      * Sets the inactive button styling.
      * 
      * @param button The button to style
@@ -278,6 +335,96 @@ public class NavigationSidebar extends JPanel {
                 this,
                 "An error occurred while signing out. Please try again.",
                 "Logout Error"
+            );
+        }
+    }
+    
+    /**
+     * Handles delete account functionality.
+     */
+    private void handleDeleteAccount() {
+        try {
+            Logger.getInstance().info("User initiated account deletion from profile sidebar");
+            
+            // Show initial confirmation dialog
+            Logger.getInstance().info("Showing initial confirmation dialog for account deletion");
+            boolean initialConfirmed = FeedbackManager.showConfirmation(
+                this,
+                "Are you sure you want to permanently delete your account?\n\n" +
+                "This action cannot be undone and will delete all your data.",
+                "Confirm Account Deletion"
+            );
+            
+            Logger.getInstance().info("Initial confirmation result: " + initialConfirmed);
+            if (!initialConfirmed) {
+                Logger.getInstance().info("User cancelled account deletion at initial confirmation");
+                return;
+            }
+            
+            // Show password confirmation dialog
+            Logger.getInstance().info("Initial confirmation passed, creating password dialog");
+            com.upnext.app.ui.dialogs.DeleteAccountDialog dialog = 
+                new com.upnext.app.ui.dialogs.DeleteAccountDialog(
+                    (java.awt.Frame) javax.swing.SwingUtilities.getWindowAncestor(this)
+                );
+            
+            Logger.getInstance().info("Password dialog created, showing dialog");
+            boolean passwordConfirmed = dialog.showDialog();
+            
+            Logger.getInstance().info("Password confirmation result: " + passwordConfirmed);
+            if (!passwordConfirmed) {
+                Logger.getInstance().info("User cancelled account deletion at password confirmation");
+                dialog.clearSensitiveData();
+                return;
+            }
+            
+            String password = dialog.getEnteredPassword();
+            dialog.clearSensitiveData();
+            
+            if (password == null || password.trim().isEmpty()) {
+                Logger.getInstance().warning("Account deletion failed: no password provided");
+                FeedbackManager.showError(
+                    this,
+                    "Password verification failed. Account deletion cancelled.",
+                    "Deletion Error"
+                );
+                return;
+            }
+            
+            // Perform account deletion
+            AuthService authService = AuthService.getInstance();
+            try {
+                authService.deleteCurrentUserAccount(password);
+                
+                Logger.getInstance().info("Account deletion successful");
+                
+                // Show success message
+                FeedbackManager.showInfo(
+                    this,
+                    "Your account has been permanently deleted.",
+                    "Account Deleted"
+                );
+                
+                // Navigate to sign-in screen
+                if (logoutCallback != null) {
+                    logoutCallback.run();
+                }
+                
+            } catch (AuthService.AuthException e) {
+                Logger.getInstance().error("Account deletion failed: " + e.getMessage());
+                FeedbackManager.showError(
+                    this,
+                    "Failed to delete account: " + e.getMessage(),
+                    "Deletion Error"
+                );
+            }
+            
+        } catch (Exception e) {
+            Logger.getInstance().error("Error during account deletion: " + e.getMessage());
+            FeedbackManager.showError(
+                this,
+                "An unexpected error occurred while deleting your account. Please try again.",
+                "Deletion Error"
             );
         }
     }

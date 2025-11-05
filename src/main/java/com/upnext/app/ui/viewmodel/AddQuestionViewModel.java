@@ -34,6 +34,7 @@ public class AddQuestionViewModel {
     private String title;
     private String description;
     private String context;
+    private Long selectedSubjectId;
     private final List<Tag> selectedTags;
     private final Set<String> normalizedTagNames; // For duplicate prevention
     
@@ -112,6 +113,24 @@ public class AddQuestionViewModel {
     }
     
     /**
+     * Sets the selected subject ID.
+     *
+     * @param subjectId The subject ID
+     */
+    public void setSelectedSubjectId(Long subjectId) {
+        this.selectedSubjectId = subjectId;
+    }
+    
+    /**
+     * Gets the selected subject ID.
+     *
+     * @return The selected subject ID
+     */
+    public Long getSelectedSubjectId() {
+        return selectedSubjectId;
+    }
+    
+    /**
      * Attempts to add a tag with proper normalization and validation.
      *
      * @param tagName The tag name to add
@@ -125,6 +144,12 @@ public class AddQuestionViewModel {
         
         // Normalize the tag name (lowercase, trim)
         String normalized = tagName.trim().toLowerCase();
+        
+        // Check for invalid tag patterns - silently reject without showing error
+        if (isInvalidTag(normalized)) {
+            Logger.getInstance().warning("[UI_TAG_VALIDATION_SILENTLY_REJECTED] Invalid tag pattern rejected - Name: '" + normalized + "'");
+            return false; // Silently reject, don't show error to user
+        }
         
         // Validate tag length
         if (normalized.length() > MAX_TAG_LENGTH) {
@@ -240,6 +265,54 @@ public class AddQuestionViewModel {
     }
     
     /**
+     * Checks if a tag contains invalid patterns that should be rejected.
+     * This prevents placeholder text and other invalid content from being saved as tags.
+     *
+     * @param normalizedTagName The normalized (lowercase, trimmed) tag name to check
+     * @return True if the tag should be rejected
+     */
+    private boolean isInvalidTag(String normalizedTagName) {
+        if (normalizedTagName == null || normalizedTagName.isEmpty()) {
+            return true;
+        }
+        
+        // Define invalid patterns (case-insensitive since input is already normalized)
+        String[] invalidPatterns = {
+            "type to add tag",
+            "add tag",
+            "enter tag",
+            "tag name",
+            "placeholder",
+            "click here",
+            "type here",
+            "...",
+            "click to add",
+            "type to add",
+            "add a tag",
+            "enter a tag"
+        };
+        
+        // Check if tag contains any invalid patterns
+        for (String pattern : invalidPatterns) {
+            if (normalizedTagName.contains(pattern)) {
+                return true;
+            }
+        }
+        
+        // Check for tags that are too short or only contain special characters
+        if (normalizedTagName.length() < 2) {
+            return true;
+        }
+        
+        // Check if tag is only special characters or numbers
+        if (normalizedTagName.matches("^[^a-zA-Z]*$")) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
      * Validates the current form state.
      *
      * @return Validation error message, or null if valid
@@ -273,6 +346,10 @@ public class AddQuestionViewModel {
             return "At least one tag is required.";
         }
         
+        if (selectedSubjectId == null) {
+            return "Please select a subject category.";
+        }
+        
         return null; // No validation errors
     }
     
@@ -292,10 +369,15 @@ public class AddQuestionViewModel {
         Logger.getInstance().info("[UI_FORM_VALIDATION_SUCCESS] Form validation passed");
         
         try {
-            // Convert tags to string list for service
+            // Convert tags to string list for service, filtering out any invalid tags
             List<String> tagNames = new ArrayList<>();
             for (Tag tag : selectedTags) {
-                tagNames.add(tag.getName());
+                String tagName = tag.getName();
+                if (tagName != null && !isInvalidTag(tagName.toLowerCase().trim())) {
+                    tagNames.add(tagName);
+                } else {
+                    Logger.getInstance().warning("[UI_QUESTION_CREATE_TAG_FILTERED] Invalid tag filtered out during question creation: '" + tagName + "'");
+                }
             }
             
             Logger.getInstance().info("[UI_QUESTION_CREATE_START] Creating question - Title length: " + title.length() + 
@@ -303,8 +385,8 @@ public class AddQuestionViewModel {
                                    ", Context: " + (context != null ? "provided" : "none") + 
                                    ", Tags: " + tagNames.size());
             
-            // Create question via service
-            Question createdQuestion = questionService.createQuestion(title, description, context, tagNames);
+            // Create question via service with subject
+            Question createdQuestion = questionService.createQuestion(title, description, context, tagNames, selectedSubjectId);
             
             Logger.getInstance().info("[UI_QUESTION_CREATE_SUCCESS] Question created successfully - ID: " + createdQuestion.getId() + 
                                    ", Tags: " + (createdQuestion.getTags() != null ? createdQuestion.getTags().size() : 0));
@@ -324,6 +406,7 @@ public class AddQuestionViewModel {
         title = "";
         description = "";
         context = null;
+        selectedSubjectId = null;
         selectedTags.clear();
         normalizedTagNames.clear();
         notifyTagsChanged();

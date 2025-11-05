@@ -37,6 +37,7 @@ E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\Filter
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\forms\FormField.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\forms\FormPanel.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\forms\PasswordField.java
+E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\forms\SubjectComboBox.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\forms\SubmitButton.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\HeroBar.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\LoadingPanel.java
@@ -56,6 +57,7 @@ E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\SkillC
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\SubjectNavigationPanel.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\TagChip.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\components\VotePanel.java
+E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\dialogs\DeleteAccountDialog.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\navigation\ViewNavigator.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\screens\AboutScreen.java
 E:\Drive\My-Project\UpNext-App\src\main\java\com\upnext\app\ui\screens\AddQuestionScreen.java

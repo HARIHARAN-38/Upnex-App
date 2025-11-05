@@ -3,7 +3,6 @@ package com.upnext.app.ui.components;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -12,8 +11,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -27,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -75,7 +73,7 @@ public class ProfileSummaryCard extends JPanel {
         ));
 
         // Create the header with avatar and name
-        JPanel headerPanel = new JPanel(new BorderLayout(12, 0));
+        JPanel headerPanel = new JPanel(new BorderLayout(8, 0));
         headerPanel.setOpaque(false);
         
         // Avatar placeholder (circular)
@@ -97,7 +95,7 @@ public class ProfileSummaryCard extends JPanel {
         memberSinceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         userInfoPanel.add(nameLabel);
-        userInfoPanel.add(Box.createVerticalStrut(4));
+        userInfoPanel.add(Box.createVerticalStrut(2));
         userInfoPanel.add(memberSinceLabel);
         
         headerPanel.add(avatarLabel, BorderLayout.WEST);
@@ -106,7 +104,7 @@ public class ProfileSummaryCard extends JPanel {
         // Divider under header
         JSeparator divider = new JSeparator();
         divider.setForeground(new Color(0xE2E8F0));
-        divider.setBorder(new EmptyBorder(12, 0, 12, 0));
+        divider.setBorder(new EmptyBorder(8, 0, 8, 0));
         
         // Metrics section with 3 key metrics
         metricsPanel = new JPanel(new GridLayout(3, 2, 8, 12));
@@ -167,55 +165,43 @@ public class ProfileSummaryCard extends JPanel {
         loadingPanel.add(loadingLabel);
         loadingPanel.add(Box.createVerticalGlue());
         
-        // Footer with "View Profile" link
+        // Footer with "View Profile" button using SubmitButton styling
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         footerPanel.setOpaque(false);
         
-        JLabel viewProfileLink = new JLabel("View Full Profile");
-        viewProfileLink.setFont(AppTheme.PRIMARY_FONT);
-        viewProfileLink.setForeground(AppTheme.PRIMARY);
-        viewProfileLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        viewProfileLink.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Navigate to the profile system
-                try {
-                    Logger.getInstance().info("Navigating to profile system from profile card");
-                    ViewNavigator.getInstance().navigateTo(App.PROFILE_LAYOUT_SCREEN);
-                } catch (Exception ex) {
-                    Logger.getInstance().error("Failed to navigate to profile system: " + ex.getMessage());
-                    JOptionPane.showMessageDialog(
-                        ProfileSummaryCard.this,
-                        "Unable to open profile page. Please try again.",
-                        "Navigation Error",
-                        JOptionPane.ERROR_MESSAGE
-                    );
-                }
-            }
-            
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                viewProfileLink.setText("<html><u>View Full Profile</u></html>");
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                viewProfileLink.setText("View Full Profile");
+        com.upnext.app.ui.components.forms.SubmitButton viewProfileButton = new com.upnext.app.ui.components.forms.SubmitButton("View Full Profile");
+        viewProfileButton.addActionListener(e -> {
+            // Navigate to the profile system
+            try {
+                Logger.getInstance().info("Navigating to profile system from profile card");
+                ViewNavigator.getInstance().navigateTo(App.PROFILE_LAYOUT_SCREEN);
+            } catch (Exception ex) {
+                Logger.getInstance().error("Failed to navigate to profile system: " + ex.getMessage());
+                JOptionPane.showMessageDialog(
+                    ProfileSummaryCard.this,
+                    "Unable to open profile page. Please try again.",
+                    "Navigation Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
             }
         });
         
-        footerPanel.add(viewProfileLink);
+        footerPanel.add(viewProfileButton);
         
-        // Add all panels to the main layout
-        add(headerPanel, BorderLayout.NORTH);
-        add(divider, BorderLayout.CENTER);
+        // Create main content panel to keep everything compact
+        JPanel mainContentPanel = new JPanel();
+        mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
+        mainContentPanel.setOpaque(false);
         
-        JPanel contentPanel = new JPanel(new BorderLayout(0, 12));
-        contentPanel.setOpaque(false);
-        contentPanel.add(metricsPanel, BorderLayout.CENTER);
-        contentPanel.add(footerPanel, BorderLayout.SOUTH);
+        // Add header, divider, and metrics in sequence
+        mainContentPanel.add(headerPanel);
+        mainContentPanel.add(divider);
+        mainContentPanel.add(metricsPanel);
+        mainContentPanel.add(Box.createVerticalStrut(8)); // Small gap before footer
+        mainContentPanel.add(footerPanel);
         
-        add(contentPanel, BorderLayout.SOUTH);
+        // Add to main layout
+        add(mainContentPanel, BorderLayout.NORTH);
         add(loadingPanel, BorderLayout.CENTER);
         
         // Initialize with empty state (done inline to avoid overridable method call)
@@ -314,10 +300,29 @@ public class ProfileSummaryCard extends JPanel {
         // Set avatar with initials
         avatarLabel.setText(getInitials(user.getName()));
         
-        // Set metrics
-        questionsAskedCountLabel.setText(String.valueOf(user.getQuestionsAsked()));
-        answersGivenCountLabel.setText(String.valueOf(user.getAnswersGiven()));
-        upvotesCountLabel.setText(String.valueOf(user.getTotalUpvotes()));
+        // Calculate and set accurate metrics
+        SwingUtilities.invokeLater(() -> {
+            try {
+                com.upnext.app.data.UserRepository.UserStatistics stats = 
+                    com.upnext.app.data.UserRepository.getInstance().calculateUserStatistics(user.getId());
+                
+                questionsAskedCountLabel.setText(String.valueOf(stats.getQuestionsAsked()));
+                answersGivenCountLabel.setText(String.valueOf(stats.getAnswersGiven()));
+                upvotesCountLabel.setText(String.valueOf(stats.getTotalUpvotes()));
+                
+                // Update the user object with the calculated stats
+                user.setQuestionsAsked(stats.getQuestionsAsked());
+                user.setAnswersGiven(stats.getAnswersGiven());
+                user.setTotalUpvotes(stats.getTotalUpvotes());
+                
+            } catch (Exception e) {
+                Logger.getInstance().error("Failed to calculate user statistics: " + e.getMessage());
+                // Fallback to user object values (which might be outdated)
+                questionsAskedCountLabel.setText(String.valueOf(user.getQuestionsAsked()));
+                answersGivenCountLabel.setText(String.valueOf(user.getAnswersGiven()));
+                upvotesCountLabel.setText(String.valueOf(user.getTotalUpvotes()));
+            }
+        });
     }
     
     /**

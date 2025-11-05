@@ -1,7 +1,6 @@
 package com.upnext.app.ui.screens;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -300,11 +299,8 @@ public class HomeScreen extends JPanel {
             questionFeedPanel.applySearchCriteria(criteria);
         });
         
-        // "Ask a Question" button at the bottom
-        JButton askButton = new JButton("Ask a Question");
-        askButton.setBackground(AppTheme.PRIMARY);
-        askButton.setForeground(Color.WHITE);
-        askButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // "Ask a Question" button at the bottom using SubmitButton styling
+        com.upnext.app.ui.components.forms.SubmitButton askButton = new com.upnext.app.ui.components.forms.SubmitButton("Ask a Question");
         askButton.addActionListener(e -> {
             Logger.getInstance().info("Navigating to Add Question screen");
             ViewNavigator.getInstance().navigateTo(com.upnext.app.App.ADD_QUESTION_SCREEN);

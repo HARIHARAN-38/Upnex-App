@@ -64,6 +64,23 @@ public final class QuestionService {
      */
     public Question createQuestion(String title, String content, String context, List<String> tags) 
             throws QuestionException, SQLException {
+        return createQuestion(title, content, context, tags, null);
+    }
+    
+    /**
+     * Creates a new question with tags and subject after comprehensive validation.
+     * 
+     * @param title The question title (required, 5-200 characters)
+     * @param content The question content (required, 10-5000 characters) 
+     * @param context Optional context information (max 1000 characters)
+     * @param tags List of tags (optional, max 10 tags, each max 50 characters)
+     * @param subjectId The ID of the subject category (optional, defaults to General if null)
+     * @return The created question with generated ID and timestamps
+     * @throws QuestionException If validation fails or user not authenticated
+     * @throws SQLException If database operation fails
+     */
+    public Question createQuestion(String title, String content, String context, List<String> tags, Long subjectId) 
+            throws QuestionException, SQLException {
         
         long startTime = System.currentTimeMillis();
         String titlePreview = title != null ? title.substring(0, Math.min(title.length(), 30)) + "..." : "null";
@@ -101,12 +118,15 @@ public final class QuestionService {
         String safeContent = (content != null) ? content.trim() : "";
         String safeContext = (context != null) ? context.trim() : null;
         
+        // Use provided subject ID or default to General category (assuming it's the last one added)
+        Long finalSubjectId = subjectId != null ? subjectId : 21L; // General subject from our migration
+        
         Question question = new Question(
             userId,
             safeTitle,
             safeContent,
             safeContext,
-            null // subjectId - will be set later if needed
+            finalSubjectId
         );
         
         try {

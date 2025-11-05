@@ -1,3 +1,4 @@
+com\upnext\app\ui\screens\QuestionDetailScreenIntegrationTest.class
 com\upnext\app\service\SkillServiceTest$InMemorySkillDataAccess.class
 com\upnext\app\ui\components\RecordingFilterChangeListener.class
 com\upnext\app\util\TestLogCapture$LogLevelSummary.class
@@ -6,6 +7,9 @@ com\upnext\app\data\question\AnswerRepositoryTest.class
 com\upnext\app\ui\components\SubjectNavigationPanelTest.class
 com\upnext\app\ui\viewmodel\AddQuestionViewModelTest.class
 com\upnext\app\ui\screens\SkillScreensTest.class
+com\upnext\app\data\question\QuestionRepositoryExtendedTest.class
+com\upnext\app\ui\components\SubjectComboBoxTest.class
+com\upnext\app\data\question\QuestionRepositoryAddTest.class
 com\upnext\app\data\JdbcConnectionProviderTest.class
 com\upnext\app\util\TestLogCapture$TelemetryValidationResult.class
 com\upnext\app\service\SearchServiceTest$StubQuestionDataAccess.class
@@ -19,6 +23,8 @@ com\upnext\app\service\QuestionServiceTest.class
 com\upnext\app\service\AuthServiceSkillTest.class
 com\upnext\app\ui\navigation\AddQuestionFlowTest.class
 com\upnext\app\data\SkillRepositoryTest.class
+com\upnext\app\ui\navigation\EndToEndQuestionFlowTest.class
 com\upnext\app\service\SearchServiceTest.class
 com\upnext\app\util\TestLogCapture$LogEntry.class
+com\upnext\app\ui\screens\QuestionDetailScreenIntegrationTest$CheckedBooleanSupplier.class
 com\upnext\app\ui\components\questions\TagInputFieldTest.class

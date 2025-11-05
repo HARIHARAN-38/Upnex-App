@@ -25751,3 +25751,853 @@ java.lang.IllegalArgumentException: Cannot format given Object as a Date
 [2025-11-04 22:47:17] [INFO] Question selected: why there is no pointers in java?
 [2025-11-04 22:47:17] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
 [2025-11-04 22:47:17] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 07:56:19] [INFO] Logger initialized
+[2025-11-05 07:56:19] [INFO] Starting UpNext application
+[2025-11-05 07:56:19] [INFO] Checking database connection and schema on startup...
+[2025-11-05 07:56:19] [INFO] Initializing database schema...
+[2025-11-05 07:56:20] [INFO] Migration 008 executed successfully
+[2025-11-05 07:56:20] [INFO] Migration 009 executed successfully
+[2025-11-05 07:56:20] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 07:56:20] [INFO] Database schema initialized successfully
+[2025-11-05 07:56:21] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:56:21] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 07:56:22] [INFO] Answer votes table initialized
+[2025-11-05 07:56:22] [INFO] Showing profile page
+[2025-11-05 07:56:22] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 07:56:42] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-05 07:56:42] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-05 07:56:42] [INFO] Retrieving skills for user ID: 3
+[2025-11-05 07:56:42] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 07:56:42] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 07:56:42] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-05 07:56:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:56:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:03] [INFO] Navigating to profile system from profile card
+[2025-11-05 07:57:05] [INFO] Navigating to profile system page: help
+[2025-11-05 07:57:05] [INFO] Showing help page
+[2025-11-05 07:57:10] [INFO] Navigating to profile system page: about
+[2025-11-05 07:57:10] [INFO] Showing about page
+[2025-11-05 07:57:26] [INFO] Navigating to profile system page: profile
+[2025-11-05 07:57:26] [INFO] Showing profile page
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:53] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:57:55] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 07:58:00] [INFO] Question selected: why there is no pointers in java?
+[2025-11-05 07:58:01] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 07:58:01] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 07:58:05] [INFO] Created new vote: user=3, question=5, vote=UPVOTE
+[2025-11-05 07:58:05] [INFO] Vote Recorded: Upvote recorded
+[2025-11-05 07:58:13] [INFO] Updated vote: user=3, question=5, vote=DOWNVOTE
+[2025-11-05 07:58:13] [INFO] Vote Recorded: Downvote recorded
+[2025-11-05 07:58:17] [INFO] Updated vote: user=3, question=5, vote=UPVOTE
+[2025-11-05 07:58:17] [INFO] Vote Recorded: Upvote recorded
+[2025-11-05 07:58:24] [INFO] Navigating to profile for user: VISHNU (id=7)
+[2025-11-05 07:58:44] [INFO] User signing out: abc@gmail.com
+[2025-11-05 07:58:44] [INFO] User signed out: abc@gmail.com
+[2025-11-05 07:58:44] [INFO] User signed out successfully: abc@gmail.com
+[2025-11-05 07:58:44] [INFO] Sign Out: You have been signed out successfully.
+[2025-11-05 07:58:46] [WARNING] Sign out attempted with no active user session
+[2025-11-05 07:59:29] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 07:59:29] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 07:59:29] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 07:59:29] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 07:59:29] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 07:59:29] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 07:59:55] [INFO] Removed vote: user=7, question=5
+[2025-11-05 07:59:55] [INFO] Vote action: Upvote removed! for question 5
+[2025-11-05 07:59:55] [INFO] Question voted: why there is no pointers in java? (Upvotes: 1, Downvotes: 0)
+[2025-11-05 07:59:57] [INFO] Created new vote: user=7, question=5, vote=UPVOTE
+[2025-11-05 07:59:57] [INFO] Vote action: Upvoted! for question 5
+[2025-11-05 07:59:57] [INFO] Question voted: why there is no pointers in java? (Upvotes: 2, Downvotes: 0)
+[2025-11-05 08:00:02] [INFO] Question selected: why there is no pointers in java?
+[2025-11-05 08:00:02] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:00:02] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 08:00:36] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:00:36] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 08:00:41] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:00:41] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 08:08:26] [INFO] Logger initialized
+[2025-11-05 08:08:26] [INFO] Starting UpNext application
+[2025-11-05 08:08:27] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:08:27] [INFO] Initializing database schema...
+[2025-11-05 08:08:28] [INFO] Migration 008 executed successfully
+[2025-11-05 08:08:28] [INFO] Migration 009 executed successfully
+[2025-11-05 08:08:28] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:08:28] [INFO] Database schema initialized successfully
+[2025-11-05 08:08:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:08:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:08:28] [INFO] Answer votes table initialized
+[2025-11-05 08:08:29] [INFO] Showing profile page
+[2025-11-05 08:08:29] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:08:47] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-05 08:08:47] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-05 08:08:47] [INFO] Retrieving skills for user ID: 3
+[2025-11-05 08:08:47] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 08:08:47] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 08:08:47] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-05 08:08:52] [INFO] Navigating to Add Question screen
+[2025-11-05 08:09:02] [INFO] User signing out: abc@gmail.com
+[2025-11-05 08:09:02] [INFO] User signed out: abc@gmail.com
+[2025-11-05 08:09:02] [INFO] User signed out successfully: abc@gmail.com
+[2025-11-05 08:09:02] [INFO] Sign Out: You have been signed out successfully.
+[2025-11-05 08:09:03] [WARNING] Sign out attempted with no active user session
+[2025-11-05 08:09:33] [INFO] Attempting sign in for: vishnu@gmail.con
+[2025-11-05 08:09:33] [INFO] Sign-in attempt for email: vishnu@gmail.con
+[2025-11-05 08:09:33] [WARNING] Sign-in failed: user not found: vishnu@gmail.con
+[2025-11-05 08:09:33] [WARNING] Sign in failed: Invalid email or password
+[2025-11-05 08:09:33] [ERROR] Authentication Error: Invalid email or password
+[2025-11-05 08:09:44] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 08:09:44] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 08:09:44] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:09:44] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:09:44] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:09:44] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:18:10] [INFO] Logger initialized
+[2025-11-05 08:18:10] [INFO] Starting UpNext application
+[2025-11-05 08:18:10] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:18:10] [INFO] Initializing database schema...
+[2025-11-05 08:18:11] [INFO] Migration 008 executed successfully
+[2025-11-05 08:18:11] [INFO] Migration 009 executed successfully
+[2025-11-05 08:18:11] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:18:11] [INFO] Database schema initialized successfully
+[2025-11-05 08:18:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:18:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:18:12] [INFO] Answer votes table initialized
+[2025-11-05 08:18:13] [INFO] Showing profile page
+[2025-11-05 08:18:13] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:18:49] [INFO] Logger initialized
+[2025-11-05 08:18:50] [INFO] Starting UpNext application
+[2025-11-05 08:18:50] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:18:50] [INFO] Initializing database schema...
+[2025-11-05 08:18:51] [INFO] Migration 008 executed successfully
+[2025-11-05 08:18:51] [INFO] Migration 009 executed successfully
+[2025-11-05 08:18:51] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:18:51] [INFO] Database schema initialized successfully
+[2025-11-05 08:18:51] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:18:51] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:18:51] [INFO] Answer votes table initialized
+[2025-11-05 08:18:52] [INFO] Showing profile page
+[2025-11-05 08:18:52] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:19:09] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 08:19:09] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 08:19:09] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:19:09] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:19:09] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:19:09] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:19:14] [INFO] Navigating to Add Question screen
+[2025-11-05 08:21:58] [INFO] Logger initialized
+[2025-11-05 08:21:58] [INFO] Starting UpNext application
+[2025-11-05 08:21:58] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:21:58] [INFO] Initializing database schema...
+[2025-11-05 08:21:59] [INFO] Migration 008 executed successfully
+[2025-11-05 08:21:59] [INFO] Migration 009 executed successfully
+[2025-11-05 08:21:59] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:21:59] [INFO] Database schema initialized successfully
+[2025-11-05 08:22:00] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:22:00] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:22:00] [INFO] Answer votes table initialized
+[2025-11-05 08:22:01] [INFO] Showing profile page
+[2025-11-05 08:22:01] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:22:37] [INFO] Attempting sign in for: vishnu@gmil.com
+[2025-11-05 08:22:37] [INFO] Sign-in attempt for email: vishnu@gmil.com
+[2025-11-05 08:22:37] [WARNING] Sign-in failed: user not found: vishnu@gmil.com
+[2025-11-05 08:22:37] [WARNING] Sign in failed: Invalid email or password
+[2025-11-05 08:22:37] [ERROR] Authentication Error: Invalid email or password
+[2025-11-05 08:22:45] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 08:22:45] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 08:22:45] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:22:45] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:22:45] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:22:45] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:23:23] [INFO] Navigating to Add Question screen
+[2025-11-05 08:23:48] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE q.subject_id = ? AND t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:23:48] [DEBUG] [QUESTION_SEARCH_PARAMS] [17, java, 1, 20, 0]
+[2025-11-05 08:23:48] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:23:48] [DEBUG] [QUESTION_SEARCH_PARAMS] [17, 20, 0]
+[2025-11-05 08:23:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:23:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [9, 20, 0]
+[2025-11-05 08:23:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:23:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [9, 20, 0]
+[2025-11-05 08:23:53] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:23:53] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:23:53] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:23:53] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:24:01] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:01] [DEBUG] [QUESTION_SEARCH_PARAMS] [2, 20, 0]
+[2025-11-05 08:24:01] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:01] [DEBUG] [QUESTION_SEARCH_PARAMS] [2, 20, 0]
+[2025-11-05 08:24:02] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:02] [DEBUG] [QUESTION_SEARCH_PARAMS] [2, 20, 0]
+[2025-11-05 08:24:02] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:02] [DEBUG] [QUESTION_SEARCH_PARAMS] [2, 20, 0]
+[2025-11-05 08:24:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [2, 20, 0]
+[2025-11-05 08:24:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [2, 20, 0]
+[2025-11-05 08:24:07] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:07] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:24:07] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:24:07] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:27:11] [INFO] Logger initialized
+[2025-11-05 08:34:11] [INFO] Logger initialized
+[2025-11-05 08:34:11] [INFO] Starting UpNext application
+[2025-11-05 08:34:12] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:34:12] [INFO] Initializing database schema...
+[2025-11-05 08:34:13] [INFO] Migration 008 executed successfully
+[2025-11-05 08:34:13] [INFO] Migration 009 executed successfully
+[2025-11-05 08:34:13] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:34:13] [INFO] Database schema initialized successfully
+[2025-11-05 08:34:13] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:34:13] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:34:14] [INFO] Answer votes table initialized
+[2025-11-05 08:34:14] [INFO] Showing profile page
+[2025-11-05 08:34:15] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:34:36] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 08:34:36] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 08:34:36] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:34:36] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:34:36] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:34:36] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:35:05] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:35:05] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:42:13] [INFO] Logger initialized
+[2025-11-05 08:42:13] [INFO] Starting UpNext application
+[2025-11-05 08:42:14] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:42:14] [INFO] Initializing database schema...
+[2025-11-05 08:42:15] [INFO] Migration 008 executed successfully
+[2025-11-05 08:42:15] [INFO] Migration 009 executed successfully
+[2025-11-05 08:42:15] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:42:15] [INFO] Database schema initialized successfully
+[2025-11-05 08:42:15] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:15] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:42:15] [INFO] Answer votes table initialized
+[2025-11-05 08:42:16] [INFO] Showing profile page
+[2025-11-05 08:42:16] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:42:31] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 08:42:31] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 08:42:31] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:42:31] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:42:31] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:42:31] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:42:42] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:42] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:42:42] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:42] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 08:42:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 08:42:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, java, 2, 20, 0]
+[2025-11-05 08:42:47] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:47] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, java, 2, 20, 0]
+[2025-11-05 08:42:47] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:47] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, programming, java, 3, 20, 0]
+[2025-11-05 08:42:49] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:49] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, programming, java, 3, 20, 0]
+[2025-11-05 08:42:49] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:49] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, java, 2, 20, 0]
+[2025-11-05 08:42:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, java, 2, 20, 0]
+[2025-11-05 08:42:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 08:42:51] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:51] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 08:42:51] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:42:51] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:45:55] [INFO] Question selected: why there is no pointers in java?
+[2025-11-05 08:45:55] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:45:55] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 08:46:09] [INFO] Created new vote: user=7, question=2, vote=UPVOTE
+[2025-11-05 08:46:09] [INFO] Vote action: Upvoted! for question 2
+[2025-11-05 08:46:09] [INFO] Question voted: Python Basics (Upvotes: 1, Downvotes: 0)
+[2025-11-05 08:46:11] [INFO] Updated vote: user=7, question=2, vote=DOWNVOTE
+[2025-11-05 08:46:11] [INFO] Vote action: Changed to downvote! for question 2
+[2025-11-05 08:46:11] [INFO] Question voted: Python Basics (Upvotes: 0, Downvotes: 1)
+[2025-11-05 08:46:12] [INFO] Removed vote: user=7, question=2
+[2025-11-05 08:46:12] [INFO] Vote action: Downvote removed! for question 2
+[2025-11-05 08:46:12] [INFO] Question voted: Python Basics (Upvotes: 0, Downvotes: 0)
+[2025-11-05 08:46:32] [INFO] Navigating to profile system from profile card
+[2025-11-05 08:46:35] [INFO] Navigating to profile system page: help
+[2025-11-05 08:46:35] [INFO] Showing help page
+[2025-11-05 08:46:36] [INFO] Navigating to profile system page: profile
+[2025-11-05 08:46:36] [INFO] Showing profile page
+[2025-11-05 08:47:30] [INFO] Logger initialized
+[2025-11-05 08:47:30] [INFO] Starting UpNext application
+[2025-11-05 08:47:30] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:47:30] [INFO] Initializing database schema...
+[2025-11-05 08:47:31] [INFO] Migration 008 executed successfully
+[2025-11-05 08:47:31] [INFO] Migration 009 executed successfully
+[2025-11-05 08:47:31] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:47:31] [INFO] Database schema initialized successfully
+[2025-11-05 08:47:31] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:47:31] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:47:32] [INFO] Answer votes table initialized
+[2025-11-05 08:47:32] [INFO] Showing profile page
+[2025-11-05 08:47:32] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:48:07] [INFO] Attempting sign in for: VISHNU@GMAIL.COM
+[2025-11-05 08:48:07] [INFO] Sign-in attempt for email: VISHNU@GMAIL.COM
+[2025-11-05 08:48:07] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:48:07] [INFO] User signed in successfully: VISHNU@GMAIL.COM
+[2025-11-05 08:48:07] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:48:07] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:52:46] [INFO] Logger initialized
+[2025-11-05 08:52:47] [INFO] Starting UpNext application
+[2025-11-05 08:52:47] [INFO] Checking database connection and schema on startup...
+[2025-11-05 08:52:47] [INFO] Initializing database schema...
+[2025-11-05 08:52:48] [INFO] Migration 008 executed successfully
+[2025-11-05 08:52:48] [INFO] Migration 009 executed successfully
+[2025-11-05 08:52:48] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 08:52:48] [INFO] Database schema initialized successfully
+[2025-11-05 08:52:48] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:52:48] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:52:48] [INFO] Answer votes table initialized
+[2025-11-05 08:52:49] [INFO] Showing profile page
+[2025-11-05 08:52:49] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 08:53:08] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 08:53:08] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 08:53:08] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 08:53:08] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:53:08] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 08:53:08] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 08:53:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:53:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 08:53:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:53:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 08:53:14] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:53:14] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 08:53:14] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 08:53:14] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:04:45] [INFO] Logger initialized
+[2025-11-05 09:04:45] [INFO] Starting UpNext application
+[2025-11-05 09:04:45] [INFO] Checking database connection and schema on startup...
+[2025-11-05 09:04:45] [INFO] Initializing database schema...
+[2025-11-05 09:04:46] [INFO] Migration 008 executed successfully
+[2025-11-05 09:04:46] [INFO] Migration 009 executed successfully
+[2025-11-05 09:04:46] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 09:04:46] [INFO] Database schema initialized successfully
+[2025-11-05 09:04:47] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 09:04:47] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:04:47] [INFO] Answer votes table initialized
+[2025-11-05 09:04:48] [INFO] Showing profile page
+[2025-11-05 09:04:48] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 09:05:10] [INFO] Attempting sign in for: def@gmail.com
+[2025-11-05 09:05:10] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:05:10] [INFO] Retrieving skills for user ID: 4
+[2025-11-05 09:05:10] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:05:10] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:05:10] [INFO] Sign In Successful: Welcome back, dhanush!
+[2025-11-05 09:05:14] [INFO] Navigating to profile system from profile card
+[2025-11-05 09:05:16] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:05:24] [WARNING] Password Required: Please enter your password to confirm account deletion.
+[2025-11-05 09:05:35] [WARNING] Password Required: Please enter your password to confirm account deletion.
+[2025-11-05 09:05:52] [INFO] User cancelled account deletion at password confirmation
+[2025-11-05 09:05:57] [INFO] Navigating to profile system page: help
+[2025-11-05 09:05:57] [INFO] Showing help page
+[2025-11-05 09:05:58] [INFO] Navigating to profile system page: profile
+[2025-11-05 09:05:58] [INFO] Showing profile page
+[2025-11-05 09:06:00] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:06:06] [WARNING] Password Required: Please enter your password to confirm account deletion.
+[2025-11-05 09:06:11] [INFO] User cancelled account deletion at password confirmation
+[2025-11-05 09:07:27] [INFO] Logger initialized
+[2025-11-05 09:07:27] [INFO] Starting UpNext application
+[2025-11-05 09:07:28] [INFO] Checking database connection and schema on startup...
+[2025-11-05 09:07:28] [INFO] Initializing database schema...
+[2025-11-05 09:07:28] [INFO] Migration 008 executed successfully
+[2025-11-05 09:07:28] [INFO] Migration 009 executed successfully
+[2025-11-05 09:07:28] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 09:07:29] [INFO] Database schema initialized successfully
+[2025-11-05 09:07:29] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 09:07:29] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:07:29] [INFO] Answer votes table initialized
+[2025-11-05 09:07:29] [INFO] Showing profile page
+[2025-11-05 09:07:30] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 09:07:54] [INFO] Attempting sign in for: def@gmail.com
+[2025-11-05 09:07:54] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:07:54] [INFO] Retrieving skills for user ID: 4
+[2025-11-05 09:07:54] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:07:54] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:07:54] [INFO] Sign In Successful: Welcome back, dhanush!
+[2025-11-05 09:07:57] [INFO] Navigating to profile system from profile card
+[2025-11-05 09:07:59] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:08:09] [WARNING] Password Required: Please enter your password to confirm account deletion.
+[2025-11-05 09:08:16] [INFO] User cancelled account deletion at password confirmation
+[2025-11-05 09:08:58] [INFO] Logger initialized
+[2025-11-05 09:08:58] [INFO] Starting UpNext application
+[2025-11-05 09:08:58] [INFO] Checking database connection and schema on startup...
+[2025-11-05 09:08:58] [INFO] Initializing database schema...
+[2025-11-05 09:08:59] [INFO] Migration 008 executed successfully
+[2025-11-05 09:08:59] [INFO] Migration 009 executed successfully
+[2025-11-05 09:08:59] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 09:08:59] [INFO] Database schema initialized successfully
+[2025-11-05 09:09:00] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 09:09:00] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:09:00] [INFO] Answer votes table initialized
+[2025-11-05 09:09:00] [INFO] Showing profile page
+[2025-11-05 09:09:00] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 09:09:22] [INFO] Attempting sign in for: def@gmail.com
+[2025-11-05 09:09:22] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:09:22] [WARNING] Sign-in failed: invalid password for: def@gmail.com
+[2025-11-05 09:09:22] [WARNING] Sign in failed: Invalid email or password
+[2025-11-05 09:09:22] [ERROR] Authentication Error: Invalid email or password
+[2025-11-05 09:09:33] [INFO] Attempting sign in for: def@gmail.com
+[2025-11-05 09:09:33] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:09:33] [INFO] Retrieving skills for user ID: 4
+[2025-11-05 09:09:33] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:09:33] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:09:33] [INFO] Sign In Successful: Welcome back, dhanush!
+[2025-11-05 09:09:36] [INFO] Navigating to profile system from profile card
+[2025-11-05 09:09:38] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:09:42] [WARNING] Password Required: Please enter your password to confirm account deletion.
+[2025-11-05 09:10:12] [INFO] User cancelled account deletion at password confirmation
+[2025-11-05 09:10:48] [INFO] Logger initialized
+[2025-11-05 09:10:48] [INFO] Starting UpNext application
+[2025-11-05 09:10:48] [INFO] Checking database connection and schema on startup...
+[2025-11-05 09:10:48] [INFO] Initializing database schema...
+[2025-11-05 09:10:49] [INFO] Migration 008 executed successfully
+[2025-11-05 09:10:49] [INFO] Migration 009 executed successfully
+[2025-11-05 09:10:49] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 09:10:49] [INFO] Database schema initialized successfully
+[2025-11-05 09:10:49] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 09:10:49] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:10:49] [INFO] Answer votes table initialized
+[2025-11-05 09:10:50] [INFO] Showing profile page
+[2025-11-05 09:10:50] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 09:11:09] [INFO] Attempting sign in for: def@gmail.com
+[2025-11-05 09:11:09] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:11:09] [INFO] Retrieving skills for user ID: 4
+[2025-11-05 09:11:09] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:11:09] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:11:09] [INFO] Sign In Successful: Welcome back, dhanush!
+[2025-11-05 09:11:13] [INFO] Navigating to profile system from profile card
+[2025-11-05 09:11:14] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:11:25] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:11:25] [INFO] Retrieving skills for user ID: 4
+[2025-11-05 09:11:25] [INFO] User signed in successfully: def@gmail.com
+[2025-11-05 09:11:25] [INFO] Password verification successful for account deletion
+[2025-11-05 09:11:25] [INFO] Starting account deletion process for user: def@gmail.com (ID: 4)
+[2025-11-05 09:11:25] [INFO] User signed out: def@gmail.com
+[2025-11-05 09:11:25] [INFO] Successfully deleted user account: def@gmail.com (ID: 4)
+[2025-11-05 09:11:25] [INFO] Account deletion successful
+[2025-11-05 09:11:25] [INFO] Account Deleted: Your account has been permanently deleted.
+[2025-11-05 09:11:29] [INFO] User logging out from profile system
+[2025-11-05 09:11:49] [INFO] Attempting sign in for: def@gmail.com
+[2025-11-05 09:11:49] [INFO] Sign-in attempt for email: def@gmail.com
+[2025-11-05 09:11:49] [WARNING] Sign-in failed: user not found: def@gmail.com
+[2025-11-05 09:11:49] [WARNING] Sign in failed: Invalid email or password
+[2025-11-05 09:11:49] [ERROR] Authentication Error: Invalid email or password
+[2025-11-05 09:19:12] [INFO] Logger initialized
+[2025-11-05 09:19:12] [INFO] Starting UpNext application
+[2025-11-05 09:19:12] [INFO] Checking database connection and schema on startup...
+[2025-11-05 09:19:12] [INFO] Initializing database schema...
+[2025-11-05 09:19:13] [INFO] Migration 008 executed successfully
+[2025-11-05 09:19:13] [INFO] Migration 009 executed successfully
+[2025-11-05 09:19:13] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 09:19:13] [INFO] Database schema initialized successfully
+[2025-11-05 09:19:14] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 09:19:14] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:19:14] [INFO] Answer votes table initialized
+[2025-11-05 09:19:14] [INFO] Showing profile page
+[2025-11-05 09:19:14] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 09:19:41] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-05 09:19:41] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-05 09:19:41] [INFO] Retrieving skills for user ID: 3
+[2025-11-05 09:19:41] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 09:19:41] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 09:19:41] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-05 09:19:44] [INFO] Navigating to profile system from profile card
+[2025-11-05 09:19:46] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:19:49] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:20:01] [INFO] Navigating to profile system page: help
+[2025-11-05 09:20:01] [INFO] Showing help page
+[2025-11-05 09:20:03] [INFO] Navigating to profile system page: profile
+[2025-11-05 09:20:03] [INFO] Showing profile page
+[2025-11-05 09:20:05] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:24:45] [INFO] Logger initialized
+[2025-11-05 09:24:45] [INFO] Starting UpNext application
+[2025-11-05 09:24:45] [INFO] Checking database connection and schema on startup...
+[2025-11-05 09:24:45] [INFO] Initializing database schema...
+[2025-11-05 09:24:46] [INFO] Migration 008 executed successfully
+[2025-11-05 09:24:46] [INFO] Migration 009 executed successfully
+[2025-11-05 09:24:46] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 09:24:46] [INFO] Database schema initialized successfully
+[2025-11-05 09:24:47] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 09:24:47] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 09:24:47] [INFO] Answer votes table initialized
+[2025-11-05 09:24:48] [INFO] Showing profile page
+[2025-11-05 09:24:48] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 09:25:04] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-05 09:25:04] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-05 09:25:04] [INFO] Retrieving skills for user ID: 3
+[2025-11-05 09:25:04] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 09:25:04] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 09:25:04] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-05 09:25:10] [INFO] Navigating to profile system from profile card
+[2025-11-05 09:25:12] [INFO] User initiated account deletion from profile sidebar
+[2025-11-05 09:25:12] [INFO] Showing initial confirmation dialog for account deletion
+[2025-11-05 09:25:14] [INFO] Initial confirmation result: true
+[2025-11-05 09:25:14] [INFO] Initial confirmation passed, creating password dialog
+[2025-11-05 09:25:14] [INFO] Password dialog created, showing dialog
+[2025-11-05 09:25:23] [INFO] Password confirmation result: false
+[2025-11-05 09:25:23] [INFO] User cancelled account deletion at password confirmation
+[2025-11-05 09:25:25] [INFO] Navigating to profile system page: help
+[2025-11-05 09:25:25] [INFO] Showing help page
+[2025-11-05 09:25:28] [INFO] Navigating to profile system page: profile
+[2025-11-05 09:25:28] [INFO] Showing profile page
+[2025-11-05 10:45:55] [INFO] Logger initialized
+[2025-11-05 10:45:56] [INFO] Starting UpNext application
+[2025-11-05 10:45:56] [INFO] Checking database connection and schema on startup...
+[2025-11-05 10:45:56] [INFO] Initializing database schema...
+[2025-11-05 10:45:57] [INFO] Migration 008 executed successfully
+[2025-11-05 10:45:57] [INFO] Migration 009 executed successfully
+[2025-11-05 10:45:57] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 10:45:57] [INFO] Database schema initialized successfully
+[2025-11-05 10:45:57] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:45:57] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 10:45:57] [INFO] Answer votes table initialized
+[2025-11-05 10:45:58] [INFO] Showing profile page
+[2025-11-05 10:45:58] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 10:46:36] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-05 10:46:36] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-05 10:46:36] [INFO] Retrieving skills for user ID: 3
+[2025-11-05 10:46:36] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 10:46:36] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 10:46:36] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-05 10:47:22] [INFO] Navigating to profile system from profile card
+[2025-11-05 10:47:30] [INFO] Question selected: Python Basics
+[2025-11-05 10:47:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:47:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, python, 2, 10, 0]
+[2025-11-05 10:47:38] [INFO] Created new vote: user=3, question=2, vote=DOWNVOTE
+[2025-11-05 10:47:38] [INFO] Vote Recorded: Downvote recorded
+[2025-11-05 10:47:41] [INFO] Updated vote: user=3, question=2, vote=UPVOTE
+[2025-11-05 10:47:41] [INFO] Vote Recorded: Upvote recorded
+[2025-11-05 10:47:44] [INFO] Updated vote: user=3, question=2, vote=DOWNVOTE
+[2025-11-05 10:47:44] [INFO] Vote Recorded: Downvote recorded
+[2025-11-05 10:47:47] [INFO] Updated vote: user=3, question=2, vote=UPVOTE
+[2025-11-05 10:47:47] [INFO] Vote Recorded: Upvote recorded
+[2025-11-05 10:48:05] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:05] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 10:48:05] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:05] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 10:48:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 10:48:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, java, 2, 20, 0]
+[2025-11-05 10:48:08] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:08] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, java, 2, 20, 0]
+[2025-11-05 10:48:08] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:08] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, 1, 20, 0]
+[2025-11-05 10:48:09] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:09] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, 1, 20, 0]
+[2025-11-05 10:48:09] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:09] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, python, 2, 20, 0]
+[2025-11-05 10:48:10] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:10] [DEBUG] [QUESTION_SEARCH_PARAMS] [programming, python, 2, 20, 0]
+[2025-11-05 10:48:10] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:10] [DEBUG] [QUESTION_SEARCH_PARAMS] [python, 1, 20, 0]
+[2025-11-05 10:48:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [python, 1, 20, 0]
+[2025-11-05 10:48:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:48:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 10:48:14] [INFO] Navigating to Add Question screen
+[2025-11-05 10:49:19] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'java', Total tags: 1
+[2025-11-05 10:49:21] [INFO] [UI_FORM_VALIDATION_START] Validating question form
+[2025-11-05 10:49:21] [WARNING] [UI_FORM_VALIDATION_FAILED] Form validation failed - Question description is required.
+[2025-11-05 10:49:27] [INFO] Question selected: why there is no pointers in java?
+[2025-11-05 10:49:27] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:49:27] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 10:52:28] [INFO] Navigating to Add Question screen
+[2025-11-05 10:53:25] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'database', Total tags: 2
+[2025-11-05 10:53:29] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'type to add tags...java', Total tags: 3
+[2025-11-05 10:53:33] [WARNING] [UI_TAG_VALIDATION_FAILED] Duplicate tag - Name: 'java'
+[2025-11-05 10:53:42] [INFO] [UI_FORM_VALIDATION_START] Validating question form
+[2025-11-05 10:53:42] [INFO] [UI_FORM_VALIDATION_SUCCESS] Form validation passed
+[2025-11-05 10:53:42] [INFO] [UI_QUESTION_CREATE_START] Creating question - Title length: 12, Description length: 24, Context: none, Tags: 3
+[2025-11-05 10:53:42] [INFO] [QUESTION_CREATE_START] User initiating question creation - Title: what is jdbc..., Tags count: 3
+[2025-11-05 10:53:42] [INFO] [QUESTION_CREATE_AUTH] Authenticated user ID: 3 creating question
+[2025-11-05 10:53:42] [WARNING] [QUESTION_CREATE_VALIDATION_FAILED] User 3 - Tag 'type to add tags...java' contains invalid characters. Only letters, numbers, hyphens, underscores, plus, hash, and dots are allowed
+[2025-11-05 10:53:42] [ERROR] [UI_QUESTION_CREATE_FAILED] Question creation failed - Tag 'type to add tags...java' contains invalid characters. Only letters, numbers, hyphens, underscores, plus, hash, and dots are allowed
+[2025-11-05 10:53:49] [WARNING] [UI_TAG_VALIDATION_FAILED] Duplicate tag - Name: 'java'
+[2025-11-05 10:53:50] [WARNING] [UI_TAG_VALIDATION_FAILED] Duplicate tag - Name: 'java'
+[2025-11-05 10:53:51] [INFO] [UI_FORM_VALIDATION_START] Validating question form
+[2025-11-05 10:53:51] [INFO] [UI_FORM_VALIDATION_SUCCESS] Form validation passed
+[2025-11-05 10:53:51] [INFO] [UI_QUESTION_CREATE_START] Creating question - Title length: 12, Description length: 24, Context: none, Tags: 3
+[2025-11-05 10:53:51] [INFO] [QUESTION_CREATE_START] User initiating question creation - Title: what is jdbc..., Tags count: 3
+[2025-11-05 10:53:51] [INFO] [QUESTION_CREATE_AUTH] Authenticated user ID: 3 creating question
+[2025-11-05 10:53:51] [WARNING] [QUESTION_CREATE_VALIDATION_FAILED] User 3 - Tag 'type to add tags...java' contains invalid characters. Only letters, numbers, hyphens, underscores, plus, hash, and dots are allowed
+[2025-11-05 10:53:51] [ERROR] [UI_QUESTION_CREATE_FAILED] Question creation failed - Tag 'type to add tags...java' contains invalid characters. Only letters, numbers, hyphens, underscores, plus, hash, and dots are allowed
+[2025-11-05 10:53:56] [INFO] User signed out: abc@gmail.com
+[2025-11-05 10:53:57] [WARNING] Sign out attempted with no active user session
+[2025-11-05 10:53:57] [WARNING] Sign out attempted with no active user session
+[2025-11-05 10:53:58] [WARNING] Sign out attempted with no active user session
+[2025-11-05 10:54:02] [INFO] User signing out: unknown
+[2025-11-05 10:54:02] [WARNING] Sign out attempted with no active user session
+[2025-11-05 10:54:02] [INFO] User signed out successfully: unknown
+[2025-11-05 10:54:02] [INFO] Sign Out: You have been signed out successfully.
+[2025-11-05 10:54:04] [WARNING] Sign out attempted with no active user session
+[2025-11-05 10:54:19] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 10:54:19] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 10:54:19] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 10:54:19] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 10:54:19] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 10:54:19] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 10:54:38] [INFO] Navigating to Add Question screen
+[2025-11-05 10:54:57] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'data', Total tags: 4
+[2025-11-05 10:54:59] [INFO] [UI_FORM_VALIDATION_START] Validating question form
+[2025-11-05 10:54:59] [INFO] [UI_FORM_VALIDATION_SUCCESS] Form validation passed
+[2025-11-05 10:54:59] [INFO] [UI_QUESTION_CREATE_START] Creating question - Title length: 12, Description length: 24, Context: none, Tags: 4
+[2025-11-05 10:54:59] [INFO] [QUESTION_CREATE_START] User initiating question creation - Title: what is jdbc..., Tags count: 4
+[2025-11-05 10:54:59] [INFO] [QUESTION_CREATE_AUTH] Authenticated user ID: 7 creating question
+[2025-11-05 10:54:59] [WARNING] [QUESTION_CREATE_VALIDATION_FAILED] User 7 - Tag 'type to add tags...java' contains invalid characters. Only letters, numbers, hyphens, underscores, plus, hash, and dots are allowed
+[2025-11-05 10:54:59] [ERROR] [UI_QUESTION_CREATE_FAILED] Question creation failed - Tag 'type to add tags...java' contains invalid characters. Only letters, numbers, hyphens, underscores, plus, hash, and dots are allowed
+[2025-11-05 10:55:22] [INFO] Logger initialized
+[2025-11-05 10:55:22] [INFO] Starting UpNext application
+[2025-11-05 10:55:23] [INFO] Checking database connection and schema on startup...
+[2025-11-05 10:55:23] [INFO] Initializing database schema...
+[2025-11-05 10:55:24] [INFO] Migration 008 executed successfully
+[2025-11-05 10:55:24] [INFO] Migration 009 executed successfully
+[2025-11-05 10:55:24] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 10:55:24] [INFO] Database schema initialized successfully
+[2025-11-05 10:55:24] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 10:55:24] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 10:55:24] [INFO] Answer votes table initialized
+[2025-11-05 10:55:24] [INFO] Showing profile page
+[2025-11-05 10:55:25] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 10:58:14] [INFO] Attempting sign in for: vishnu@gmail.com
+[2025-11-05 10:58:14] [INFO] Sign-in attempt for email: vishnu@gmail.com
+[2025-11-05 10:58:14] [INFO] Retrieving skills for user ID: 7
+[2025-11-05 10:58:14] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 10:58:15] [INFO] User signed in successfully: vishnu@gmail.com
+[2025-11-05 10:58:15] [INFO] Sign In Successful: Welcome back, VISHNU!
+[2025-11-05 11:09:42] [INFO] Logger initialized
+[2025-11-05 11:09:43] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:43] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:45] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:45] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:45] [INFO] Adding new question to feed: Test Title
+[2025-11-05 11:09:45] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:09:45] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:09:45] [INFO] Navigating to Add Question screen
+[2025-11-05 11:10:52] [INFO] Logger initialized
+[2025-11-05 11:10:53] [INFO] Starting UpNext application
+[2025-11-05 11:10:53] [INFO] Checking database connection and schema on startup...
+[2025-11-05 11:10:53] [INFO] Initializing database schema...
+[2025-11-05 11:10:54] [INFO] Migration 008 executed successfully
+[2025-11-05 11:10:54] [INFO] Migration 009 executed successfully
+[2025-11-05 11:10:54] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 11:10:54] [INFO] Database schema initialized successfully
+[2025-11-05 11:10:54] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:10:54] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:10:55] [INFO] Answer votes table initialized
+[2025-11-05 11:10:55] [INFO] Showing profile page
+[2025-11-05 11:10:56] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 11:11:22] [INFO] Attempting sign in for: abc@gmail.com
+[2025-11-05 11:11:22] [INFO] Sign-in attempt for email: abc@gmail.com
+[2025-11-05 11:11:22] [INFO] Retrieving skills for user ID: 3
+[2025-11-05 11:11:22] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 11:11:22] [INFO] User signed in successfully: abc@gmail.com
+[2025-11-05 11:11:22] [INFO] Sign In Successful: Welcome back, hari!
+[2025-11-05 11:11:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:11:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, code, 2, 20, 0]
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, code, 2, 20, 0]
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [code, 1, 20, 0]
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:30] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, code, 2, 20, 0]
+[2025-11-05 11:11:32] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:32] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, code, 2, 20, 0]
+[2025-11-05 11:11:32] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:32] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:11:34] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:34] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:11:34] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:11:34] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:11:36] [INFO] Navigating to Add Question screen
+[2025-11-05 11:12:54] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'python', Total tags: 1
+[2025-11-05 11:13:03] [WARNING] [UI_TAG_VALIDATION_SILENTLY_REJECTED] Invalid tag pattern rejected - Name: 'type to add tags...paradigm'
+[2025-11-05 11:13:13] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'paradigm', Total tags: 2
+[2025-11-05 11:13:17] [INFO] [UI_FORM_VALIDATION_START] Validating question form
+[2025-11-05 11:13:17] [INFO] [UI_FORM_VALIDATION_SUCCESS] Form validation passed
+[2025-11-05 11:13:17] [INFO] [UI_QUESTION_CREATE_START] Creating question - Title length: 32, Description length: 47, Context: none, Tags: 2
+[2025-11-05 11:13:17] [INFO] [QUESTION_CREATE_START] User initiating question creation - Title: what is referential tranparenc..., Tags count: 2
+[2025-11-05 11:13:17] [INFO] [QUESTION_CREATE_AUTH] Authenticated user ID: 3 creating question
+[2025-11-05 11:13:17] [INFO] [QUESTION_CREATE_VALIDATION] Input validation passed for user 3
+[2025-11-05 11:13:17] [INFO] [QUESTION_TAG_ANALYTICS] User 3 using tags: [python, paradigm]
+[2025-11-05 11:13:17] [INFO] Question saved successfully with ID: 6 and 2 tags
+[2025-11-05 11:13:17] [INFO] [USER_METRICS_UPDATE] User 3 questions_asked incremented to 2
+[2025-11-05 11:13:17] [INFO] [USER_METRICS_UPDATE_SUCCESS] Incremented questions_asked for user 3
+[2025-11-05 11:13:17] [INFO] [QUESTION_CREATE_SUCCESS] Question created successfully - ID: 6, User: 3, Tags: 2, Duration: 76ms
+[2025-11-05 11:13:17] [INFO] [UI_QUESTION_CREATE_SUCCESS] Question created successfully - ID: 6, Tags: 2
+[2025-11-05 11:13:17] [INFO] Question created successfully with ID: 6
+[2025-11-05 11:13:17] [INFO] Question created successfully, returning to Home and refreshing feed
+[2025-11-05 11:13:17] [INFO] Adding new question to feed: what is referential tranparency?
+[2025-11-05 11:13:23] [INFO] Question selected: what is referential tranparency?
+[2025-11-05 11:13:23] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:13:23] [DEBUG] [QUESTION_SEARCH_PARAMS] [paradigm, python, 2, 10, 0]
+[2025-11-05 11:13:32] [INFO] Created new vote: user=3, question=6, vote=UPVOTE
+[2025-11-05 11:13:32] [INFO] Vote action: Upvoted! for question 6
+[2025-11-05 11:13:32] [INFO] Question voted: what is referential tranparency? (Upvotes: 1, Downvotes: 0)
+[2025-11-05 11:13:38] [INFO] Question selected: what is referential tranparency?
+[2025-11-05 11:13:38] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:13:38] [DEBUG] [QUESTION_SEARCH_PARAMS] [paradigm, python, 2, 10, 0]
+[2025-11-05 11:14:44] [INFO] Submitting answer for question 6 by user 3
+[2025-11-05 11:14:44] [INFO] Answer Posted: Your answer has been posted successfully!
+[2025-11-05 11:14:45] [INFO] Answer display refreshed after new submission for question: 6
+[2025-11-05 11:14:45] [INFO] Answer submitted successfully for question 6
+[2025-11-05 11:14:48] [INFO] Tag clicked in details card: paradigm
+[2025-11-05 11:14:53] [INFO] Navigate to user profile: hari (ID: 3)
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:03] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.is_solved = TRUE ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.is_solved = TRUE ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:04] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.is_solved = TRUE ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:06] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.answer_count = 0 ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:12] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:12] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:13] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:13] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:15:21] [INFO] Question selected: why there is no pointers in java?
+[2025-11-05 11:15:21] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:15:21] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 11:16:34] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:34] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:16:35] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:35] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:16:36] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:36] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:16:36] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY upvotes DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:36] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, programming, 2, 20, 0]
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, programming, 2, 20, 0]
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, programming, 2, 20, 0]
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, programming, 2, 20, 0]
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:16:44] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, programming, 2, 20, 0]
+[2025-11-05 11:30:49] [INFO] Logger initialized
+[2025-11-05 11:30:49] [INFO] Starting UpNext application
+[2025-11-05 11:30:49] [INFO] Checking database connection and schema on startup...
+[2025-11-05 11:30:49] [INFO] Initializing database schema...
+[2025-11-05 11:30:50] [INFO] Migration 008 executed successfully
+[2025-11-05 11:30:50] [INFO] Migration 009 executed successfully
+[2025-11-05 11:30:50] [INFO] Migration 011 file not found, skipping migration
+[2025-11-05 11:30:50] [INFO] Database schema initialized successfully
+[2025-11-05 11:30:50] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:30:50] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:30:51] [INFO] Answer votes table initialized
+[2025-11-05 11:30:51] [INFO] Showing profile page
+[2025-11-05 11:30:51] [INFO] Application UI initialized, showing sign-in screen
+[2025-11-05 11:31:28] [INFO] Proceeding to skills collection for: pry@gmail.com
+[2025-11-05 11:31:31] [INFO] Navigating to add skill screen
+[2025-11-05 11:31:49] [INFO] Added new skill: cpp with proficiency: 8
+[2025-11-05 11:31:51] [INFO] Attempting to create account for: pry@gmail.com
+[2025-11-05 11:31:51] [INFO] Creating account with 1 skills for: pry@gmail.com
+[2025-11-05 11:31:51] [INFO] Sign-up attempt for email: pry@gmail.com
+[2025-11-05 11:31:51] [INFO] User created successfully: pry@gmail.com
+[2025-11-05 11:31:51] [INFO] Adding skill for user ID: 8, skill: cpp
+[2025-11-05 11:31:51] [INFO] Skill added successfully: 7
+[2025-11-05 11:31:51] [INFO] Added 1 skills for user ID: 8
+[2025-11-05 11:31:51] [INFO] Retrieving skills for user ID: 8
+[2025-11-05 11:31:51] [INFO] Account created successfully for: pry@gmail.com
+[2025-11-05 11:31:51] [INFO] Account Created: Welcome to UpNext, priyan!
+[2025-11-05 11:31:53] [INFO] Finalizing registration with 0 skills
+[2025-11-05 11:32:03] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE q.subject_id = ? AND t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:32:03] [DEBUG] [QUESTION_SEARCH_PARAMS] [9, java, programming, 2, 20, 0]
+[2025-11-05 11:32:03] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id WHERE q.subject_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:32:03] [DEBUG] [QUESTION_SEARCH_PARAMS] [9, 20, 0]
+[2025-11-05 11:32:05] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:32:05] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:32:05] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:32:05] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:32:14] [INFO] Navigating to profile system from profile card
+[2025-11-05 11:32:16] [INFO] Navigating to profile system page: help
+[2025-11-05 11:32:16] [INFO] Showing help page
+[2025-11-05 11:32:17] [INFO] Navigating to profile system page: profile
+[2025-11-05 11:32:17] [INFO] Showing profile page
+[2025-11-05 11:32:25] [INFO] Navigating to Add Question screen
+[2025-11-05 11:33:05] [INFO] [UI_TAG_ADD_SUCCESS] Tag added - Name: 'py', Total tags: 1
+[2025-11-05 11:33:08] [INFO] [UI_FORM_VALIDATION_START] Validating question form
+[2025-11-05 11:33:08] [INFO] [UI_FORM_VALIDATION_SUCCESS] Form validation passed
+[2025-11-05 11:33:08] [INFO] [UI_QUESTION_CREATE_START] Creating question - Title length: 23, Description length: 19, Context: none, Tags: 1
+[2025-11-05 11:33:08] [INFO] [QUESTION_CREATE_START] User initiating question creation - Title: WHAT IS VARIABLE IN PY?..., Tags count: 1
+[2025-11-05 11:33:08] [WARNING] [QUESTION_CREATE_FAILED] Authentication failure - No authenticated user for question creation
+[2025-11-05 11:33:08] [ERROR] [UI_QUESTION_CREATE_FAILED] Question creation failed - User must be authenticated to create questions
+[2025-11-05 11:33:17] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:17] [DEBUG] [QUESTION_SEARCH_PARAMS] [20, 0]
+[2025-11-05 11:33:17] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:17] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:33:20] [INFO] Question selected: why there is no pointers in java?
+[2025-11-05 11:33:20] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:20] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 10, 0]
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE q.answer_count = 0 AND t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE q.answer_count = 0 AND t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE q.answer_count = 0 AND t.name IN (?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:28] [DEBUG] [QUESTION_SEARCH_PARAMS] [java, 1, 20, 0]
+[2025-11-05 11:33:31] [INFO] Question selected: Advanced Java
+[2025-11-05 11:33:31] [DEBUG] [QUESTION_SEARCH_SQL] SELECT DISTINCT q.*, s.name AS subject_name FROM questions q LEFT JOIN subjects s ON q.subject_id = s.id INNER JOIN question_tags qt ON q.id = qt.question_id INNER JOIN tags t ON qt.tag_id = t.id WHERE t.name IN (?, ?) GROUP BY q.id HAVING COUNT(DISTINCT t.id) = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+[2025-11-05 11:33:31] [DEBUG] [QUESTION_SEARCH_PARAMS] [advanced, java, 2, 10, 0]
+[2025-11-05 11:33:34] [WARNING] Authentication Required: Please log in to vote
+[2025-11-05 11:33:38] [WARNING] Sign out attempted with no active user session

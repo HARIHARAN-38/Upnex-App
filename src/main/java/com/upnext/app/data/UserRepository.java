@@ -1,6 +1,5 @@
 package com.upnext.app.data;
 
-import com.upnext.app.domain.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.upnext.app.domain.User;
 
 /**
  * Repository for User entity database operations.
@@ -252,6 +253,91 @@ public class UserRepository {
             if (statement != null) {
                 statement.close();
             }
+            if (connection != null) {
+                JdbcConnectionProvider.getInstance().releaseConnection(connection);
+            }
+        }
+    }
+    
+    /**
+     * Data class to hold user statistics.
+     */
+    public static class UserStatistics {
+        private final int questionsAsked;
+        private final int answersGiven;
+        private final int totalUpvotes;
+        
+        public UserStatistics(int questionsAsked, int answersGiven, int totalUpvotes) {
+            this.questionsAsked = questionsAsked;
+            this.answersGiven = answersGiven;
+            this.totalUpvotes = totalUpvotes;
+        }
+        
+        public int getQuestionsAsked() { return questionsAsked; }
+        public int getAnswersGiven() { return answersGiven; }
+        public int getTotalUpvotes() { return totalUpvotes; }
+    }
+    
+    /**
+     * Calculates and retrieves accurate user statistics from the database.
+     * 
+     * @param userId The ID of the user to calculate statistics for
+     * @return A UserStatistics object containing the calculated metrics
+     * @throws SQLException If there's an error querying the database
+     */
+    public UserStatistics calculateUserStatistics(Long userId) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = JdbcConnectionProvider.getInstance().getConnection();
+            
+            // Count questions asked by the user
+            int questionsAsked = 0;
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM questions WHERE user_id = ?")) {
+                stmt.setLong(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        questionsAsked = rs.getInt(1);
+                    }
+                }
+            }
+            
+            // Count answers given by the user
+            int answersGiven = 0;
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM answers WHERE user_id = ?")) {
+                stmt.setLong(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        answersGiven = rs.getInt(1);
+                    }
+                }
+            }
+            
+            // Calculate total upvotes received (questions + answers)
+            int totalUpvotes = 0;
+            
+            // Upvotes from questions
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT COALESCE(SUM(upvotes), 0) FROM questions WHERE user_id = ?")) {
+                stmt.setLong(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        totalUpvotes += rs.getInt(1);
+                    }
+                }
+            }
+            
+            // Upvotes from answers
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT COALESCE(SUM(upvotes), 0) FROM answers WHERE user_id = ?")) {
+                stmt.setLong(1, userId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        totalUpvotes += rs.getInt(1);
+                    }
+                }
+            }
+            
+            return new UserStatistics(questionsAsked, answersGiven, totalUpvotes);
+            
+        } finally {
             if (connection != null) {
                 JdbcConnectionProvider.getInstance().releaseConnection(connection);
             }

@@ -52,6 +52,7 @@ public class AddQuestionScreen extends JPanel {
     private final FormField titleField;
     private final JTextArea descriptionArea;
     private final JScrollPane descriptionScrollPane;
+    private final com.upnext.app.ui.components.forms.SubjectComboBox subjectComboBox;
     private final TagInputField tagInputField;
     private final TagChipList tagChipList;
     private final JButton submitButton;
@@ -86,6 +87,8 @@ public class AddQuestionScreen extends JPanel {
         titleField = new FormField("Question Title", 30);
         descriptionArea = createDescriptionArea();
         descriptionScrollPane = createDescriptionScrollPane();
+        subjectComboBox = new com.upnext.app.ui.components.forms.SubjectComboBox("Subject");
+        subjectComboBox.setOnSelectionChanged(viewModel::setSelectedSubjectId);
         tagInputField = new TagInputField(viewModel::addTag);
         tagChipList = new TagChipList(viewModel::removeTag);
     tagChipList.setBorder(new EmptyBorder(PADDING_SMALL, 0, 0, 0));
@@ -314,33 +317,40 @@ public class AddQuestionScreen extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
         
+        // Subject ComboBox
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, COMPONENT_SPACING, 0);
+        cardPanel.add(subjectComboBox, gbc);
+        
         // Tags Label
         JLabel tagsLabel = new JLabel("Tags");
         tagsLabel.setFont(AppTheme.PRIMARY_FONT);
         tagsLabel.setForeground(AppTheme.TEXT_PRIMARY);
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 0, 4, 0);
         cardPanel.add(tagsLabel, gbc);
         
         // Tag Input Field
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 0, PADDING_SMALL, 0);
         cardPanel.add(tagInputField, gbc);
         
         // Tag Chip List
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 0, COMPONENT_SPACING, 0);
         cardPanel.add(tagChipList, gbc);
         
         // Validation Label
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 0, COMPONENT_SPACING, 0);
         cardPanel.add(validationLabel, gbc);
@@ -352,7 +362,7 @@ public class AddQuestionScreen extends JPanel {
         buttonPanel.add(cancelButton);
         
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
@@ -446,6 +456,7 @@ public class AddQuestionScreen extends JPanel {
     private void clearForm() {
         titleField.setText("");
         descriptionArea.setText("");
+        subjectComboBox.clearSelection();
         tagInputField.clear();
         viewModel.clearAll();
         clearValidationMessage();
@@ -462,6 +473,7 @@ public class AddQuestionScreen extends JPanel {
         cancelButton.setEnabled(!submitting);
         titleField.getTextField().setEditable(!submitting);
         descriptionArea.setEditable(!submitting);
+        subjectComboBox.getComboBox().setEnabled(!submitting);
         tagInputField.setEnabled(!submitting);
         setCursor(submitting ? Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)
                              : Cursor.getDefaultCursor());

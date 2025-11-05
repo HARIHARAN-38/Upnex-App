@@ -1,9 +1,5 @@
 package com.upnext.app.data.question;
 
-import com.upnext.app.core.Logger;
-import com.upnext.app.data.JdbcConnectionProvider;
-import com.upnext.app.domain.question.Tag;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import com.upnext.app.core.Logger;
+import com.upnext.app.data.JdbcConnectionProvider;
+import com.upnext.app.domain.question.Tag;
 
 public final class TagRepository {
     private static final Logger LOGGER = Logger.getInstance();
@@ -238,6 +238,72 @@ public final class TagRepository {
             throw new IllegalArgumentException("Tag name must not be blank");
         }
         return normalized;
+    }
+
+    /**
+     * Removes invalid tags from the database based on validation patterns
+     * @return number of invalid tags removed
+     */
+    public int cleanupInvalidTags() throws SQLException {
+        String[] invalidPatterns = {
+            "type to add tag",
+            "add tag",
+            "enter tag",
+            "placeholder",
+            "click to add",
+            "tag here",
+            "new tag"
+        };
+        
+        JdbcConnectionProvider provider = JdbcConnectionProvider.getInstance();
+        Connection connection = null;
+        int deletedCount = 0;
+        
+        try {
+            connection = provider.getConnection();
+            connection.setAutoCommit(false);
+            
+            // Build SQL to delete tags containing any invalid pattern
+            StringBuilder sqlBuilder = new StringBuilder("DELETE FROM tags WHERE ");
+            for (int i = 0; i < invalidPatterns.length; i++) {
+                if (i > 0) sqlBuilder.append(" OR ");
+                sqlBuilder.append("LOWER(name) LIKE ?");
+            }
+            
+            try (PreparedStatement statement = connection.prepareStatement(sqlBuilder.toString())) {
+                for (int i = 0; i < invalidPatterns.length; i++) {
+                    statement.setString(i + 1, "%" + invalidPatterns[i].toLowerCase() + "%");
+                }
+                
+                deletedCount = statement.executeUpdate();
+                connection.commit();
+                
+                if (deletedCount > 0) {
+                    LOGGER.info("Cleaned up " + deletedCount + " invalid tags from database");
+                }
+            }
+        } catch (SQLException ex) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    LOGGER.logException("Failed to rollback invalid tag cleanup", rollbackEx);
+                }
+            }
+            LOGGER.logException("Failed to cleanup invalid tags", ex);
+            throw ex;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException ex) {
+                    LOGGER.logException("Failed to reset auto-commit", ex);
+                }
+            }
+            releaseConnection(provider, connection);
+        }
+        
+        return deletedCount;
     }
 
     private void closeQuietly(AutoCloseable closeable) {
